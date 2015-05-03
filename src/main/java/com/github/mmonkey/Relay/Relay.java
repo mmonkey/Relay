@@ -2,6 +2,8 @@ package com.github.mmonkey.Relay;
 
 import java.io.File;
 
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
@@ -88,23 +90,26 @@ public class Relay {
 	}
 	
 	private void loadGateways() throws Exception {
+
+		CommentedConfigurationNode settingsConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS);
+		CommentedConfigurationNode emailConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO);
+		CommentedConfigurationNode mandrillConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO);
 		
-		String secretKey = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
+		String name = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_NAME).getString();
+		String emailAddress = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_ADDRESS).getString();
+		String username = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_USERNAME).getString();
+		String password = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_PASSWORD).getString();
+		String host = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_HOST).getString();
+		int port = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_PORT).getInt();
+		boolean ssl = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_SSL).getBoolean();
 		
-		String name = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_NAME).getString();
-		String emailAddress = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_ADDRESS).getString();
-		String username = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_USERNAME).getString();
-		String password = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_PASSWORD).getString();
-		String host = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_HOST).getString();
-		int port = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_PORT).getInt();
-		boolean ssl = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_SSL).getBoolean();
-		
-		String mandrillUsername = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_MANDRILL_USERNAME).getString();
-		String mandrillPassword = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_MANDRILL_PASSWORD).getString();
+		String mandrillUsername = mandrillConfig.getNode(StorageUtil.CONFIG_NODE_MANDRILL_USERNAME).getString();
+		String mandrillPassword = mandrillConfig.getNode(StorageUtil.CONFIG_NODE_MANDRILL_PASSWORD).getString();
 	
 		Gateway gateway = new Gateway();
 		Gateway mandrill = new Gateway();
-		EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
+		
+		EncryptionUtil encryptionUtil = new EncryptionUtil(settingsConfig.getNode(StorageUtil.CONFIG_NODE_SECRET_KEY).getString());
 		
 		gateway.setName(name);
 		gateway.setEmailAddress(encryptionUtil.encrypt(emailAddress));
