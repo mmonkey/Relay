@@ -11,13 +11,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class EncryptionUtil {
 	
-	private static String encryptionKey;
+	private String encryptionKey;
 	
 	public EncryptionUtil(String key) {
-		encryptionKey = key;
+		this.encryptionKey = key;
 	}
 
-	public static String encrypt(String plainText) throws GeneralSecurityException, UnsupportedEncodingException {
+	public String encrypt(String plainText) throws GeneralSecurityException, UnsupportedEncodingException {
 		
 		byte[] raw = encryptionKey.getBytes(Charset.forName("UTF-8"));
 
@@ -34,7 +34,7 @@ public class EncryptionUtil {
 		
 	}
 
-	public static String decrypt(String encryptedText) throws GeneralSecurityException {
+	public String decrypt(String encryptedText) throws GeneralSecurityException {
 		
 		byte[] encrypted = encryptedText.getBytes(Charset.forName("UTF-8"));
 		byte[] raw = encryptionKey.getBytes(Charset.forName("UTF-8"));
