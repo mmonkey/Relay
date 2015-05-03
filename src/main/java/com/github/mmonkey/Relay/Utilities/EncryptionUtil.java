@@ -1,57 +1,70 @@
 package com.github.mmonkey.Relay.Utilities;
 
-import java.security.NoSuchAlgorithmException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.GeneralSecurityException;
+import java.util.Random;
 
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.apache.commons.codec.binary.Base64;
-
 public class EncryptionUtil {
-
-	private SecretKey encryptionKey;
 	
-	public static String generateSecretKey() throws NoSuchAlgorithmException {
-		SecretKey secretKey = KeyGenerator.getInstance("AES").generateKey();
-		return Base64.encodeBase64String(secretKey.getEncoded());
-	}
+	private static String encryptionKey;
 	
-	public SecretKey parseSecretKey(String encodedKey) {
-		byte[] decodedKey = Base64.decodeBase64(encodedKey);
-		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"); 
+	public EncryptionUtil(String key) {
+		encryptionKey = key;
 	}
 
-	public EncryptionUtil(String encryptionKey) {
-		this.encryptionKey = parseSecretKey(encryptionKey);
+	public static String encrypt(String plainText) throws GeneralSecurityException, UnsupportedEncodingException {
+		
+		byte[] raw = encryptionKey.getBytes(Charset.forName("UTF-8"));
+
+		if (raw.length != 16) {
+			throw new IllegalArgumentException("Invalid key size.");
+		}
+
+		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, skeySpec, new IvParameterSpec(new byte[16]));
+		
+		byte[] encrypted = cipher.doFinal(plainText.getBytes(Charset.forName("UTF-8")));
+		return new String(encrypted, Charset.forName("UTF-8"));
+		
 	}
 
-	public String encrypt(String plainText) throws Exception {
+	public static String decrypt(String encryptedText) throws GeneralSecurityException {
 		
-		Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);
-		byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
+		byte[] encrypted = encryptedText.getBytes(Charset.forName("UTF-8"));
+		byte[] raw = encryptionKey.getBytes(Charset.forName("UTF-8"));
 
-		return Base64.encodeBase64String(encryptedBytes);
+		if (raw.length != 16) {
+			throw new IllegalArgumentException("Invalid key size.");
+		}
 		
-	}
-
-	public String decrypt(String encrypted) throws Exception {
-        
-		Cipher cipher = getCipher(Cipher.DECRYPT_MODE);
-		byte[] plainBytes = cipher.doFinal(Base64.decodeBase64(encrypted));
-
-		return new String(plainBytes);
-        
-    }
-
-	private Cipher getCipher(int cipherMode) throws Exception {
-       
-		Cipher cipher = Cipher.getInstance("AES");
-		cipher.init(cipherMode, encryptionKey);
-
-		return cipher;
+		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, skeySpec, new IvParameterSpec(new byte[16]));
+		
+	    byte[] decrypted = cipher.doFinal(encrypted);
+	    return new String(decrypted, Charset.forName("UTF-8"));
+	    
 	}
     
+	public static String generateSecretKey() {
+		
+		Random r = new Random();
+		StringBuilder sb = new StringBuilder();
+		
+		for(int i = 0; i < 16; i++) {
+			char c = (char) ((int)r.nextInt(128));
+			sb.append(c);
+		}
+		
+		return sb.toString();
+	
+	}
+	
 }
