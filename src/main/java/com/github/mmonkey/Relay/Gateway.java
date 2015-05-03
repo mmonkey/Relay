@@ -66,7 +66,7 @@ public class Gateway {
 		this.ssl = enabled;
 	}
 	
-	public boolean isValidGateway() {
+	public boolean isValid() {
 		
 		if (this.name == null || this.username == null || this.password == null || this.host == null || this.port == 0) {
 			return false;

@@ -13,6 +13,7 @@ import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.config.ConfigDir;
 
+import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
@@ -33,6 +34,7 @@ public class Relay {
 	
 	private DefaultConfigStorageService defaultConfigService;
 	private GatewayStorageService gatewayStorageService;
+	private ContactStorageService contactStorageService;
 	
 	@Inject
 	@ConfigDir(sharedRoot = false)
@@ -58,6 +60,10 @@ public class Relay {
 		return this.gatewayStorageService;
 	}
 	
+	public ContactStorageService getContactStorageService() {
+		return this.contactStorageService;
+	}
+	
 	@Subscribe
 	public void onPreInit(PreInitializationEvent event) {
 		
@@ -73,23 +79,30 @@ public class Relay {
 		
 		this.defaultConfigService = new DefaultConfigStorageService(this, this.configDir);
 		this.gatewayStorageService = new GatewayStorageService(this, this.configDir);
+		this.contactStorageService = new ContactStorageService(this, this.configDir);
 		
 		this.defaultConfigService.load();
+		this.gatewayStorageService.load();
+		this.contactStorageService.load();
+		
+		try {
+			
+			this.saveSensitiveData();
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}
 			
 	}
 	
 	@Subscribe
 	public void onInit(InitializationEvent event) {
 		
-		try {
-			this.loadGateways();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
-	private void loadGateways() throws Exception {
+	private void saveSensitiveData() throws Exception {
 
 		CommentedConfigurationNode settingsConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS);
 		CommentedConfigurationNode emailConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO);
@@ -119,7 +132,7 @@ public class Relay {
 		gateway.setPort(port);
 		gateway.sslEnabled(ssl);
 		
-		if (gateway.isValidGateway()) {
+		if (gateway.isValid()) {
 			this.gatewayStorageService.saveGateway(gateway);
 		}
 		
@@ -130,9 +143,11 @@ public class Relay {
 		mandrill.setPort(587);
 		mandrill.sslEnabled(true);
 		
-		if (mandrill.isValidGateway()) {
+		if (mandrill.isValid()) {
 			this.gatewayStorageService.saveGateway(mandrill);
 		}
+		
+		this.defaultConfigService.clearSensitiveData();
 		
 	}
 
