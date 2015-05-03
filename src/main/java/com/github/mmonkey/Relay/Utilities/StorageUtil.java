@@ -30,4 +30,8 @@ public class StorageUtil {
 	public static final String CONFIG_NODE_CONTACT_METHODS = "methods";
 	public static final String CONFIG_NODE_CONTACT_BLACKLIST = "blacklist";
 	
+	public static final String CONFIG_NODE_CONTACT_METHOD_TYPE = "type";
+	public static final String CONFIG_NODE_CONTACT_METHOD_ADDRESS = "address";
+	public static final String CONFIG_NODE_CONTACT_METHOD_CARRIER = "carrier";
+	
 }

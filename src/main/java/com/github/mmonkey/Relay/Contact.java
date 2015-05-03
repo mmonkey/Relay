@@ -1,18 +1,15 @@
 package com.github.mmonkey.Relay;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import org.spongepowered.api.entity.player.Player;
 
-import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
-
 public class Contact {
 	
 	private boolean acceptTerms = false;
-	HashMap<ContactMethodTypes, String> methods = new HashMap<ContactMethodTypes, String>();	
+	List<ContactMethod> methods = new ArrayList<ContactMethod>();	
 	private List<UUID> blacklist = new ArrayList<UUID>();
 	
 	public boolean acceptTerms() {
@@ -23,11 +20,11 @@ public class Contact {
 		this.acceptTerms = acceptTerms;
 	}
 	
-	public HashMap<ContactMethodTypes, String> getMethods() {
+	public List<ContactMethod> getMethods() {
 		return this.methods;
 	}
 	
-	public void setMethods(HashMap<ContactMethodTypes, String> methods) {
+	public void setMethods(List<ContactMethod> methods) {
 		this.methods = methods;
 	}
 	

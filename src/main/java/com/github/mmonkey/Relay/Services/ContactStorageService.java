@@ -2,16 +2,16 @@ package com.github.mmonkey.Relay.Services;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import org.spongepowered.api.entity.player.Player;
 
+import com.github.mmonkey.Relay.Carriers;
 import com.github.mmonkey.Relay.Contact;
+import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.StorageUtil;
@@ -26,9 +26,18 @@ public class ContactStorageService extends StorageService {
 	
 	private void saveContactMethods(CommentedConfigurationNode config, Contact contact) {
 		
-		for (Map.Entry<ContactMethodTypes, String> method : contact.getMethods().entrySet()) {
-			config.getNode(method.getKey().name()).setValue(method.getValue());
+		List<String> list = new ArrayList<String>();
+		
+		for (ContactMethod method: contact.getMethods()) {
+			CommentedConfigurationNode item = config.getNode(method.getCarrier().getDisplayName());
+			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).setValue(method.getType().name());
+			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).setValue(method.getAddress());
+			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).setValue(method.getCarrier().name());
+			
+			list.add(method.getCarrier().getDisplayName());
 		}
+		
+		config.getNode(StorageUtil.CONFIG_NODE_LIST).setValue(list);
 		
 	}
 	
@@ -66,12 +75,22 @@ public class ContactStorageService extends StorageService {
 	
 	}
 	
-	private HashMap<ContactMethodTypes, String> getMethods(CommentedConfigurationNode config) {
+	private List<ContactMethod> getMethods(CommentedConfigurationNode config) {
 		
-		HashMap<ContactMethodTypes, String> methods = new HashMap<ContactMethodTypes, String>();
+		List<String> list = getList(config);
+		List<ContactMethod> methods = new ArrayList<ContactMethod>();
 		
-		for (Map.Entry<Object, ? extends CommentedConfigurationNode> entry: config.getChildrenMap().entrySet()) {
-			methods.put(ContactMethodTypes.valueOf((String) entry.getKey()), entry.getValue().getString());
+		for (String item: list) {
+			CommentedConfigurationNode configItem = config.getNode(item);
+			
+			ContactMethodTypes type = ContactMethodTypes.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).getString());
+			String address = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).getString();
+			Carriers carrier = Carriers.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).getString());
+			
+			ContactMethod method = new ContactMethod(type, address);
+			method.setCarrier(carrier);
+			
+			methods.add(method);
 		}
 		
 		return methods;

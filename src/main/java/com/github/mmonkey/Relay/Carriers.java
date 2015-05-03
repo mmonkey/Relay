@@ -1,6 +1,9 @@
 package com.github.mmonkey.Relay;
 
 public enum Carriers {
+	
+	NO_CARRIER ("No Carrier",
+		new String[] {""}),
 
 	ALLTEL ("Alltel",
 		new String[] {"@message.alltel.com"}),
