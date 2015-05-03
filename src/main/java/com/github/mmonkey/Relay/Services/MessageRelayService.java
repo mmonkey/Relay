@@ -17,7 +17,6 @@ import javax.mail.internet.MimeMessage;
 
 import org.spongepowered.api.entity.player.Player;
 
-import com.github.mmonkey.Relay.Carriers;
 import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Gateway;
@@ -216,14 +215,15 @@ public class MessageRelayService implements RelayService {
 						emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
 					}
 					
-					if (method.getCarrier().name().equals(Carriers.NO_CARRIER)) {
-						
-						emailMessage.setSubject(emailSubject);
-					
-					} else {
-						
-						emailMessage.setSubject(smsSubject);
-						
+					switch (method.getType()) {
+						case EMAIL:
+							emailMessage.setSubject(emailSubject);
+							break;
+						case SMS:
+							emailMessage.setSubject(smsSubject);
+							break;
+						default:
+							break;
 					}
 					
 					emailMessage.setText(message);

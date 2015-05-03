@@ -1,7 +1,6 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
-
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import org.slf4j.Logger;
@@ -112,6 +111,7 @@ public class Relay {
 			e.printStackTrace();
 		
 		}
+		
 	}
 	
 	private void saveSensitiveData() throws Exception {
