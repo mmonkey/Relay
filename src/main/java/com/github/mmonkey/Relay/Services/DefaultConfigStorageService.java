@@ -72,7 +72,7 @@ public class DefaultConfigStorageService extends StorageService {
 		getConfig().getNode(StorageUtil.CONFIG_NODE_MESSAGES, StorageUtil.CONFIG_NODE_SMS_SUBJECT).setValue("MC Alert!");
 		
 		getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_ENABLED).setValue(true);
-		getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).setValue(EncryptionUtil.generateSecretKey());
+		getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).setValue(EncryptionUtil.generateSecretKey()).setComment("Warning: Do not change this value!");
 		
 		saveConfig();
 		

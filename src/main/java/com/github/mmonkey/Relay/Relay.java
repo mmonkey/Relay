@@ -136,27 +136,35 @@ public class Relay {
 		
 		EncryptionUtil encryptionUtil = new EncryptionUtil(settingsConfig.getNode(StorageUtil.CONFIG_NODE_SECRET_KEY).getString());
 		
-		gateway.setName(name);
-		gateway.setEmailAddress(encryptionUtil.encrypt(emailAddress));
-		gateway.setUsername(encryptionUtil.encrypt(username));
-		gateway.setPassword(encryptionUtil.encrypt(password));
-		gateway.setHost(host);
-		gateway.setPort(port);
-		gateway.sslEnabled(ssl);
-		
-		if (gateway.isValid()) {
-			this.gatewayStorageService.saveGateway(gateway);
+		if (!name.equals("") && !username.equals("") && !password.equals("") && !host.equals("") && port != 0) {
+			
+			gateway.setName(name);
+			gateway.setEmailAddress(encryptionUtil.encrypt(emailAddress));
+			gateway.setUsername(encryptionUtil.encrypt(username));
+			gateway.setPassword(encryptionUtil.encrypt(password));
+			gateway.setHost(host);
+			gateway.setPort(port);
+			gateway.sslEnabled(ssl);
+			
+			if (gateway.isValid()) {
+				this.gatewayStorageService.saveGateway(gateway);
+			}
+			
 		}
 		
-		mandrill.setName("Mandrill");
-		mandrill.setUsername(encryptionUtil.encrypt(mandrillUsername));
-		mandrill.setPassword(encryptionUtil.encrypt(mandrillPassword));
-		mandrill.setHost("smtp.mandrillapp.com");
-		mandrill.setPort(587);
-		mandrill.sslEnabled(true);
-		
-		if (mandrill.isValid()) {
-			this.gatewayStorageService.saveGateway(mandrill);
+		if (!mandrillUsername.equals("") && !mandrillPassword.equals("")) {
+			
+			mandrill.setName("Mandrill");
+			mandrill.setUsername(encryptionUtil.encrypt(mandrillUsername));
+			mandrill.setPassword(encryptionUtil.encrypt(mandrillPassword));
+			mandrill.setHost("smtp.mandrillapp.com");
+			mandrill.setPort(587);
+			mandrill.sslEnabled(true);
+			
+			if (mandrill.isValid()) {
+				this.gatewayStorageService.saveGateway(mandrill);
+			}
+			
 		}
 		
 		this.defaultConfigService.clearSensitiveData();
