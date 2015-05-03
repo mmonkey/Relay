@@ -11,11 +11,14 @@ import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.service.ProviderExistsException;
 import org.spongepowered.api.service.config.ConfigDir;
 
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
+import com.github.mmonkey.Relay.Services.MessageRelayService;
+import com.github.mmonkey.Relay.Services.RelayService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.StorageUtil;
 import com.google.common.base.Optional;
@@ -100,6 +103,15 @@ public class Relay {
 	@Subscribe
 	public void onInit(InitializationEvent event) {
 		
+		try {
+			
+			this.game.getServiceManager().setProvider(this, RelayService.class, new MessageRelayService(this));
+		
+		} catch (ProviderExistsException e) {
+			
+			e.printStackTrace();
+		
+		}
 	}
 	
 	private void saveSensitiveData() throws Exception {
