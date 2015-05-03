@@ -1,16 +1,30 @@
 package com.github.mmonkey.Relay.Utilities;
 
+import java.security.NoSuchAlgorithmException;
+
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
 public class EncryptionUtil {
 
-	private String encryptionKey;
+	private SecretKey encryptionKey;
+	
+	public static String generateSecretKey() throws NoSuchAlgorithmException {
+		SecretKey secretKey = KeyGenerator.getInstance("AES").generateKey();
+		return Base64.encodeBase64String(secretKey.getEncoded());
+	}
+	
+	public SecretKey parseSecretKey(String encodedKey) {
+		byte[] decodedKey = Base64.decodeBase64(encodedKey);
+		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES"); 
+	}
 
 	public EncryptionUtil(String encryptionKey) {
-		this.encryptionKey = encryptionKey;
+		this.encryptionKey = parseSecretKey(encryptionKey);
 	}
 
 	public String encrypt(String plainText) throws Exception {
@@ -33,10 +47,8 @@ public class EncryptionUtil {
 
 	private Cipher getCipher(int cipherMode) throws Exception {
        
-		String encryptionAlgorithm = "AES";
-		SecretKeySpec keySpecification = new SecretKeySpec(encryptionKey.getBytes("UTF-8"), encryptionAlgorithm);
-		Cipher cipher = Cipher.getInstance(encryptionAlgorithm);
-		cipher.init(cipherMode, keySpecification);
+		Cipher cipher = Cipher.getInstance("AES");
+		cipher.init(cipherMode, encryptionKey);
 
 		return cipher;
 		

@@ -5,12 +5,16 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
+import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.config.ConfigDir;
 
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
+import com.github.mmonkey.Relay.Services.GatewayStorageService;
+import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
+import com.github.mmonkey.Relay.Utilities.StorageUtil;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
@@ -26,6 +30,7 @@ public class Relay {
 	private static Logger logger;
 	
 	private DefaultConfigStorageService defaultConfigService;
+	private GatewayStorageService gatewayStorageService;
 	
 	@Inject
 	@ConfigDir(sharedRoot = false)
@@ -47,6 +52,10 @@ public class Relay {
 		return this.defaultConfigService;
 	}
 	
+	public GatewayStorageService getGatewayStorageService() {
+		return this.gatewayStorageService;
+	}
+	
 	@Subscribe
 	public void onPreInit(PreInitializationEvent event) {
 		
@@ -61,8 +70,65 @@ public class Relay {
 		}
 		
 		this.defaultConfigService = new DefaultConfigStorageService(this, this.configDir);
+		this.gatewayStorageService = new GatewayStorageService(this, this.configDir);
+		
 		this.defaultConfigService.load();
 			
+	}
+	
+	@Subscribe
+	public void onInit(InitializationEvent event) {
+		
+		try {
+			this.loadGateways();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void loadGateways() throws Exception {
+		
+		String secretKey = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
+		
+		String name = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_NAME).getString();
+		String emailAddress = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_ADDRESS).getString();
+		String username = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_USERNAME).getString();
+		String password = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_PASSWORD).getString();
+		String host = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_HOST).getString();
+		int port = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_PORT).getInt();
+		boolean ssl = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_EMAIL_SSL).getBoolean();
+		
+		String mandrillUsername = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_MANDRILL_USERNAME).getString();
+		String mandrillPassword = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO, StorageUtil.CONFIG_NODE_MANDRILL_PASSWORD).getString();
+	
+		Gateway gateway = new Gateway();
+		Gateway mandrill = new Gateway();
+		EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
+		
+		gateway.setName(name);
+		gateway.setEmailAddress(encryptionUtil.encrypt(emailAddress));
+		gateway.setUsername(encryptionUtil.encrypt(username));
+		gateway.setPassword(encryptionUtil.encrypt(password));
+		gateway.setHost(host);
+		gateway.setPort(port);
+		gateway.sslEnabled(ssl);
+		
+		if (gateway.isValidGateway()) {
+			this.gatewayStorageService.saveGateway(gateway);
+		}
+		
+		mandrill.setName("Mandrill");
+		mandrill.setUsername(encryptionUtil.encrypt(mandrillUsername));
+		mandrill.setPassword(encryptionUtil.encrypt(mandrillPassword));
+		mandrill.setHost("smtp.mandrillapp.com");
+		mandrill.setPort(587);
+		mandrill.sslEnabled(true);
+		
+		if (mandrill.isValidGateway()) {
+			this.gatewayStorageService.saveGateway(mandrill);
+		}
+		
 	}
 
 }

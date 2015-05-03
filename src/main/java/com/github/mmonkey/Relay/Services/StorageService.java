@@ -2,11 +2,14 @@ package com.github.mmonkey.Relay.Services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
+import com.github.mmonkey.Relay.Utilities.StorageUtil;
 import com.github.mmonkey.Relay.Relay;
 
 public class StorageService {
@@ -80,6 +83,19 @@ public class StorageService {
 			e.printStackTrace();
 			
 		}
+		
+	}
+	
+	public List<String> getList(CommentedConfigurationNode config) {
+		
+		@SuppressWarnings("unchecked")
+		List<String> list = (List<String>) config.getNode(StorageUtil.CONFIG_NODE_LIST).getValue();
+		
+		if (list == null) {
+			return new ArrayList<String>();
+		}
+		
+		return list;
 		
 	}
 	

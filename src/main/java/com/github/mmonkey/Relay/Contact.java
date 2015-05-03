@@ -23,6 +23,10 @@ public class Contact {
 		this.acceptTerms = acceptTerms;
 	}
 	
+	protected HashMap<ContactMethodTypes, String> getMethods() {
+		return this.methods;
+	}
+	
 	protected List<UUID> getBlacklist() {
 		return this.blacklist;
 	}
