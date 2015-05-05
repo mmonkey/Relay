@@ -93,6 +93,7 @@ public class MessageRelayService implements RelayService {
 		Gateway gateway = getGateway();
 		
 		if (gateway == null) {
+			Relay.getLogger().info("gateway is null");
 			return false;
 		}
 		
@@ -113,10 +114,10 @@ public class MessageRelayService implements RelayService {
 		properties.put("mail.smtp.host", gateway.getHost());
 		properties.put("mail.smtp.port", gateway.getPort());
 		
-		String encryptionKey = plugin.getDefaultConfigService().getConfig()
+		String secretKey = plugin.getDefaultConfigService().getConfig()
 				.getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
 		
-		EncryptionUtil encryptionUtil = new EncryptionUtil(encryptionKey);
+		EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
 		
 		Session session;
 		final String username;
@@ -136,12 +137,17 @@ public class MessageRelayService implements RelayService {
 			);
 			
 		} catch (GeneralSecurityException e) {
+			e.printStackTrace();
+			return false;
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 			return false;
 		}
 		
-		List<Message> messages = getMessages(sender, recipients, session, message);
+		List<Message> messages = getMessages(sender, recipients, session, gateway, message);
 		
 		if (messages == null) {
+			Relay.getLogger().info("messages is null");
 			return false;
 		}
 		
@@ -155,6 +161,7 @@ public class MessageRelayService implements RelayService {
 			}
 		
 		} catch (MessagingException e) {
+			e.printStackTrace();
 			return false;
 		}
 		
@@ -162,7 +169,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, String message) {
+	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String message) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		
@@ -170,7 +177,7 @@ public class MessageRelayService implements RelayService {
 			
 			try {
 				
-				String encryptionKey = plugin.getDefaultConfigService().getConfig()
+				String secretKey = plugin.getDefaultConfigService().getConfig()
 					.getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
 				
 				String emailSubject = plugin.getDefaultConfigService().getConfig()
@@ -182,7 +189,7 @@ public class MessageRelayService implements RelayService {
 				String displayName = plugin.getDefaultConfigService().getConfig()
 					.getNode(StorageUtil.CONFIG_NODE_MESSAGES, StorageUtil.CONFIG_NODE_EMAIL_DISPLAY_NAME).getString();
 				
-				EncryptionUtil encryptionUtil = new EncryptionUtil(encryptionKey);
+				EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
 				Contact contact = plugin.getContactStorageService().getContact(player);
 				List<ContactMethod> methods = contact.getMethods();
 				
@@ -190,7 +197,6 @@ public class MessageRelayService implements RelayService {
 					
 					Message emailMessage = new MimeMessage(session);
 					List<String> addresses = new ArrayList<String>();
-					Gateway gateway = getGateway();
 					
 					String fromEmailAddress = encryptionUtil.decrypt(gateway.getEmailAddress());
 					String fromEmailUsername = encryptionUtil.decrypt(gateway.getUsername());
@@ -232,10 +238,13 @@ public class MessageRelayService implements RelayService {
 				}
 				
 			} catch (MessagingException e) {
+				e.printStackTrace();
 				return null;
 			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
 				return null;
 			} catch (GeneralSecurityException e) {
+				e.printStackTrace();
 				return null;
 			}
 		}
