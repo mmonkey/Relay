@@ -1,12 +1,13 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
+
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
-import org.spongepowered.api.event.state.InitializationEvent;
+import org.spongepowered.api.event.state.PostInitializationEvent;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -100,7 +101,7 @@ public class Relay {
 	}
 	
 	@Subscribe
-	public void onInit(InitializationEvent event) {
+	public void postInit(PostInitializationEvent event) {
 		
 		try {
 			
@@ -155,6 +156,7 @@ public class Relay {
 		if (!mandrillUsername.equals("") && !mandrillPassword.equals("")) {
 			
 			mandrill.setName("Mandrill");
+			mandrill.setEmailAddress(encryptionUtil.encrypt(""));
 			mandrill.setUsername(encryptionUtil.encrypt(mandrillUsername));
 			mandrill.setPassword(encryptionUtil.encrypt(mandrillPassword));
 			mandrill.setHost("smtp.mandrillapp.com");
