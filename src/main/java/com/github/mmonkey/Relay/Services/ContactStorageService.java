@@ -33,6 +33,8 @@ public class ContactStorageService extends StorageService {
 			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).setValue(method.getType().name());
 			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).setValue(method.getAddress());
 			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).setValue(method.getCarrier().name());
+			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ACTIVATION_KEY).setValue(method.getActivationKey());
+			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_IS_ACTIVATED).setValue(method.isActivated());
 			
 			list.add(method.getCarrier().getDisplayName());
 		}
@@ -75,6 +77,10 @@ public class ContactStorageService extends StorageService {
 	
 	}
 	
+	public List<String> getContactList() {
+		return getList(getConfig());
+	}
+	
 	private List<ContactMethod> getMethods(CommentedConfigurationNode config) {
 		
 		List<String> list = getList(config);
@@ -86,9 +92,11 @@ public class ContactStorageService extends StorageService {
 			ContactMethodTypes type = ContactMethodTypes.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).getString());
 			String address = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).getString();
 			Carriers carrier = Carriers.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).getString());
+			String activationKey = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ACTIVATION_KEY).getString();
+			boolean isActivated = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_IS_ACTIVATED).getBoolean();
 			
-			ContactMethod method = new ContactMethod(type, address);
-			method.setCarrier(carrier);
+			ContactMethod method = new ContactMethod(type, address, carrier, activationKey);
+			method.isActivated(isActivated);
 			
 			methods.add(method);
 		}
@@ -119,8 +127,20 @@ public class ContactStorageService extends StorageService {
 		CommentedConfigurationNode methodConfig = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHODS);
 		CommentedConfigurationNode blacklistConfig = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_BLACKLIST);
 		
+		boolean terms;
+		
+		try {
+		
+			terms = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_ACCEPT_TERMS).getBoolean();
+		
+		} catch (Exception e) {
+			
+			terms = false;
+			
+		}
+		
 		Contact contact = new Contact();
-		contact.acceptTerms(config.getNode(StorageUtil.CONFIG_NODE_CONTACT_ACCEPT_TERMS).getBoolean());
+		contact.acceptTerms(terms);
 		contact.setMethods(getMethods(methodConfig));
 		contact.setBlacklist(getBlacklist(blacklistConfig));
 	

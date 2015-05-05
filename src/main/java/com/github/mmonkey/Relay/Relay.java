@@ -7,13 +7,17 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.event.Subscribe;
-import org.spongepowered.api.event.state.PostInitializationEvent;
+import org.spongepowered.api.event.state.InitializationEvent;
 import org.spongepowered.api.event.state.PreInitializationEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.service.ProviderExistsException;
 import org.spongepowered.api.service.config.ConfigDir;
+import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.util.command.args.GenericArguments;
+import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import com.github.mmonkey.Relay.Commands.RegisterCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
@@ -101,7 +105,7 @@ public class Relay {
 	}
 	
 	@Subscribe
-	public void postInit(PostInitializationEvent event) {
+	public void init(InitializationEvent event) {
 		
 		try {
 			
@@ -110,6 +114,30 @@ public class Relay {
 		} catch (ProviderExistsException e) {
 			
 			e.printStackTrace();
+		
+		}
+		
+		/**
+		 * /register [[-a] [-d] [contact]] [[-c] [code]] [carrier]
+		 * 
+		 * -a = accept terms
+		 * -d = decline terms
+		 * -c = enter registration code
+		 */
+		CommandSpec registerCommand = CommandSpec.builder()
+			.setDescription(Texts.of("Register your email or phone number."))
+			.setExtendedDescription(Texts.of("If registered, you can recieve emails or text messages from this server."))
+			.setExecutor(new RegisterCommand(this))
+			.setArguments(GenericArguments.seq(
+				GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("contact")))),
+				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("code")))),
+				GenericArguments.optional(GenericArguments.string(Texts.of("carrier")))
+			))
+			.build();
+		
+		if (this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_ENABLED).getBoolean()) {
+			
+			game.getCommandDispatcher().register(this, registerCommand, "register");
 		
 		}
 		

@@ -33,5 +33,7 @@ public class StorageUtil {
 	public static final String CONFIG_NODE_CONTACT_METHOD_TYPE = "type";
 	public static final String CONFIG_NODE_CONTACT_METHOD_ADDRESS = "address";
 	public static final String CONFIG_NODE_CONTACT_METHOD_CARRIER = "carrier";
+	public static final String CONFIG_NODE_CONTACT_METHOD_ACTIVATION_KEY = "activationKey";
+	public static final String CONFIG_NODE_CONTACT_METHOD_IS_ACTIVATED = "isActivated";
 	
 }

@@ -7,6 +7,8 @@ public class ContactMethod {
 	private ContactMethodTypes type;
 	private String address;
 	private Carriers carrier = Carriers.NO_CARRIER;
+	private String activationKey;
+	boolean isActivated = false;
 	
 	public ContactMethodTypes getType() {
 		return this.type;
@@ -32,9 +34,27 @@ public class ContactMethod {
 		this.carrier = carrier;
 	}
 	
-	public ContactMethod(ContactMethodTypes type, String address) {
+	public String getActivationKey() {
+		return this.activationKey;
+	}
+	
+	public void setActivationKey(String activationKey) {
+		this.activationKey = activationKey;
+	}
+	
+	public boolean isActivated() {
+		return this.isActivated;
+	}
+	
+	public void isActivated(boolean isActivated) {
+		this.isActivated = isActivated;
+	}
+	
+	public ContactMethod(ContactMethodTypes type, String address, Carriers carrier, String activationKey) {
 		this.type = type;
 		this.address = address;
+		this.carrier = carrier;
+		this.activationKey = activationKey;
 	}
 	
 }

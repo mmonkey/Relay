@@ -35,12 +35,13 @@ public class MessageRelayService implements RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
+	@Override
 	public boolean sendMessage(Player recipient, String message) {
 		
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, message);
+		return send(null, recipients, message, false);
 		
 	}
 	
@@ -51,9 +52,10 @@ public class MessageRelayService implements RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
+	@Override
 	public boolean sendMessage(List<Player> recipients, String message) {
 		
-		return send(null, recipients, message);
+		return send(null, recipients, message, false);
 		
 	}
 	
@@ -65,12 +67,13 @@ public class MessageRelayService implements RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
+	@Override
 	public boolean sendMessage(Player sender, Player recipient, String message) {
 		
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, message);
+		return send(sender, recipients, message, false);
 		
 	}
 	
@@ -82,13 +85,14 @@ public class MessageRelayService implements RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
+	@Override
 	public boolean sendMessage(Player sender, List<Player> recipients, String message) {
 		
-		return send(sender, recipients, message);
+		return send(sender, recipients, message, false);
 		
 	}
 	
-	private boolean send(Player sender, List<Player> recipients, String message) {
+	protected boolean send(Player sender, List<Player> recipients, String message, boolean force) {
 		
 		Gateway gateway = getGateway();
 		
@@ -144,7 +148,7 @@ public class MessageRelayService implements RelayService {
 			return false;
 		}
 		
-		List<Message> messages = getMessages(sender, recipients, session, gateway, message);
+		List<Message> messages = getMessages(sender, recipients, session, gateway, message, force);
 		
 		if (messages == null) {
 			Relay.getLogger().info("messages is null");
@@ -169,7 +173,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String message) {
+	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String message, boolean force) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		
@@ -192,6 +196,10 @@ public class MessageRelayService implements RelayService {
 				EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
 				Contact contact = plugin.getContactStorageService().getContact(player);
 				List<ContactMethod> methods = contact.getMethods();
+				
+				if (!contact.acceptTerms()) {
+					return null;
+				}
 				
 				for (ContactMethod method: methods) {
 					
@@ -233,7 +241,10 @@ public class MessageRelayService implements RelayService {
 					}
 					
 					emailMessage.setText(message);
-					messages.add(emailMessage);
+					
+					if (method.isActivated() || force) {
+						messages.add(emailMessage);
+					}
 					
 				}
 				
