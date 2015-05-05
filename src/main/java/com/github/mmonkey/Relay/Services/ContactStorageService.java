@@ -103,8 +103,10 @@ public class ContactStorageService extends StorageService {
 		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) config.getValue();
 		
-		for (String uniqueId: list) {
-			blacklist.add(UUID.fromString(uniqueId));
+		if (list != null && !list.isEmpty()) {
+			for (String uniqueId: list) {
+				blacklist.add(UUID.fromString(uniqueId));
+			}
 		}
 		
 		return blacklist;
