@@ -1,6 +1,10 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +99,14 @@ public class Relay {
 			this.configDir.mkdirs();
 		}
 		
+		File templateDir = new File(this.configDir, "templates");
+		
+		if (!templateDir.isDirectory()) {
+			templateDir.mkdirs();
+		}
+		
+		saveTemplateFiles(templateDir);
+		
 		this.defaultConfigService = new DefaultConfigStorageService(this, this.configDir);
 		this.gatewayStorageService = new GatewayStorageService(this, this.configDir);
 		this.contactStorageService = new ContactStorageService(this, this.configDir);
@@ -181,6 +193,42 @@ public class Relay {
 		
 		}
 		
+	}
+	
+	private void saveTemplateFiles(File templateDir) {
+		try {
+			File libFolder = new File(Relay.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath(), "lib");
+			File defaultTemplateSource = new File(libFolder, "default.mustache");
+			File defaultTemplate = new File(templateDir, "default.mustache");
+			
+			
+			if (!defaultTemplate.isFile()) {
+				copyFile(defaultTemplateSource, defaultTemplate);
+			}
+			
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void copyFile(File input, File output) throws IOException {
+		
+		FileInputStream inputStream = new FileInputStream(input);
+	    FileOutputStream outputStream = new FileOutputStream(output);
+	    byte[] buffer = new byte[1024];
+
+	    int length;
+	    while ((length = inputStream.read(buffer)) > 0){
+
+	    	outputStream.write(buffer, 0, length);
+
+	    }
+
+	    inputStream.close();
+	    outputStream.close();
+	    
 	}
 	
 	private void saveSensitiveData() throws Exception {
