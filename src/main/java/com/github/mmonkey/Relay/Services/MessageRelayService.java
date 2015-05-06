@@ -3,6 +3,7 @@ package com.github.mmonkey.Relay.Services;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -13,7 +14,9 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 import org.spongepowered.api.entity.player.Player;
 
@@ -21,6 +24,7 @@ import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Gateway;
 import com.github.mmonkey.Relay.Relay;
+import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 
 public class MessageRelayService implements RelayService {
@@ -28,7 +32,7 @@ public class MessageRelayService implements RelayService {
 	private Relay plugin;
 	
 	/**
-	 * Send message from the server to a player
+	 * Send message from the server to a player.
 	 * 
 	 * @param recipient Player
 	 * @param message String
@@ -40,12 +44,12 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, message, false);
+		return send(null, recipients, message, null, false);
 		
 	}
 	
 	/**
-	 * Send message from the server to multiple players
+	 * Send message from the server to multiple players.
 	 * 
 	 * @param recipients List<Player>
 	 * @param message String
@@ -54,12 +58,12 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public boolean sendMessage(List<Player> recipients, String message) {
 		
-		return send(null, recipients, message, false);
+		return send(null, recipients, message, null, false);
 		
 	}
 	
 	/**
-	 * Send message from a player to a player
+	 * Send message from a player to a player.
 	 * 
 	 * @param sender Player
 	 * @param recipient Player
@@ -72,12 +76,12 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, message, false);
+		return send(sender, recipients, message, null, false);
 		
 	}
 	
 	/**
-	 * Send message from a player to multiple players
+	 * Send message from a player to multiple players.
 	 * 
 	 * @param sender Player
 	 * @param recipients List<Player>
@@ -87,11 +91,79 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public boolean sendMessage(Player sender, List<Player> recipients, String message) {
 		
-		return send(sender, recipients, message, false);
+		return send(sender, recipients, message, null, false);
 		
 	}
 	
-	protected boolean send(Player sender, List<Player> recipients, String message, boolean force) {
+	/**
+	 * Send message from the server to a player with separate text and email message templates.
+	 * 
+	 * @param recipient Player
+	 * @param text String
+	 * @param html String
+	 * @return boolean
+	 */
+	@Override
+	public boolean sendMessage(Player recipient, String text, String html) {
+		
+		List<Player> recipients = new ArrayList<Player>();
+		recipients.add(recipient);
+		
+		return send(null, recipients, text, html, false);
+		
+	}
+	
+	/**
+	 * Send message from the server to multiple players with separate text and email message templates.
+	 * 
+	 * @param recipients List<Player>
+	 * @param text String
+	 * @param html String
+	 * @return boolean
+	 */
+	@Override
+	public boolean sendMessage(List<Player> recipients, String text, String html) {
+		
+		return send(null, recipients, text, html, false);
+		
+	}
+	
+	/**
+	 * Send message from a player to a player with separate text and email message templates.
+	 * 
+	 * @param sender Player
+	 * @param recipient Player
+	 * @param text String
+	 * @param html String
+	 * @return boolean
+	 */
+	@Override
+	public boolean sendMessage(Player sender, Player recipient, String text, String html) {
+		
+		List<Player> recipients = new ArrayList<Player>();
+		recipients.add(recipient);
+		
+		return send(sender, recipients, text, html, false);
+		
+	}
+	
+	/**
+	 * Send message from a player to multiple players with separate text and email message templates.
+	 * 
+	 * @param sender Player
+	 * @param recipients List<Player>
+	 * @param text String
+	 * @param html String
+	 * @return boolean
+	 */
+	@Override
+	public boolean sendMessage(Player sender, List<Player> recipients, String text, String html) {
+		
+		return send(sender, recipients, text, html, false);
+		
+	}
+	
+	protected boolean send(Player sender, List<Player> recipients, String text, String html, boolean force) {
 		
 		Gateway gateway = getGateway();
 		
@@ -140,14 +212,18 @@ public class MessageRelayService implements RelayService {
 			);
 			
 		} catch (GeneralSecurityException e) {
+			
 			e.printStackTrace();
 			return false;
+			
 		} catch (UnsupportedEncodingException e) {
+			
 			e.printStackTrace();
 			return false;
+			
 		}
 		
-		List<Message> messages = getMessages(sender, recipients, session, gateway, message, force);
+		List<Message> messages = getMessages(sender, recipients, session, gateway, text, html, force);
 		
 		if (messages == null) {
 			Relay.getLogger().info("messages is null");
@@ -172,7 +248,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String message, boolean force) {
+	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String text, String html, boolean force) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		
@@ -202,7 +278,7 @@ public class MessageRelayService implements RelayService {
 				
 				for (ContactMethod method: methods) {
 					
-					Message emailMessage = new MimeMessage(session);
+					MimeMessage message = new MimeMessage(session);
 					List<String> addresses = new ArrayList<String>();
 					
 					String fromEmailAddress = encryptionUtil.decrypt(gateway.getEmailAddress());
@@ -210,13 +286,9 @@ public class MessageRelayService implements RelayService {
 					String fromAddress = (!fromEmailAddress.equals("")) ? fromEmailAddress : fromEmailUsername;
 					
 					if (sender == null) {
-						
-						emailMessage.setFrom(new InternetAddress(fromAddress, displayName));
-					
+						message.setFrom(new InternetAddress(fromAddress, displayName));
 					} else {
-						
-						emailMessage.setFrom(new InternetAddress(fromAddress, sender.getName()));
-						
+						message.setFrom(new InternetAddress(fromAddress, sender.getName()));
 					}
 					
 					for (int i = 0; i < method.getCarrier().getAddresses().length; i++) {	
@@ -225,24 +297,39 @@ public class MessageRelayService implements RelayService {
 					}
 					
 					for (String address: addresses) {
-						emailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
+						message.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
 					}
 					
-					switch (method.getType()) {
-						case EMAIL:
-							emailMessage.setSubject(emailSubject);
-							break;
-						case SMS:
-							emailMessage.setSubject(smsSubject);
-							break;
-						default:
-							break;
+					message.setSentDate(new Date());
+					
+					if (method.getType().equals(ContactMethodTypes.EMAIL)) {
+						
+						message.setSubject(emailSubject);
+						
+						if (html != null) {
+							
+							MimeMultipart multipart = new MimeMultipart();
+						    MimeBodyPart part = new MimeBodyPart();
+						    
+						    part.setText(html);
+						    multipart.addBodyPart(part);
+						    message.setContent(multipart);
+						    part.setHeader("Content-Type", "text/html");
+						    
+						    message.saveChanges();
+						
+						}
 					}
 					
-					emailMessage.setText(message);
+					if (method.getType().equals(ContactMethodTypes.SMS)) {
+						
+						message.setSubject(smsSubject);
+						message.setText(text);
+						
+					}
 					
 					if (method.isActivated() || force) {
-						messages.add(emailMessage);
+						messages.add(message);
 					}
 					
 				}
