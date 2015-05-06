@@ -27,6 +27,7 @@ public class DefaultConfigStorageService extends StorageService {
 	public static final String MESSAGES = "messages";
 	public static final String EMAIL_DISPLAY_NAME = "displayName";
 	public static final String EMAIL_SUBJECT = "emailSubjectLine";
+	public static final String EMAIL_TEMPLATE = "emailTemplate";
 	public static final String SMS_SUBJECT = "smsSubjectLine";
 	
 	public static final String SETTINGS = "settings";
@@ -84,6 +85,7 @@ public class DefaultConfigStorageService extends StorageService {
 		
 		getConfig().getNode(MESSAGES, EMAIL_DISPLAY_NAME).setValue("Minecraft Server");
 		getConfig().getNode(MESSAGES, EMAIL_SUBJECT).setValue("You have a new alert from your Minecraft server!");
+		getConfig().getNode(MESSAGES, EMAIL_TEMPLATE).setValue("default.mustache");
 		getConfig().getNode(MESSAGES, SMS_SUBJECT).setValue("MC Alert!");
 		
 		getConfig().getNode(SETTINGS, ENABLED).setValue(true);
