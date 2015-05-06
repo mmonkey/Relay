@@ -90,10 +90,16 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 				// TODO invalid carrier, select carrier from list (with note to notify admin if carrier not on list)
 				return CommandResult.empty();
 				
-			} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+			} catch (UnsupportedEncodingException  e) {
 				
+				e.printStackTrace();
 				return CommandResult.empty();
 			
+			} catch (GeneralSecurityException e) {
+				
+				e.printStackTrace();
+				return CommandResult.empty();
+				
 			}
 			
 		}

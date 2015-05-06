@@ -80,11 +80,16 @@ public class RegisterEmailSubCommand extends RegisterCommand {
 			ContactMethod method = new ContactMethod(ContactMethodTypes.EMAIL, encryptionUtil.encrypt(emailAddress), Carriers.NO_CARRIER, EncryptionUtil.generateSecretKey(4));
 			this.saveContactNotActivated(contact, method, player);
 			
-		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
+		} catch (UnsupportedEncodingException  e) {
 		
 			e.printStackTrace();
 			return CommandResult.empty();
 		
+		} catch (GeneralSecurityException e) {
+			
+			e.printStackTrace();
+			return CommandResult.empty();
+			
 		}
 		
 		return CommandResult.success();
