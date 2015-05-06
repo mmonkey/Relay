@@ -43,13 +43,13 @@ public class EncryptionUtil {
 	    
 	}
     
-	public static String generateSecretKey() {
+	public static String generateSecretKey(int length) {
 		
 		Random rand = new Random();
 		String characters = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ0123456789";
-		char[] key = new char[16];
+		char[] key = new char[length];
 		
-		for(int i = 0; i < 16; i++) {
+		for(int i = 0; i < length; i++) {
 			key[i] = characters.charAt(rand.nextInt(characters.length()));
 		}
 		
