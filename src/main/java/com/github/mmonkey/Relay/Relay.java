@@ -1,6 +1,9 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 
@@ -17,14 +20,16 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import com.github.mmonkey.Relay.Commands.RegisterActivateSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
+import com.github.mmonkey.Relay.Commands.RegisterEmailSubCommand;
+import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
 import com.github.mmonkey.Relay.Services.RelayService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
-import com.github.mmonkey.Relay.Utilities.StorageUtil;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
@@ -117,25 +122,53 @@ public class Relay {
 		
 		}
 		
+		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
+		
 		/**
-		 * /register [[-a] [-d] [contact]] [[-c] [code]] [carrier]
-		 * 
-		 * -a = accept terms
-		 * -d = decline terms
-		 * -c = enter registration code
+		 * /register email [[-a:accept] [-d:decline]] <emailAddress>
+		 */
+		subcommands.put(Arrays.asList("email"), CommandSpec.builder()
+			.setPermission("relay.register.email")
+			.setDescription(Texts.of("Register your email address."))
+			.setExtendedDescription(Texts.of("If registered, you can receive emails from this server."))
+			.setExecutor(new RegisterEmailSubCommand(this))
+			.setArguments(GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("emailAddress"))))
+			.build());
+		
+		/**
+		 * /register phone [[-a:accept] [-d:decline]] <phoneNumber> [carrier]
+		 */
+		subcommands.put(Arrays.asList("phone"), CommandSpec.builder()
+			.setPermission("relay.register.phone")
+			.setDescription(Texts.of("Register your phone number."))
+			.setExtendedDescription(Texts.of("If registered, you can receive text messages from this server."))
+			.setExecutor(new RegisterPhoneSubCommand(this))
+			.setArguments(GenericArguments.seq(
+					GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("phoneNumber"))),
+					GenericArguments.optional(GenericArguments.string(Texts.of("carrier")))))
+			.build());
+		
+		/**
+		 * /register activate <code>
+		 */
+		subcommands.put(Arrays.asList("activate"), CommandSpec.builder()
+			.setDescription(Texts.of("Activate your contact method."))
+			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
+			.setExecutor(new RegisterActivateSubCommand(this))
+			.setArguments(GenericArguments.string(Texts.of("code")))
+			.build());
+		
+		/**
+		 * /register
 		 */
 		CommandSpec registerCommand = CommandSpec.builder()
 			.setDescription(Texts.of("Register your email or phone number."))
 			.setExtendedDescription(Texts.of("If registered, you can recieve emails or text messages from this server."))
 			.setExecutor(new RegisterCommand(this))
-			.setArguments(GenericArguments.seq(
-				GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("contact")))),
-				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("code")))),
-				GenericArguments.optional(GenericArguments.string(Texts.of("carrier")))
-			))
+			.setChildren(subcommands)
 			.build();
 		
-		if (this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_ENABLED).getBoolean()) {
+		if (this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.ENABLED).getBoolean()) {
 			
 			game.getCommandDispatcher().register(this, registerCommand, "register");
 		
@@ -145,25 +178,25 @@ public class Relay {
 	
 	private void saveSensitiveData() throws Exception {
 
-		CommentedConfigurationNode settingsConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_SETTINGS);
-		CommentedConfigurationNode emailConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_EMAIL_ACCOUNT_INFO);
-		CommentedConfigurationNode mandrillConfig = this.getDefaultConfigService().getConfig().getNode(StorageUtil.CONFIG_NODE_MANDRILL_ACCOUNT_INFO);
+		CommentedConfigurationNode settingsConfig = this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.SETTINGS);
+		CommentedConfigurationNode emailConfig = this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.EMAIL_ACCOUNT_INFO);
+		CommentedConfigurationNode mandrillConfig = this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.MANDRILL_ACCOUNT_INFO);
 		
-		String name = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_NAME).getString();
-		String emailAddress = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_ADDRESS).getString();
-		String username = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_USERNAME).getString();
-		String password = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_PASSWORD).getString();
-		String host = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_HOST).getString();
-		int port = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_PORT).getInt();
-		boolean ssl = emailConfig.getNode(StorageUtil.CONFIG_NODE_EMAIL_SSL).getBoolean();
+		String name = emailConfig.getNode(DefaultConfigStorageService.EMAIL_NAME).getString();
+		String emailAddress = emailConfig.getNode(DefaultConfigStorageService.EMAIL_ADDRESS).getString();
+		String username = emailConfig.getNode(DefaultConfigStorageService.EMAIL_USERNAME).getString();
+		String password = emailConfig.getNode(DefaultConfigStorageService.EMAIL_PASSWORD).getString();
+		String host = emailConfig.getNode(DefaultConfigStorageService.EMAIL_HOST).getString();
+		int port = emailConfig.getNode(DefaultConfigStorageService.EMAIL_PORT).getInt();
+		boolean ssl = emailConfig.getNode(DefaultConfigStorageService.EMAIL_SSL).getBoolean();
 		
-		String mandrillUsername = mandrillConfig.getNode(StorageUtil.CONFIG_NODE_MANDRILL_USERNAME).getString();
-		String mandrillPassword = mandrillConfig.getNode(StorageUtil.CONFIG_NODE_MANDRILL_PASSWORD).getString();
+		String mandrillUsername = mandrillConfig.getNode(DefaultConfigStorageService.MANDRILL_USERNAME).getString();
+		String mandrillPassword = mandrillConfig.getNode(DefaultConfigStorageService.MANDRILL_PASSWORD).getString();
 	
 		Gateway gateway = new Gateway();
 		Gateway mandrill = new Gateway();
 		
-		EncryptionUtil encryptionUtil = new EncryptionUtil(settingsConfig.getNode(StorageUtil.CONFIG_NODE_SECRET_KEY).getString());
+		EncryptionUtil encryptionUtil = new EncryptionUtil(settingsConfig.getNode(DefaultConfigStorageService.SECRET_KEY).getString());
 		
 		if (!name.equals("") && !username.equals("") && !password.equals("") && !host.equals("") && port != 0) {
 			
