@@ -14,9 +14,18 @@ import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
-import com.github.mmonkey.Relay.Utilities.StorageUtil;
 
 public class ContactStorageService extends StorageService {
+	
+	public static final String CONTACT_ACCEPT_TERMS = "acceptTerms";
+	public static final String CONTACT_METHODS = "methods";
+	public static final String CONTACT_BLACKLIST = "blacklist";
+	
+	public static final String CONTACT_METHOD_TYPE = "type";
+	public static final String CONTACT_METHOD_ADDRESS = "address";
+	public static final String CONTACT_METHOD_CARRIER = "carrier";
+	public static final String CONTACT_METHOD_ACTIVATION_KEY = "activationKey";
+	public static final String CONTACT_METHOD_IS_ACTIVATED = "isActivated";
 
 	public ContactStorageService(Relay plugin, File configDir) {
 		super(plugin, configDir);
@@ -29,17 +38,19 @@ public class ContactStorageService extends StorageService {
 		List<String> list = new ArrayList<String>();
 		
 		for (ContactMethod method: contact.getMethods()) {
-			CommentedConfigurationNode item = config.getNode(method.getCarrier().getDisplayName());
-			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).setValue(method.getType().name());
-			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).setValue(method.getAddress());
-			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).setValue(method.getCarrier().name());
-			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ACTIVATION_KEY).setValue(method.getActivationKey());
-			item.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_IS_ACTIVATED).setValue(method.isActivated());
+			String name = getMethodName(list, method);
+			CommentedConfigurationNode item = config.getNode(name);
 			
-			list.add(method.getCarrier().getDisplayName());
+			item.getNode(CONTACT_METHOD_TYPE).setValue(method.getType().name());
+			item.getNode(CONTACT_METHOD_ADDRESS).setValue(method.getAddress());
+			item.getNode(CONTACT_METHOD_CARRIER).setValue(method.getCarrier().name());
+			item.getNode(CONTACT_METHOD_ACTIVATION_KEY).setValue(method.getActivationKey());
+			item.getNode(CONTACT_METHOD_IS_ACTIVATED).setValue(method.isActivated());
+			
+			list.add(name);
 		}
 		
-		config.getNode(StorageUtil.CONFIG_NODE_LIST).setValue(list);
+		config.getNode(LIST).setValue(list);
 		
 	}
 	
@@ -61,16 +72,16 @@ public class ContactStorageService extends StorageService {
 		
 		if (!list.contains(player.getUniqueId().toString())) {
 			list.add(player.getUniqueId().toString());
-			getConfig().getNode(StorageUtil.CONFIG_NODE_LIST).setValue(list);
+			getConfig().getNode(LIST).setValue(list);
 		}
 		
 		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
-		config.getNode(StorageUtil.CONFIG_NODE_CONTACT_ACCEPT_TERMS).setValue(contact.acceptTerms());
+		config.getNode(CONTACT_ACCEPT_TERMS).setValue(contact.acceptTerms());
 		
-		CommentedConfigurationNode methods = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHODS);
+		CommentedConfigurationNode methods = config.getNode(CONTACT_METHODS);
 		saveContactMethods(methods, contact);
 		
-		CommentedConfigurationNode blacklist = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_BLACKLIST);
+		CommentedConfigurationNode blacklist = config.getNode(CONTACT_BLACKLIST);
 		saveBlacklist(blacklist, contact);
 		
 		saveConfig();
@@ -89,11 +100,11 @@ public class ContactStorageService extends StorageService {
 		for (String item: list) {
 			CommentedConfigurationNode configItem = config.getNode(item);
 			
-			ContactMethodTypes type = ContactMethodTypes.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_TYPE).getString());
-			String address = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ADDRESS).getString();
-			Carriers carrier = Carriers.valueOf(configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_CARRIER).getString());
-			String activationKey = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_ACTIVATION_KEY).getString();
-			boolean isActivated = configItem.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHOD_IS_ACTIVATED).getBoolean();
+			ContactMethodTypes type = ContactMethodTypes.valueOf(configItem.getNode(CONTACT_METHOD_TYPE).getString());
+			String address = configItem.getNode(CONTACT_METHOD_ADDRESS).getString();
+			Carriers carrier = Carriers.valueOf(configItem.getNode(CONTACT_METHOD_CARRIER).getString());
+			String activationKey = configItem.getNode(CONTACT_METHOD_ACTIVATION_KEY).getString();
+			boolean isActivated = configItem.getNode(CONTACT_METHOD_IS_ACTIVATED).getBoolean();
 			
 			ContactMethod method = new ContactMethod(type, address, carrier, activationKey);
 			method.isActivated(isActivated);
@@ -124,14 +135,14 @@ public class ContactStorageService extends StorageService {
 	public Contact getContact(Player player) {
 		
 		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
-		CommentedConfigurationNode methodConfig = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_METHODS);
-		CommentedConfigurationNode blacklistConfig = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_BLACKLIST);
+		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
+		CommentedConfigurationNode blacklistConfig = config.getNode(CONTACT_BLACKLIST);
 		
 		boolean terms;
 		
 		try {
 		
-			terms = config.getNode(StorageUtil.CONFIG_NODE_CONTACT_ACCEPT_TERMS).getBoolean();
+			terms = config.getNode(CONTACT_ACCEPT_TERMS).getBoolean();
 		
 		} catch (Exception e) {
 			
@@ -145,6 +156,21 @@ public class ContactStorageService extends StorageService {
 		contact.setBlacklist(getBlacklist(blacklistConfig));
 	
 		return contact;
+		
+	}
+	
+	private String getMethodName(List<String> list, ContactMethod method) {
+		
+		String type = method.getType().name();
+		int count = 1;
+		
+		for (String item: list) {
+			if (item.contains(type)) {
+				count++;
+			}
+		}
+		
+		return type + count;
 		
 	}
 

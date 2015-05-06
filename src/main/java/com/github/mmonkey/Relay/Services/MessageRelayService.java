@@ -22,7 +22,6 @@ import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Gateway;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
-import com.github.mmonkey.Relay.Utilities.StorageUtil;
 
 public class MessageRelayService implements RelayService {
 
@@ -119,7 +118,7 @@ public class MessageRelayService implements RelayService {
 		properties.put("mail.smtp.port", gateway.getPort());
 		
 		String secretKey = plugin.getDefaultConfigService().getConfig()
-				.getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
+				.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.SECRET_KEY).getString();
 		
 		EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
 		
@@ -182,16 +181,16 @@ public class MessageRelayService implements RelayService {
 			try {
 				
 				String secretKey = plugin.getDefaultConfigService().getConfig()
-					.getNode(StorageUtil.CONFIG_NODE_SETTINGS, StorageUtil.CONFIG_NODE_SECRET_KEY).getString();
+					.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.SECRET_KEY).getString();
 				
 				String emailSubject = plugin.getDefaultConfigService().getConfig()
-					.getNode(StorageUtil.CONFIG_NODE_MESSAGES, StorageUtil.CONFIG_NODE_EMAIL_SUBJECT).getString();
+					.getNode(DefaultConfigStorageService.MESSAGES, DefaultConfigStorageService.EMAIL_SUBJECT).getString();
 				
 				String smsSubject = plugin.getDefaultConfigService().getConfig()
-					.getNode(StorageUtil.CONFIG_NODE_MESSAGES, StorageUtil.CONFIG_NODE_SMS_SUBJECT).getString();
+					.getNode(DefaultConfigStorageService.MESSAGES,DefaultConfigStorageService.SMS_SUBJECT).getString();
 				
 				String displayName = plugin.getDefaultConfigService().getConfig()
-					.getNode(StorageUtil.CONFIG_NODE_MESSAGES, StorageUtil.CONFIG_NODE_EMAIL_DISPLAY_NAME).getString();
+					.getNode(DefaultConfigStorageService.MESSAGES, DefaultConfigStorageService.EMAIL_DISPLAY_NAME).getString();
 				
 				EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
 				Contact contact = plugin.getContactStorageService().getContact(player);
