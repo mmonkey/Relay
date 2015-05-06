@@ -19,7 +19,7 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 	 * 
 	 * @param recipient Player
 	 * @param message String
-	 * @return
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendActivationMessage(Player recipient, String message) {
 
@@ -33,10 +33,10 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 	/**
 	 * Send activation message to player with separate text and email message templates.
 	 * 
-	 * @param recipient
-	 * @param text
-	 * @param email
-	 * @return
+	 * @param recipient Player
+	 * @param text String 
+	 * @param email String
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendActivationMessage(Player recipient, String text, String email) {
 

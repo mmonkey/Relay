@@ -13,7 +13,7 @@ public interface RelayService {
 	 * 
 	 * @param recipient Player
 	 * @param message String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player recipient, String message);
 	
@@ -22,7 +22,7 @@ public interface RelayService {
 	 * 
 	 * @param recipients List<Player>
 	 * @param message String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(List<Player> recipients, String message);
 	
@@ -32,7 +32,7 @@ public interface RelayService {
 	 * @param sender Player
 	 * @param recipient Player
 	 * @param message String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player sender, Player recipient, String message);
 	
@@ -42,7 +42,7 @@ public interface RelayService {
 	 * @param sender Player
 	 * @param recipients List<Player>
 	 * @param message String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message);
 	
@@ -52,7 +52,7 @@ public interface RelayService {
 	 * @param recipient Player
 	 * @param text String
 	 * @param html String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player recipient, String text, String html);
 	
@@ -62,7 +62,7 @@ public interface RelayService {
 	 * @param recipients List<Player>
 	 * @param message String
 	 * @param html String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html);
 	
@@ -73,7 +73,7 @@ public interface RelayService {
 	 * @param recipient Player
 	 * @param text String
 	 * @param html String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player sender, Player recipient, String text, String html);
 	
@@ -84,7 +84,7 @@ public interface RelayService {
 	 * @param recipients List<Player>
 	 * @param text String
 	 * @param html String
-	 * @return boolean
+	 * @return MessageRelayResult
 	 */
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html);
 	
