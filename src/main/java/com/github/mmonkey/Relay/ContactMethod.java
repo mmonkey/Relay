@@ -6,7 +6,7 @@ public class ContactMethod {
 
 	private ContactMethodTypes type;
 	private String address;
-	private Carriers carrier = Carriers.NO_CARRIER;
+	private Carriers carrier = Carriers.EMAIL;
 	private String activationKey;
 	boolean isActivated = false;
 	

@@ -77,7 +77,7 @@ public class RegisterEmailSubCommand extends RegisterCommand {
 
 		try {
 			
-			ContactMethod method = new ContactMethod(ContactMethodTypes.EMAIL, encryptionUtil.encrypt(emailAddress), Carriers.NO_CARRIER, EncryptionUtil.generateSecretKey(4));
+			ContactMethod method = new ContactMethod(ContactMethodTypes.EMAIL, encryptionUtil.encrypt(emailAddress), Carriers.EMAIL, EncryptionUtil.generateSecretKey(4));
 			this.saveContactNotActivated(contact, method, player);
 			
 		} catch (UnsupportedEncodingException  e) {
