@@ -14,6 +14,11 @@ public class HTMLTemplatingService implements TemplatingService {
 	private MustacheFactory mustacheFactory;
 	private Mustache mustache;
 	
+	public void setTemplateDirectory(File templateDir) {
+		this.templateDir = templateDir;
+		this.mustacheFactory = new DefaultMustacheFactory(this.templateDir.getPath());
+	}
+	
 	public String parse(String file, Object model) throws IOException {
 		
 		String result = "";
@@ -22,6 +27,9 @@ public class HTMLTemplatingService implements TemplatingService {
 		
 		return result;
 		
+	}
+	
+	public HTMLTemplatingService() {
 	}
 	
 	public HTMLTemplatingService(File templateDir) {

@@ -1,5 +1,7 @@
 package com.github.mmonkey.Relay.Commands;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
@@ -18,8 +20,10 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 
 import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
+import com.github.mmonkey.Relay.EmailMessage;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
+import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Services.SendActivationMessageRelayService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
@@ -41,8 +45,6 @@ public class RegisterCommand implements CommandExecutor {
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		
-		// TODO add default /register command stuff
 		return CommandResult.success();
 	}
 	
@@ -115,9 +117,28 @@ public class RegisterCommand implements CommandExecutor {
 			plugin.getContactStorageService().saveContact(player, contact);
 			
 			SendActivationMessageRelayService service = new SendActivationMessageRelayService(plugin);
-			service.sendActivationMessage(player, "Please verify your contact information by entering the following command on our server:"
-					+ " /register -c " + activationKey);
-
+			HTMLTemplatingService templateService = new HTMLTemplatingService(); 
+			
+			EmailMessage email = new EmailMessage();
+			email.setHeadline("Verify your email!");
+			email.addParagraph("Thank you for registering your contact information on our minecraft server! "
+					+ "To verify your contact information, please enter the following command on our server.");
+			email.addParagraph("/register activate " + activationKey);
+			
+			File templateDir = new File(plugin.getConfigDir(), "templates");
+			templateService.setTemplateDirectory(templateDir);
+			
+			String emailMessage;
+			try {
+				emailMessage = templateService.parse("default.mustache", email);
+			} catch (IOException e) {
+				emailMessage = null;
+			}
+			
+			String smsMessage = "Please verify your contact information by entering the following command on our server:"
+					+ " /register activate " + activationKey;
+			
+			service.sendActivationMessage(player, smsMessage, emailMessage);
 		
 			player.sendMessage(
 				Texts.of(TextColors.GREEN, "Thank you for registering, you will receive an activation code shortly. Follow the"

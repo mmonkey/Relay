@@ -37,6 +37,10 @@ public class EmailMessage {
 		this.imageUrl = imageUrl;
 	}
 	
+	public EmailMessage() {
+		this.paragraphs = new ArrayList<Paragraph>();
+	}
+	
 	public EmailMessage(String headline, String paragraph) {
 		
 		Paragraph p = new Paragraph(paragraph);

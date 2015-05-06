@@ -27,8 +27,10 @@ import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
+import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
 import com.github.mmonkey.Relay.Services.RelayService;
+import com.github.mmonkey.Relay.Services.TemplatingService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
@@ -76,6 +78,10 @@ public class Relay {
 		return this.contactStorageService;
 	}
 	
+	public File getConfigDir() {
+		return this.configDir;
+	}
+	
 	@Subscribe
 	public void onPreInit(PreInitializationEvent event) {
 		
@@ -115,6 +121,7 @@ public class Relay {
 		try {
 			
 			this.game.getServiceManager().setProvider(this, RelayService.class, new MessageRelayService(this));
+			this.game.getServiceManager().setProvider(this, TemplatingService.class, new HTMLTemplatingService());
 		
 		} catch (ProviderExistsException e) {
 			
