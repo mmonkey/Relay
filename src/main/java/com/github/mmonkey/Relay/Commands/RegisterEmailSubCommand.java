@@ -74,7 +74,6 @@ public class RegisterEmailSubCommand extends RegisterCommand {
 				
 		}
 
-
 		try {
 			
 			ContactMethod method = new ContactMethod(ContactMethodTypes.EMAIL, encryptionUtil.encrypt(emailAddress), Carriers.EMAIL, EncryptionUtil.generateSecretKey(4));

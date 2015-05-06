@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
 
+import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
+
 public interface RelayService {
 
 	/**
@@ -13,7 +15,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player recipient, String message);
+	public MessageRelayResult sendMessage(Player recipient, String message);
 	
 	/**
 	 * Send message from server to multiple players.
@@ -22,7 +24,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
-	public boolean sendMessage(List<Player> recipients, String message);
+	public MessageRelayResult sendMessage(List<Player> recipients, String message);
 	
 	/**
 	 * Send message from player to player.
@@ -32,7 +34,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player sender, Player recipient, String message);
+	public MessageRelayResult sendMessage(Player sender, Player recipient, String message);
 	
 	/**
 	 * Send message from player to multiple players.
@@ -42,7 +44,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player sender, List<Player> recipients, String message);
+	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message);
 	
 	/**
 	 * Send message from server to player with separate text and email message templates.
@@ -52,7 +54,7 @@ public interface RelayService {
 	 * @param html String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player recipient, String text, String html);
+	public MessageRelayResult sendMessage(Player recipient, String text, String html);
 	
 	/**
 	 * Send message from server to multiple players with separate text and email message templates.
@@ -62,7 +64,7 @@ public interface RelayService {
 	 * @param html String
 	 * @return boolean
 	 */
-	public boolean sendMessage(List<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html);
 	
 	/**
 	 * Send message from player to player with separate text and email message templates.
@@ -73,7 +75,7 @@ public interface RelayService {
 	 * @param html String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player sender, Player recipient, String text, String html);
+	public MessageRelayResult sendMessage(Player sender, Player recipient, String text, String html);
 	
 	/**
 	 * Send message from player to multiple players with separate text and email message templates.
@@ -84,6 +86,6 @@ public interface RelayService {
 	 * @param html String
 	 * @return boolean
 	 */
-	public boolean sendMessage(Player sender, List<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html);
 	
 }

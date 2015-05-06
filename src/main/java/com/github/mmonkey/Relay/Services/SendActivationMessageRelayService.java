@@ -6,6 +6,7 @@ import java.util.List;
 import org.spongepowered.api.entity.player.Player;
 
 import com.github.mmonkey.Relay.Relay;
+import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
 public class SendActivationMessageRelayService extends MessageRelayService {
 
@@ -20,12 +21,12 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 	 * @param message String
 	 * @return
 	 */
-	public boolean sendActivationMessage(Player recipient, String message) {
+	public MessageRelayResult sendActivationMessage(Player recipient, String message) {
 
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 
-		return this.send(null, recipients, message, null, true);
+		return this.send(null, recipients, message, null, null, true);
 	
 	}
 	
@@ -37,12 +38,12 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 	 * @param email
 	 * @return
 	 */
-	public boolean sendActivationMessage(Player recipient, String text, String email) {
+	public MessageRelayResult sendActivationMessage(Player recipient, String text, String email) {
 
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 
-		return this.send(null, recipients, text, email, true);
+		return this.send(null, recipients, text, email, null, true);
 	
 	}
 	
