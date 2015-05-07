@@ -1,6 +1,7 @@
 package com.github.mmonkey.Relay.Services;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -11,29 +12,27 @@ import com.github.mustachejava.MustacheFactory;
 public class HTMLTemplatingService implements TemplatingService {
 
 	private File templateDir;
-	private MustacheFactory mustacheFactory;
-	private Mustache mustache;
 	
 	public void setTemplateDirectory(File templateDir) {
 		this.templateDir = templateDir;
-		this.mustacheFactory = new DefaultMustacheFactory(this.templateDir.getPath());
 	}
 	
-	public String parse(String file, Object model) throws IOException {
+	public String parse(String template, Object model) throws IOException {
 		
 		String result = "";
-		this.mustache = this.mustacheFactory.compile(file);
-		this.mustache.execute(new StringWriter(), model).write(result);
+		
+		File temp = new File(this.templateDir, template);
+		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
+		Mustache mustache = mustacheFactory.compile(new FileReader(temp), "fileReader");
+		
+		StringWriter writer = new StringWriter();
+		mustache.execute(writer, model).write(result);
+		writer.flush();
 		
 		return result;
 		
 	}
 	
 	public HTMLTemplatingService() {
-	}
-	
-	public HTMLTemplatingService(File templateDir) {
-		this.templateDir = templateDir;
-		this.mustacheFactory = new DefaultMustacheFactory(this.templateDir.getPath());
 	}
 }

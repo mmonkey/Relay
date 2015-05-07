@@ -2,6 +2,7 @@ package com.github.mmonkey.Relay.Commands;
 
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -40,12 +41,16 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 		String carrier = (args.hasAny("carrier")) ? ((String) args.getOne("carrier").get()) : "";
 		
 		Player player = (Player) src;
-		Contact contact = getContact(player);
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
 		boolean isValid = (phoneNumber != null && isValidPhoneNumber(phoneNumber));
 		
-		accept = contact.acceptTerms();
-		decline = !contact.acceptTerms();
+		Contact contact = new Contact();
+		List<String> contacts = plugin.getContactStorageService().getContactList();
+		
+		if (contacts.contains(player.getUniqueId().toString())) {
+			contact = plugin.getContactStorageService().getContact(player);
+			accept = contact.acceptTerms();
+		}
 		
 		if (decline) {
 			
