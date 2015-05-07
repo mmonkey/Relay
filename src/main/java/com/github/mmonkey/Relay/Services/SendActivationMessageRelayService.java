@@ -26,7 +26,7 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 
-		return this.send(null, recipients, message, null, null, true);
+		return this.send(null, recipients, message, null, true);
 	
 	}
 	
@@ -43,7 +43,7 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 
-		return this.send(null, recipients, text, email, null, true);
+		return this.send(null, recipients, text, email, true);
 	
 	}
 	

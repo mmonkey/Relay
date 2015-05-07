@@ -32,9 +32,6 @@ public class MessageRelayService implements RelayService {
 
 	private Relay plugin;
 	
-	private Gateway gateway;
-	private int gatewayNumber = 1;
-	
 	/**
 	 * Send message from the server to a player.
 	 * 
@@ -48,7 +45,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, message, null, null, false);
+		return send(null, recipients, message, null, false);
 		
 	}
 	
@@ -62,7 +59,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(List<Player> recipients, String message) {
 		
-		return send(null, recipients, message, null, null, false);
+		return send(null, recipients, message, null, false);
 		
 	}
 	
@@ -80,7 +77,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, message, null, null, false);
+		return send(sender, recipients, message, null, false);
 		
 	}
 	
@@ -95,7 +92,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message) {
 		
-		return send(sender, recipients, message, null, null, false);
+		return send(sender, recipients, message, null, false);
 		
 	}
 	
@@ -113,7 +110,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, text, html, null, false);
+		return send(null, recipients, text, html, false);
 		
 	}
 	
@@ -128,7 +125,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html) {
 		
-		return send(null, recipients, text, html, null, false);
+		return send(null, recipients, text, html, false);
 		
 	}
 	
@@ -147,7 +144,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, text, html, null, false);
+		return send(sender, recipients, text, html, false);
 		
 	}
 	
@@ -163,15 +160,15 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html) {
 		
-		return send(sender, recipients, text, html, null, false);
+		return send(sender, recipients, text, html, false);
 		
 	}
 	
-	protected MessageRelayResult send(Player sender, List<Player> recipients, String text, String html, List<Message> messages, boolean force) {
+	protected MessageRelayResult send(Player sender, List<Player> recipients, String text, String html, boolean force) {
 		
-		if (this.gateway == null) {
-			this.gatewayNumber = 1;
-			this.gateway = getGateway(this.gatewayNumber, true);
+		Gateway gateway = getGateway();
+		
+		if (gateway == null) {
 			return MessageRelayResult.TRY_RELOADING_GATEWAYS;
 		}
 		
@@ -224,7 +221,7 @@ public class MessageRelayService implements RelayService {
 			
 		}
 		
-		List<Message> msgs = (messages != null) ? messages : getMessages(sender, recipients, session, gateway, text, html, force);
+		List<Message> messages = getMessages(sender, recipients, session, gateway, text, html, force);
 		
 		if (messages == null) {
 			return MessageRelayResult.NO_MESSAGES_TO_SEND;
@@ -235,14 +232,14 @@ public class MessageRelayService implements RelayService {
 			Transport transport = session.getTransport("smtp");
 			transport.connect(gateway.getHost(), gateway.getPort(), username, password);
 		
-			for (Message message: msgs) {
+			for (Message message: messages) {
 				transport.sendMessage(message, message.getAllRecipients());
 			}
 		
 		} catch (MessagingException e) {
 			
-			this.gateway = getGateway((this.gatewayNumber + 1), false);
-			send(sender, recipients, text, html, msgs, force);
+			e.printStackTrace();
+			return MessageRelayResult.TRY_RELOADING_GATEWAYS;
 			
 		}
 		
@@ -298,24 +295,26 @@ public class MessageRelayService implements RelayService {
 						message.addRecipient(Message.RecipientType.TO, new InternetAddress(address));
 					}
 					
-					message.setSentDate(new Date());
 					
 					if (method.getType().equals(ContactMethodTypes.EMAIL)) {
 						
 						message.setSubject(emailSubject);
+						message.setSentDate(new Date());
 						
 						if (html != null) {
 							
 							MimeMultipart multipart = new MimeMultipart();
-						    MimeBodyPart part = new MimeBodyPart();
-						    
-						    part.setText(html);
-						    multipart.addBodyPart(part);
-						    message.setContent(multipart);
-						    part.setHeader("Content-Type", "text/html");
-						    
-						    message.saveChanges();
-						
+							MimeBodyPart textPart = new MimeBodyPart();
+							MimeBodyPart htmlPart = new MimeBodyPart();
+
+							htmlPart.setContent(html, "text/html");
+							textPart.setContent(text, "text/plain");
+							
+							multipart.addBodyPart(htmlPart);
+							multipart.addBodyPart(textPart);
+							
+							message.setContent(multipart);
+
 						} else {
 							
 							message.setText(text);
@@ -357,43 +356,27 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private Gateway getGateway(int number, boolean getDefault) {
+	private Gateway getGateway() {
 		
-		int index = number - 1;
 		List<String> gateways = plugin.getGatewayStorageService().getGatewayList();
 		
-		if (gateways.size() == 0) {
-			return null;
-		}
-		
-		if (index < 1) {
-			return null;
-		}
-		
-		if (getDefault) {
-			
-			for (String name: gateways) {
-				if (name.equals("Mandrill")) {
-					return plugin.getGatewayStorageService().getGateway(name);
-				}
+		for (String name: gateways) {
+			if (name.equals("Mandrill")) {
+				return plugin.getGatewayStorageService().getGateway(name);
 			}
-			
 		}
 		
-		if (gateways.size() >= index) {
+		if (gateways.size() > 0) {
 		
-			return plugin.getGatewayStorageService().getGateway(gateways.get(index));
-		
-		} else {
-			
-			return null;
+			return plugin.getGatewayStorageService().getGateway(gateways.get(0));
 		
 		}
+		
+		return null;
 		
 	}
 	
 	public MessageRelayService(Relay plugin) {
 		this.plugin = plugin;
-		this.gateway = getGateway(this.gatewayNumber, true);
 	}
 }

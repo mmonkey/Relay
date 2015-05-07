@@ -19,17 +19,14 @@ public class HTMLTemplatingService implements TemplatingService {
 	
 	public String parse(String template, Object model) throws IOException {
 		
-		String result = "";
-		
 		File temp = new File(this.templateDir, template);
 		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
 		Mustache mustache = mustacheFactory.compile(new FileReader(temp), "fileReader");
 		
 		StringWriter writer = new StringWriter();
-		mustache.execute(writer, model).write(result);
-		writer.flush();
-		
-		return result;
+		mustache.execute(writer, model).flush();
+			
+		return writer.toString();
 		
 	}
 	

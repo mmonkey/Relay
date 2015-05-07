@@ -113,8 +113,6 @@ public class RegisterCommand implements CommandExecutor {
 			
 			contact.getMethods().add(method);
 			contact.acceptTerms(true);
-		
-			plugin.getContactStorageService().saveContact(player, contact);
 			
 			SendActivationMessageRelayService service = new SendActivationMessageRelayService(plugin);
 			HTMLTemplatingService templateService = new HTMLTemplatingService(); 
@@ -131,12 +129,18 @@ public class RegisterCommand implements CommandExecutor {
 			String emailMessage;
 			try {
 				emailMessage = templateService.parse("default.mustache", email);
+				
+				if (emailMessage == null) {
+					//there was an error trying to parse template file
+				}
 			} catch (IOException e) {
 				emailMessage = null;
 			}
 			
 			String smsMessage = "Please verify your contact information by entering the following command on our server:"
 					+ " /register activate " + activationKey;
+			
+			plugin.getContactStorageService().saveContact(player, contact);
 			
 			service.sendActivationMessage(player, smsMessage, emailMessage);
 		
