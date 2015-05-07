@@ -316,6 +316,10 @@ public class MessageRelayService implements RelayService {
 						    
 						    message.saveChanges();
 						
+						} else {
+							
+							message.setText(text);
+							
 						}
 						
 					}
