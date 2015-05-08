@@ -25,6 +25,7 @@ import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
 import com.github.mmonkey.Relay.Commands.RegisterActivateSubCommand;
+import com.github.mmonkey.Relay.Commands.RegisterCarriersSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
 import com.github.mmonkey.Relay.Commands.RegisterEmailSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
@@ -175,6 +176,20 @@ public class Relay {
 			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
 			.setExecutor(new RegisterActivateSubCommand(this))
 			.setArguments(GenericArguments.string(Texts.of("code")))
+			.build());
+		
+		/**
+		 * /register carriers [[-s:select] [-u:update]] [name]
+		 */
+		subcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
+			.setPermission("relay.register.phone")
+			.setDescription(Texts.of("Supported Carriers"))
+			.setExtendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
+			.setExecutor(new RegisterCarriersSubCommand(this))
+			.setArguments(GenericArguments.seq(
+				GenericArguments.optional(GenericArguments.integer(Texts.of("page"))),
+				GenericArguments.flags().flag("s").flag("u").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("phone"))))
+			))
 			.build());
 		
 		/**

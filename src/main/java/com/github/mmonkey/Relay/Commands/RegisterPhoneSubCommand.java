@@ -92,7 +92,7 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 			
 			} catch (IllegalArgumentException e) {
 				
-				// TODO invalid carrier, select carrier from list (with note to notify admin if carrier not on list)
+				plugin.getGame().getCommandDispatcher().process(player, "register carriers -s " + phoneNumber);
 				return CommandResult.empty();
 				
 			} catch (UnsupportedEncodingException  e) {
@@ -108,9 +108,8 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 			}
 			
 		}
-				
-		//TODO:
-		//prompt player to select carrier from list
+		
+		plugin.getGame().getCommandDispatcher().process(player, "register carriers -s " + phoneNumber);
 		
 		return CommandResult.success();
 			

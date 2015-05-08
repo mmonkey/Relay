@@ -173,5 +173,48 @@ public class ContactStorageService extends StorageService {
 		return type + count;
 		
 	}
+	
+	public boolean deleteContactMethod(Player player, String name) {
+		
+		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
+		
+		List<String> list = getList(methodConfig);
+		
+		if (list.contains(name)) {
+			
+			list.remove(name);
+			
+			methodConfig.removeChild(name);
+			methodConfig.removeChild(LIST);
+			methodConfig.getNode(LIST).setValue(list);
+			
+			saveConfig();
+			return true;
+		}
+		
+		return false;
+		
+	}
+	
+	public boolean deleteContact(Player player) {
+		
+		List<String> list = getList(getConfig());
+		
+		if (list.contains(player.getUniqueId().toString())) {
+			
+			list.remove(player.getUniqueId().toString());
+			
+			getConfig().removeChild(player.getUniqueId().toString());
+			getConfig().removeChild(LIST);
+			getConfig().getNode(LIST).setValue(list);
+			
+			saveConfig();
+			return true;
+		}
+		
+		return false;
+		
+	}
 
 }
