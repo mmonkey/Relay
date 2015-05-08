@@ -115,7 +115,7 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 	private Text getUpdateCarrierAction(String displayName, String phone, String carrier) {
 		
 		return Texts.builder(displayName)
-				.onClick(TextActions.runCommand("/register edit -c " + carrier + " " + phone))
+				.onClick(TextActions.runCommand("/register edit -t phone -c " + carrier + " " + phone))
 				.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
 				.color(TextColors.DARK_AQUA)
 				.build();
