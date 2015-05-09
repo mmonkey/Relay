@@ -12,10 +12,6 @@ import org.apache.commons.codec.binary.Base64;
 public class EncryptionUtil {
 	
 	private String secretKey;
-	
-	public EncryptionUtil(String secretKey) {
-		this.secretKey = secretKey;
-	}
 
 	public String encrypt(String plainText) throws GeneralSecurityException, UnsupportedEncodingException {
 		
@@ -55,6 +51,10 @@ public class EncryptionUtil {
 		
 		return new String(key);
 	
+	}
+	
+	public EncryptionUtil(String secretKey) {
+		this.secretKey = secretKey;
 	}
 	
 }

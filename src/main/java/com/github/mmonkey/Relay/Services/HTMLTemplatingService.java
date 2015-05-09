@@ -17,16 +17,24 @@ public class HTMLTemplatingService implements TemplatingService {
 		this.templateDir = templateDir;
 	}
 	
-	public String parse(String template, Object model) throws IOException {
+	public String parse(String template, Object model) {
 		
-		File temp = new File(this.templateDir, template);
-		MustacheFactory mustacheFactory = new DefaultMustacheFactory();
-		Mustache mustache = mustacheFactory.compile(new FileReader(temp), "fileReader");
-		
-		StringWriter writer = new StringWriter();
-		mustache.execute(writer, model).flush();
+		try {
 			
-		return writer.toString();
+			File temp = new File(this.templateDir, template);
+			MustacheFactory mustacheFactory = new DefaultMustacheFactory();
+			Mustache mustache = mustacheFactory.compile(new FileReader(temp), "fileReader");
+			
+			StringWriter writer = new StringWriter();
+			mustache.execute(writer, model).flush();
+				
+			return writer.toString();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return "";
 		
 	}
 	

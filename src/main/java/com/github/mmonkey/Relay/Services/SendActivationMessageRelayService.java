@@ -9,10 +9,6 @@ import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
 public class SendActivationMessageRelayService extends MessageRelayService {
-
-	public SendActivationMessageRelayService(Relay plugin) {
-		super(plugin);
-	}
 	
 	/**
 	 * Send activation message to player.
@@ -45,6 +41,10 @@ public class SendActivationMessageRelayService extends MessageRelayService {
 
 		return this.send(null, recipients, text, email, true);
 	
+	}
+	
+	public SendActivationMessageRelayService(Relay plugin) {
+		super(plugin);
 	}
 	
 }

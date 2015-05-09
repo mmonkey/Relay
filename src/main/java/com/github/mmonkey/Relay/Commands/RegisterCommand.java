@@ -1,7 +1,6 @@
 package com.github.mmonkey.Relay.Commands;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
@@ -38,10 +37,6 @@ public class RegisterCommand implements CommandExecutor {
 			+ "by using the command:", CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/unregister");
 	
 	protected Relay plugin;
-	
-	public RegisterCommand(Relay plugin) {
-		this.plugin = plugin;
-	}
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -127,13 +122,9 @@ public class RegisterCommand implements CommandExecutor {
 			templateService.setTemplateDirectory(templateDir);
 			
 			String emailMessage;
-			try {
-				emailMessage = templateService.parse("default.mustache", email);
-				
-				if (emailMessage == null) {
-					//there was an error trying to parse template file
-				}
-			} catch (IOException e) {
+			emailMessage = templateService.parse("default.mustache", email);
+
+			if (emailMessage == "") {
 				emailMessage = null;
 			}
 			
@@ -156,6 +147,10 @@ public class RegisterCommand implements CommandExecutor {
 			
 		}
 		
+	}
+	
+	public RegisterCommand(Relay plugin) {
+		this.plugin = plugin;
 	}
 
 }

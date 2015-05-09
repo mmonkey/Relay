@@ -16,10 +16,6 @@ import com.github.mmonkey.Relay.Relay;
 
 public class RegisterActivateSubCommand extends RegisterCommand {
 
-	public RegisterActivateSubCommand(Relay plugin) {
-		super(plugin);
-	}
-
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 	
@@ -68,6 +64,10 @@ public class RegisterActivateSubCommand extends RegisterCommand {
 		
 		return CommandResult.success();
 	
+	}
+	
+	public RegisterActivateSubCommand(Relay plugin) {
+		super(plugin);
 	}
 
 }

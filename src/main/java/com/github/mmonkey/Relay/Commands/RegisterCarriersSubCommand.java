@@ -18,10 +18,6 @@ import com.github.mmonkey.Relay.PaginatedList;
 import com.github.mmonkey.Relay.Relay;
 
 public class RegisterCarriersSubCommand extends RegisterCommand {
-
-	public RegisterCarriersSubCommand(Relay plugin) {
-		super(plugin);
-	}
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -120,6 +116,10 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 				.color(TextColors.DARK_AQUA)
 				.build();
 		
+	}
+	
+	public RegisterCarriersSubCommand(Relay plugin) {
+		super(plugin);
 	}
 
 }

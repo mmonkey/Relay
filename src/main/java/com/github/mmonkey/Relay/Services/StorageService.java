@@ -101,8 +101,10 @@ public class StorageService {
 	}
 	
 	public StorageService(Relay plugin, File configDir) {
+		
 		this.plugin = plugin;
 		this.configDir = configDir;
+		
 	}
 	
 }

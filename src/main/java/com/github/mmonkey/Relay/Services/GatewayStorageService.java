@@ -9,12 +9,6 @@ import com.github.mmonkey.Relay.Gateway;
 import com.github.mmonkey.Relay.Relay;
 
 public class GatewayStorageService extends StorageService {
-
-	public GatewayStorageService(Relay plugin, File configDir) {
-		super(plugin, configDir);
-		
-		setConfigFile(new File(configDir, "gateways.conf"));
-	}
 	
 	public List<String> getGatewayList() {
 		return getList(getConfig());
@@ -57,6 +51,13 @@ public class GatewayStorageService extends StorageService {
 		getConfig().getNode(gateway.getName(), DefaultConfigStorageService.EMAIL_SSL).setValue(gateway.sslEnabled());
 		
 		saveConfig();
+		
+	}
+	
+	public GatewayStorageService(Relay plugin, File configDir) {
+		super(plugin, configDir);
+		
+		setConfigFile(new File(configDir, "gateways.conf"));
 		
 	}
 

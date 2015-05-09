@@ -250,24 +250,6 @@ public class PaginatedList {
 		return list.build();
 	}
 	
-	/**
-	 * @param command String
-	 */
-	public PaginatedList(String command) {
-		this.items = new ArrayList<Text>();
-		this.command = command;
-	}
-	
-	/**
-	 * @param command String
-	 * @param itemsPerPage int
-	 */
-	public PaginatedList(String command, int itemsPerPage) {
-		this.items = new ArrayList<Text>();
-		this.command = command;
-		this.itemsPerPage = itemsPerPage;
-	}
-	
 	private Text getPrevLinks(int currentPage) {
 		
 		TextBuilder paginationPrev = Texts.builder();
@@ -324,6 +306,24 @@ public class PaginatedList {
 	
 	private String fill(int length, char character) {
 		return new String(new char[length]).replace('\0', character);
+	}
+	
+	/**
+	 * @param command String
+	 */
+	public PaginatedList(String command) {
+		this.items = new ArrayList<Text>();
+		this.command = command;
+	}
+	
+	/**
+	 * @param command String
+	 * @param itemsPerPage int
+	 */
+	public PaginatedList(String command, int itemsPerPage) {
+		this.items = new ArrayList<Text>();
+		this.command = command;
+		this.itemsPerPage = itemsPerPage;
 	}
 	
 }

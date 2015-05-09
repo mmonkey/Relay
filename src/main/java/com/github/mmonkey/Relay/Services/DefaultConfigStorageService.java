@@ -116,6 +116,7 @@ public class DefaultConfigStorageService extends StorageService {
 		super(plugin, configDir);
 		
 		setConfigFile(new File(configDir, "config.conf"));
+		
 	}
 	
 }

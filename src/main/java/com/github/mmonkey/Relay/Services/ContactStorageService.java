@@ -26,12 +26,6 @@ public class ContactStorageService extends StorageService {
 	public static final String CONTACT_METHOD_CARRIER = "carrier";
 	public static final String CONTACT_METHOD_ACTIVATION_KEY = "activationKey";
 	public static final String CONTACT_METHOD_IS_ACTIVATED = "isActivated";
-
-	public ContactStorageService(Relay plugin, File configDir) {
-		super(plugin, configDir);
-		
-		setConfigFile(new File(configDir, "contacts.conf"));
-	}
 	
 	private void saveContactMethods(CommentedConfigurationNode config, Contact contact) {
 		
@@ -247,6 +241,13 @@ public class ContactStorageService extends StorageService {
 		
 		return false;
 		
+	}
+	
+	public ContactStorageService(Relay plugin, File configDir) {
+		super(plugin, configDir);
+		
+		setConfigFile(new File(configDir, "contacts.conf"));
+	
 	}
 
 }

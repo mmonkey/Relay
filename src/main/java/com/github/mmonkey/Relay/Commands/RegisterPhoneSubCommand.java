@@ -23,10 +23,6 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 
 public class RegisterPhoneSubCommand extends RegisterCommand {
-	
-	public RegisterPhoneSubCommand(Relay plugin) {
-		super(plugin);
-	}
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -154,6 +150,10 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 			return false;
 		}
 		
+	}
+	
+	public RegisterPhoneSubCommand(Relay plugin) {
+		super(plugin);
 	}
 
 }
