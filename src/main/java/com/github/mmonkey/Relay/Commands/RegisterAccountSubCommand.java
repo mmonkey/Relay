@@ -1,6 +1,5 @@
 package com.github.mmonkey.Relay.Commands;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
@@ -14,12 +13,12 @@ import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
 
-import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.PaginatedList;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
+import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
 public class RegisterAccountSubCommand extends RegisterCommand {
 
@@ -33,7 +32,6 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		int page = (args.hasAny("page")) ? ((Integer) args.getOne("page").get()) : 1;
 		
 		Player player = (Player) src;
-		Contact contact = getContact(player);
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
 		PaginatedList pagination = new PaginatedList("/register account");
 		
@@ -41,31 +39,45 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		TextBuilder header = Texts.builder();
 		
 		//TODO get ContactMethodList
-		List<String> list = new ArrayList<String>();
+		List<String> list = plugin.getContactStorageService().getContactMethodList(player);
 		
-		for (String item: list) {
+		for (String name: list) {
 			
 			//TODO get ContactMethod
-			ContactMethod method = plugin.getContactStorageService().getContactMethod(item);
-				
-			try {
+			ContactMethod method = plugin.getContactStorageService().getContactMethod(player, name);
 			
-				String type = (method.getType().equals(ContactMethodTypes.EMAIL)) ? "email": "phone";
-				String address = encryptionUtil.decrypt(method.getAddress());
+			if (method != null) {
 				
-				TextBuilder row = Texts.builder();
-				row.append(Texts.of(TextColors.WHITE, address + " - "));
-				row.append(getEditAction(address, type, "GET_METHOD_NAME"));
+				try {
 				
-				pagination.add(row.build());
-			
-			} catch (Exception e) {
-				// Don't panic.
+					String type = (method.getType().equals(ContactMethodTypes.EMAIL)) ? "email": "phone";
+					String address = encryptionUtil.decrypt(method.getAddress());
+					
+					TextBuilder row = Texts.builder();
+					row.append(Texts.of(TextColors.WHITE, address + " - "));
+					row.append(getEditAction(address, type, name));
+					
+					pagination.add(row.build());
+				
+				} catch (Exception e) {
+					// Don't panic.
+				}
+				
 			}
-				
+			
 		}
 		
-		//TODO: finish displaying pagination 
+		//TODO: finish displaying pagination
+		header.append(Texts.of(TextColors.GREEN, "-------"));
+		header.append(Texts.of(TextColors.GREEN, " Showing contact methods page " + page + " of " + pagination.getTotalPages() + " "));
+		header.append(Texts.of(TextColors.GREEN, "-------"));
+
+		pagination.setHeader(header.build());
+		
+		message.append(FormatUtil.empty());
+		message.append(pagination.getPage(page));
+		
+		player.sendMessage(message.build());
 		
 		return CommandResult.success();
 		

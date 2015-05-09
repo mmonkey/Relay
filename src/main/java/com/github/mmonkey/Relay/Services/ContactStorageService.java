@@ -116,6 +116,38 @@ public class ContactStorageService extends StorageService {
 		
 	}
 	
+	public List<String> getContactMethodList(Player player) {
+		
+		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
+		
+		return getList(methodConfig);
+		
+	}
+	
+	public ContactMethod getContactMethod(Player player, String name) {
+		
+		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
+		CommentedConfigurationNode methodNode = methodConfig.getNode(name);
+		
+		if (methodNode == null) {
+			return null;
+		}
+		
+		ContactMethodTypes type = ContactMethodTypes.valueOf(methodNode.getNode(CONTACT_METHOD_TYPE).getString());
+		String address = methodNode.getNode(CONTACT_METHOD_ADDRESS).getString();
+		Carriers carrier = Carriers.valueOf(methodNode.getNode(CONTACT_METHOD_CARRIER).getString());
+		String activationKey = methodNode.getNode(CONTACT_METHOD_ACTIVATION_KEY).getString();
+		boolean isActivated = methodNode.getNode(CONTACT_METHOD_IS_ACTIVATED).getBoolean();
+		
+		ContactMethod method = new ContactMethod(type, address, carrier, activationKey);
+		method.isActivated(isActivated);
+		
+		return method;
+		
+	}
+	
 	private List<UUID> getBlacklist(CommentedConfigurationNode config) {
 		
 		List<UUID> blacklist = new ArrayList<UUID>();

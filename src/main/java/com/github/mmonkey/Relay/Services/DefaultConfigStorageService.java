@@ -115,7 +115,7 @@ public class DefaultConfigStorageService extends StorageService {
 	public DefaultConfigStorageService(Relay plugin, File configDir) {
 		super(plugin, configDir);
 		
-		setConfigFile(new File(configDir, Relay.NAME + ".conf"));
+		setConfigFile(new File(configDir, "config.conf"));
 	}
 	
 }
