@@ -1,8 +1,6 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -38,6 +36,7 @@ import com.github.mmonkey.Relay.Services.RelayService;
 import com.github.mmonkey.Relay.Services.TemplatingService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.google.common.base.Optional;
+import com.google.common.io.Files;
 import com.google.inject.Inject;
 
 @Plugin(id = Relay.ID, name = Relay.NAME, version = Relay.VERSION)
@@ -218,7 +217,7 @@ public class Relay {
 			
 			
 			if (!defaultTemplate.isFile()) {
-				copyFile(defaultTemplateSource, defaultTemplate);
+				Files.copy(defaultTemplateSource, defaultTemplate);
 			}
 			
 		} catch (URISyntaxException e) {
@@ -226,24 +225,6 @@ public class Relay {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void copyFile(File input, File output) throws IOException {
-		
-		FileInputStream inputStream = new FileInputStream(input);
-	    FileOutputStream outputStream = new FileOutputStream(output);
-	    byte[] buffer = new byte[1024];
-
-	    int length;
-	    while ((length = inputStream.read(buffer)) > 0){
-
-	    	outputStream.write(buffer, 0, length);
-
-	    }
-
-	    inputStream.close();
-	    outputStream.close();
-	    
 	}
 	
 	private void saveSensitiveData() throws Exception {
