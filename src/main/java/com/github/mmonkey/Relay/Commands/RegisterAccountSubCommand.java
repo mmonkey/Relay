@@ -39,12 +39,10 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		TextBuilder message = Texts.builder();
 		TextBuilder header = Texts.builder();
 		
-		//TODO get ContactMethodList
 		List<String> list = plugin.getContactStorageService().getContactMethodList(player);
 		
 		for (String name: list) {
 			
-			//TODO get ContactMethod
 			ContactMethod method = plugin.getContactStorageService().getContactMethod(player, name);
 			
 			if (method != null) {
@@ -68,7 +66,6 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 			
 		}
 		
-		//TODO: finish displaying pagination
 		header.append(Texts.of(TextColors.GREEN, "-------"));
 		header.append(Texts.of(TextColors.GREEN, " Showing contact methods page " + page + " of " + pagination.getTotalPages() + " "));
 		header.append(Texts.of(TextColors.GREEN, "-------"));
