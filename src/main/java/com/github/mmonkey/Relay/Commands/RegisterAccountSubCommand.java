@@ -34,6 +34,7 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		Player player = (Player) src;
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
 		PaginatedList pagination = new PaginatedList("/register account");
+		pagination.setLineNumberType("");
 		
 		TextBuilder message = Texts.builder();
 		TextBuilder header = Texts.builder();
@@ -54,7 +55,7 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 					String address = encryptionUtil.decrypt(method.getAddress());
 					
 					TextBuilder row = Texts.builder();
-					row.append(Texts.of(TextColors.WHITE, address + " - "));
+					row.append(Texts.of(TextColors.WHITE, name + ": " + address + " - "));
 					row.append(getEditAction(address, type, name));
 					
 					pagination.add(row.build());

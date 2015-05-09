@@ -168,16 +168,6 @@ public class Relay {
 			.build());
 		
 		/**
-		 * /register activate <code>
-		 */
-		subcommands.put(Arrays.asList("activate"), CommandSpec.builder()
-			.setDescription(Texts.of("Activate your contact method."))
-			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
-			.setExecutor(new RegisterActivateSubCommand(this))
-			.setArguments(GenericArguments.string(Texts.of("code")))
-			.build());
-		
-		/**
 		 * /register carriers [[-s:select] [-u:update]] [name]
 		 */
 		subcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
@@ -189,6 +179,26 @@ public class Relay {
 				GenericArguments.optional(GenericArguments.integer(Texts.of("page"))),
 				GenericArguments.flags().flag("s").flag("u").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("phone"))))
 			))
+			.build());
+		
+		/**
+		 * /register activate <code>
+		 */
+		subcommands.put(Arrays.asList("activate"), CommandSpec.builder()
+			.setDescription(Texts.of("Activate your contact method."))
+			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
+			.setExecutor(new RegisterActivateSubCommand(this))
+			.setArguments(GenericArguments.string(Texts.of("code")))
+			.build());
+		
+		/**
+		 * /register account [page]
+		 */
+		subcommands.put(Arrays.asList("account"), CommandSpec.builder()
+			.setDescription(Texts.of("Manage your contact methods."))
+			.setExtendedDescription(Texts.of("View a list of your contact methods."))
+			.setExecutor(new RegisterActivateSubCommand(this))
+			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
 			.build());
 		
 		/**
