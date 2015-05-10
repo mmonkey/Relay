@@ -2,8 +2,8 @@ package com.github.mmonkey.Relay.Email;
 
 public class EmailSection {
 
-	private String sectionTextColor;
-	private String sectionBackgroundColor;
+	public String sectionTextColor;
+	public String sectionBackgroundColor;
 	
 	public String getSectionTextColor() {
 		return this.sectionTextColor;

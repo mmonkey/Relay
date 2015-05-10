@@ -5,9 +5,9 @@ import java.util.List;
 
 public class EmailMessage {
 	
-	private EmailHeaderSection headerSection;
-	private List<EmailBodySection> sections = new ArrayList<EmailBodySection>();
-	private EmailFooterSection footerSeciton;
+	public EmailHeaderSection headerSection;
+	public List<EmailBodySection> sections = new ArrayList<EmailBodySection>();
+	public EmailFooterSection footerSeciton;
 	
 	private String emailBackground;
 	private String bodyBackground;

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class EmailBodySection extends EmailSection {
 
-	List<EmailComponent> components = new ArrayList<EmailComponent>();
+	public List<EmailComponent> components = new ArrayList<EmailComponent>();
 	
 	public void addComponent(EmailComponent component) {
 		this.components.add(component);

@@ -28,7 +28,7 @@ import com.github.mmonkey.Relay.Email.EmailHeaderSection;
 import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
-import com.github.mmonkey.Relay.Services.SendActivationMessageRelayService;
+import com.github.mmonkey.Relay.Services.ActivationMessageRelayService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
@@ -114,18 +114,30 @@ public class RegisterCommand implements CommandExecutor {
 			contact.getMethods().add(method);
 			contact.acceptTerms(true);
 			
-			SendActivationMessageRelayService service = new SendActivationMessageRelayService(plugin);
+			ActivationMessageRelayService service = new ActivationMessageRelayService(plugin);
 			HTMLTemplatingService templateService = new HTMLTemplatingService(); 
 			
-			EmailHeaderSection header = new EmailHeaderSection();
-			header.setInvisibleIntroduction("Please verify your contact information!");
+			EmailHeaderSection header = new EmailHeaderSection(plugin.getGame().getServer().getBoundAddress().get().getHostString());
+			header.setServerAddress(plugin.getGame().getServer().getBoundAddress().get().getAddress().getHostAddress()
+					+ ":" + plugin.getGame().getServer().getBoundAddress().get().getPort());
+			header.setInvisibleIntroduction("Thank you for registering your contact information on our Minecraft server! To verify "
+					+ "your contact information, please enter the following command on our server");
 			
-			EmailBodySection body = new EmailBodySection();
-			body.addComponent(new EmailComponent(EmailComponentTypes.HEADLINE, "Verify your contact information!"));
-			body.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "Thank you for registering your "
+			EmailBodySection infoSection = new EmailBodySection();
+			infoSection.addComponent(new EmailComponent(EmailComponentTypes.SECTION_HEADLINE, "Please verify your contact information!"));
+			infoSection.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "<br />Thank you for registering your "
 					+ "contact information on our Minecraft server! To verify your contact information, please "
-					+ "enter the following command on our server."));
-			body.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "/register activate " + activationKey));
+					+ "enter the following command on our server:"));
+			
+			EmailBodySection commandSection = new EmailBodySection();
+			commandSection.setSectionBackgroundColor("#52894F");
+			EmailComponent command = new EmailComponent(EmailComponentTypes.HEADLINE, "/register activate " + activationKey);
+			command.setTextColor("#FFFFFF");
+			commandSection.addComponent(command);
+			
+			EmailBodySection wrongAddress = new EmailBodySection();
+			wrongAddress.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
+					+ "message by mistake, please disregard this message."));
 			
 			EmailFooterSection footer = new EmailFooterSection();
 			footer.setCopyrightName("Relay");
@@ -134,7 +146,9 @@ public class RegisterCommand implements CommandExecutor {
 			EmailMessage email = new EmailMessage();
 			email.setHeaderSection(header);
 			email.setFooterSection(footer);
-			email.addBodySection(body);
+			email.addBodySection(infoSection);
+			email.addBodySection(commandSection);
+			email.addBodySection(wrongAddress);
 			
 			File templateDir = new File(plugin.getConfigDir(), "templates");
 			templateService.setTemplateDirectory(templateDir);
@@ -151,7 +165,7 @@ public class RegisterCommand implements CommandExecutor {
 			
 			plugin.getContactStorageService().saveContact(player, contact);
 			
-			service.sendActivationMessage(player, smsMessage, emailMessage);
+			service.sendActivationMessage(method, smsMessage, emailMessage);
 		
 			player.sendMessage(
 				Texts.of(TextColors.GREEN, "Thank you for registering, you will receive an activation code shortly. Follow the"
