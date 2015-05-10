@@ -1,8 +1,6 @@
 package com.github.mmonkey.Relay;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +33,8 @@ import com.github.mmonkey.Relay.Services.MessageRelayService;
 import com.github.mmonkey.Relay.Services.RelayService;
 import com.github.mmonkey.Relay.Services.TemplatingService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
+import com.github.mmonkey.Relay.Utilities.FileUtils;
 import com.google.common.base.Optional;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
 
 @Plugin(id = Relay.ID, name = Relay.NAME, version = Relay.VERSION)
@@ -105,7 +103,7 @@ public class Relay {
 			templateDir.mkdirs();
 		}
 		
-		saveTemplateFiles(templateDir);
+		FileUtils.copyResourcesRecursively(this.getClass().getResource("/templates"), templateDir);
 		
 		this.defaultConfigService = new DefaultConfigStorageService(this, this.configDir);
 		this.gatewayStorageService = new GatewayStorageService(this, this.configDir);
@@ -217,24 +215,6 @@ public class Relay {
 		
 		}
 		
-	}
-	
-	private void saveTemplateFiles(File templateDir) {
-		try {
-			File libFolder = new File(Relay.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath(), "lib");
-			File defaultTemplateSource = new File(libFolder, "default.mustache");
-			File defaultTemplate = new File(templateDir, "default.mustache");
-			
-			
-			if (!defaultTemplate.isFile()) {
-				Files.copy(defaultTemplateSource, defaultTemplate);
-			}
-			
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	private void saveSensitiveData() throws Exception {
