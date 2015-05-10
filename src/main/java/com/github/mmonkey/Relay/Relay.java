@@ -25,6 +25,7 @@ import com.github.mmonkey.Relay.Commands.RegisterCarriersSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
 import com.github.mmonkey.Relay.Commands.RegisterEmailSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
+import com.github.mmonkey.Relay.Commands.UnregisterCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
@@ -209,9 +210,22 @@ public class Relay {
 			.setChildren(subcommands)
 			.build();
 		
+		/**
+		 * /unregister
+		 */
+		CommandSpec unregisterCommand = CommandSpec.builder()
+			.setDescription(Texts.of("Unregister your contact methods."))
+			.setExtendedDescription(Texts.of("Remove all contact information from this server."))
+			.setExecutor(new UnregisterCommand(this))
+			.setArguments(
+				GenericArguments.flags().flag("confirm").flag("cancel").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("method"))))
+			)
+			.build();
+		
 		if (this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.ENABLED).getBoolean()) {
 			
 			game.getCommandDispatcher().register(this, registerCommand, "register");
+			game.getCommandDispatcher().register(this, unregisterCommand, "unregister");
 		
 		}
 		
