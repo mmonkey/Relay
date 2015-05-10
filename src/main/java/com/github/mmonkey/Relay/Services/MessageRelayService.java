@@ -30,7 +30,7 @@ import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
 public class MessageRelayService implements RelayService {
 
-	private Relay plugin;
+	protected Relay plugin;
 	
 	/**
 	 * Send message from the server to a player.
@@ -45,7 +45,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, message, null, false);
+		return send(null, recipients, message, null);
 		
 	}
 	
@@ -59,7 +59,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(List<Player> recipients, String message) {
 		
-		return send(null, recipients, message, null, false);
+		return send(null, recipients, message, null);
 		
 	}
 	
@@ -77,7 +77,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, message, null, false);
+		return send(sender, recipients, message, null);
 		
 	}
 	
@@ -92,7 +92,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message) {
 		
-		return send(sender, recipients, message, null, false);
+		return send(sender, recipients, message, null);
 		
 	}
 	
@@ -110,7 +110,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(null, recipients, text, html, false);
+		return send(null, recipients, text, html);
 		
 	}
 	
@@ -125,7 +125,7 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html) {
 		
-		return send(null, recipients, text, html, false);
+		return send(null, recipients, text, html);
 		
 	}
 	
@@ -144,7 +144,7 @@ public class MessageRelayService implements RelayService {
 		List<Player> recipients = new ArrayList<Player>();
 		recipients.add(recipient);
 		
-		return send(sender, recipients, text, html, false);
+		return send(sender, recipients, text, html);
 		
 	}
 	
@@ -160,11 +160,11 @@ public class MessageRelayService implements RelayService {
 	@Override
 	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html) {
 		
-		return send(sender, recipients, text, html, false);
+		return send(sender, recipients, text, html);
 		
 	}
 	
-	protected MessageRelayResult send(Player sender, List<Player> recipients, String text, String html, boolean force) {
+	private MessageRelayResult send(Player sender, List<Player> recipients, String text, String html) {
 		
 		Gateway gateway = getGateway();
 		
@@ -221,7 +221,7 @@ public class MessageRelayService implements RelayService {
 			
 		}
 		
-		List<Message> messages = getMessages(sender, recipients, session, gateway, text, html, force);
+		List<Message> messages = getMessages(sender, recipients, session, gateway, text, html);
 		
 		if (messages == null) {
 			return MessageRelayResult.NO_MESSAGES_TO_SEND;
@@ -247,7 +247,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String text, String html, boolean force) {
+	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String text, String html) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		
@@ -330,12 +330,8 @@ public class MessageRelayService implements RelayService {
 						
 					}
 					
-					if (contact.acceptTerms()) {
-						
-						if (method.isActivated() || force) {
-							messages.add(message);
-						}
-						
+					if (contact.acceptTerms() && method.isActivated()) {
+						messages.add(message);
 					}
 					
 				}
@@ -356,7 +352,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private Gateway getGateway() {
+	protected Gateway getGateway() {
 		
 		List<String> gateways = plugin.getGatewayStorageService().getGatewayList();
 		
