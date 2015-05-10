@@ -70,9 +70,15 @@ public class RegisterCommand implements CommandExecutor {
 	
 	protected Text getTermsAndConditions(String subCommand, String address) {
 		
-		Text link =  Texts.builder("Yes, I accept.")
+		Text accept =  Texts.builder("Yes, I accept.")
 			.onClick(TextActions.runCommand("/register " + subCommand + " -a " + address))
 			.color(TextColors.GREEN)
+			.style(TextStyles.UNDERLINE)
+			.build();
+		
+		Text decline =  Texts.builder("No, I do not accept.")
+			.onClick(TextActions.runCommand("/register " + subCommand + " -d " + address))
+			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
 			.build();
 		
@@ -87,7 +93,7 @@ public class RegisterCommand implements CommandExecutor {
 		message.append(Texts.of(TextColors.GRAY, "Accept by clicking yes, or using command: /register " + subCommand + " -a " + address));
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(link);
+		message.append(accept, Texts.of(" "), decline);
 		
 		return message.build();
 	
@@ -162,7 +168,6 @@ public class RegisterCommand implements CommandExecutor {
 			service.sendActivationMessage(method, smsMessage, emailMessage);
 		
 			player.sendMessage(
-				FormatUtil.empty(),
 				Texts.of(TextColors.GREEN, "Thank you for registering, you will receive an activation code shortly. Follow the"
 						+ " instructions in the message to verify your credentials.").builder()
 				.build()
@@ -171,7 +176,7 @@ public class RegisterCommand implements CommandExecutor {
 		} else {
 			
 			player.sendMessage(
-				Texts.of(TextColors.GOLD, "This account has already been registered, to manage your accoutns, use command: ",
+				Texts.of(TextColors.GOLD, "This account has already been registered, to manage your accounts, use command: ",
 						CommandMessageFormatting.NEWLINE_TEXT,
 						Texts.of(TextColors.GOLD, "/register account")).builder()
 				.build()

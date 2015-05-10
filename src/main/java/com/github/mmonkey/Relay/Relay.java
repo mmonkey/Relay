@@ -20,6 +20,7 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import com.github.mmonkey.Relay.Commands.RegisterAccountSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterActivateSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCarriersSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
@@ -196,7 +197,7 @@ public class Relay {
 		subcommands.put(Arrays.asList("account"), CommandSpec.builder()
 			.setDescription(Texts.of("Manage your contact methods."))
 			.setExtendedDescription(Texts.of("View a list of your contact methods."))
-			.setExecutor(new RegisterActivateSubCommand(this))
+			.setExecutor(new RegisterAccountSubCommand(this))
 			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
 			.build());
 		
@@ -218,7 +219,7 @@ public class Relay {
 			.setExtendedDescription(Texts.of("Remove all contact information from this server."))
 			.setExecutor(new UnregisterCommand(this))
 			.setArguments(
-				GenericArguments.flags().flag("confirm").flag("cancel").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("method"))))
+				GenericArguments.flags().flag("d").flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("method"))))
 			)
 			.build();
 		

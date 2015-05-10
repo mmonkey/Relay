@@ -34,7 +34,7 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		Player player = (Player) src;
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
 		PaginatedList pagination = new PaginatedList("/register account");
-		pagination.setLineNumberType("");
+		pagination.displayLineNumbers(false);
 		
 		TextBuilder message = Texts.builder();
 		TextBuilder header = Texts.builder();

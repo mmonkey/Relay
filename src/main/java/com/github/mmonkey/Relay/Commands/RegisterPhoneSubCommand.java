@@ -21,6 +21,7 @@ import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
+import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
 public class RegisterPhoneSubCommand extends RegisterCommand {
 
@@ -51,6 +52,7 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 		if (decline) {
 			
 			player.sendMessage(
+				FormatUtil.empty(),
 				Texts.of(TextColors.GOLD, "Registration process canceled, your information will not be stored.").builder()
 				.build()
 			);
