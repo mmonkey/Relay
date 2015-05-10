@@ -23,7 +23,6 @@ import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Email.EmailBodySection;
 import com.github.mmonkey.Relay.Email.EmailContent;
 import com.github.mmonkey.Relay.Email.EmailContentTypes;
-import com.github.mmonkey.Relay.Email.EmailFooterSection;
 import com.github.mmonkey.Relay.Email.EmailHeaderSection;
 import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
@@ -163,6 +162,7 @@ public class RegisterCommand implements CommandExecutor {
 			service.sendActivationMessage(method, smsMessage, emailMessage);
 		
 			player.sendMessage(
+				FormatUtil.empty(),
 				Texts.of(TextColors.GREEN, "Thank you for registering, you will receive an activation code shortly. Follow the"
 						+ " instructions in the message to verify your credentials.").builder()
 				.build()
@@ -170,7 +170,12 @@ public class RegisterCommand implements CommandExecutor {
 		
 		} else {
 			
-			//TODO ask to resend activation link.
+			player.sendMessage(
+				Texts.of(TextColors.GOLD, "This account has already been registered, to manage your accoutns, use command: ",
+						CommandMessageFormatting.NEWLINE_TEXT,
+						Texts.of(TextColors.GOLD, "/register account")).builder()
+				.build()
+			);
 			
 		}
 		
