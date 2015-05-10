@@ -139,13 +139,8 @@ public class RegisterCommand implements CommandExecutor {
 			wrongAddress.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
 					+ "message by mistake, please disregard this message."));
 			
-			EmailFooterSection footer = new EmailFooterSection();
-			footer.setCopyrightName("Relay");
-			footer.setCopyrightLink("https://github.com/mmonkey/Relay");
-			
 			EmailMessage email = new EmailMessage();
 			email.setHeaderSection(header);
-			email.setFooterSection(footer);
 			email.addBodySection(infoSection);
 			email.addBodySection(commandSection);
 			email.addBodySection(wrongAddress);
