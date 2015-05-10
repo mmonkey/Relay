@@ -21,8 +21,8 @@ import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Email.EmailBodySection;
-import com.github.mmonkey.Relay.Email.EmailComponent;
-import com.github.mmonkey.Relay.Email.EmailComponentTypes;
+import com.github.mmonkey.Relay.Email.EmailContent;
+import com.github.mmonkey.Relay.Email.EmailContentTypes;
 import com.github.mmonkey.Relay.Email.EmailFooterSection;
 import com.github.mmonkey.Relay.Email.EmailHeaderSection;
 import com.github.mmonkey.Relay.Email.EmailMessage;
@@ -124,19 +124,19 @@ public class RegisterCommand implements CommandExecutor {
 					+ "your contact information, please enter the following command on our server");
 			
 			EmailBodySection infoSection = new EmailBodySection();
-			infoSection.addComponent(new EmailComponent(EmailComponentTypes.SECTION_HEADLINE, "Please verify your contact information!"));
-			infoSection.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "<br />Thank you for registering your "
+			infoSection.addContent(new EmailContent(EmailContentTypes.SECTION_HEADLINE, "Please verify your contact information!"));
+			infoSection.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "<br />Thank you for registering your "
 					+ "contact information on our Minecraft server! To verify your contact information, please "
 					+ "enter the following command on our server:"));
 			
 			EmailBodySection commandSection = new EmailBodySection();
 			commandSection.setSectionBackgroundColor("#52894F");
-			EmailComponent command = new EmailComponent(EmailComponentTypes.HEADLINE, "/register activate " + activationKey);
+			EmailContent command = new EmailContent(EmailContentTypes.HEADLINE, "/register activate " + activationKey);
 			command.setTextColor("#FFFFFF");
-			commandSection.addComponent(command);
+			commandSection.addContent(command);
 			
 			EmailBodySection wrongAddress = new EmailBodySection();
-			wrongAddress.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
+			wrongAddress.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
 					+ "message by mistake, please disregard this message."));
 			
 			EmailFooterSection footer = new EmailFooterSection();

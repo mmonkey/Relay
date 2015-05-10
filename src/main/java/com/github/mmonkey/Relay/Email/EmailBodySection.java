@@ -5,25 +5,25 @@ import java.util.List;
 
 public class EmailBodySection extends EmailSection {
 
-	public List<EmailComponent> components = new ArrayList<EmailComponent>();
+	List<EmailContent> contents = new ArrayList<EmailContent>();
 	
-	public void addComponent(EmailComponent component) {
-		this.components.add(component);
+	public void addContent(EmailContent content) {
+		this.contents.add(content);
 	}
 	
-	public void addComponents(List<EmailComponent> components) {
-		this.components.addAll(components);
+	public void addContents(List<EmailContent> contents) {
+		this.contents.addAll(contents);
 	}
 	
 	public EmailBodySection() {
 	}
 	
-	public EmailBodySection(EmailComponent component) {
-		this.components.add(component);
+	public EmailBodySection(EmailContent content) {
+		this.contents.add(content);
 	}
 	
-	public EmailBodySection(List<EmailComponent> components) {
-		this.components.addAll(components);
+	public EmailBodySection(List<EmailContent> contents) {
+		this.contents.addAll(contents);
 	}
 	
 }
