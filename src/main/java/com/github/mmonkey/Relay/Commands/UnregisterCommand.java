@@ -3,9 +3,13 @@ package com.github.mmonkey.Relay.Commands;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.TextBuilder;
 import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
+import org.spongepowered.api.util.command.CommandMessageFormatting;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
@@ -32,14 +36,22 @@ public class UnregisterCommand implements CommandExecutor {
 		Player player = (Player) src;
 		
 		if (cancel && !method.equals("")) {
-			// TODO method wasn't deleted
+			
+			player.sendMessage(
+				FormatUtil.empty(),
+				Texts.of(TextColors.GREEN, "Contact method ", TextColors.GOLD, method, TextColors.GREEN, " was not deleted.").builder().build()
+			);
 			
 			return CommandResult.success();
 			
 		}
 		
 		if (cancel && method.equals("")) {
-			// TODO account wasn't deleted
+			
+			player.sendMessage(
+				FormatUtil.empty(),
+				Texts.of(TextColors.GREEN, "You account was not deleted.").builder().build()
+			);
 			
 			return CommandResult.success();
 			
@@ -93,20 +105,70 @@ public class UnregisterCommand implements CommandExecutor {
 		}
 		
 		if (!confirm && !cancel && !method.equals("")) {
-			// TODO confirm delete method
+			
+			TextBuilder message = Texts.builder();
+			
+			message.append(Texts.of(TextColors.WHITE + "Would you like to delte method ", TextColors.GOLD, method, TextColors.WHITE, "?"));
+			message.append(CommandMessageFormatting.NEWLINE_TEXT);
+			message.append(getConfirmDeleteContactMethodAction(method), Texts.of(" "), getCancelDeleteContactMethodAction(method));
+			
+			player.sendMessage(message.build());
 			
 			return CommandResult.success();
 			
 		}
 		
 		if (!confirm && !cancel && method.equals("")) {
-			// TODO confirm delete account
+			
+			TextBuilder message = Texts.builder();
+			
+			message.append(Texts.of(TextColors.WHITE + "Would you like to your account?"));
+			message.append(CommandMessageFormatting.NEWLINE_TEXT);
+			message.append(getConfirmDeleteAccountAction(), Texts.of(" "), getCancelDeleteAccountAction());
+			
+			player.sendMessage(message.build());
 			
 			return CommandResult.success();
 			
 		}
 		
 		return CommandResult.empty();
+		
+	}
+	
+	private Text getConfirmDeleteContactMethodAction(String method) {
+		
+		return Texts.builder("Yes, delete method " + method + ".")
+			.onClick(TextActions.runCommand("/unregister -confirm " + method))
+			.color(TextColors.GREEN)
+			.build();
+		
+	}
+	
+	private Text getCancelDeleteContactMethodAction(String method) {
+		
+		return Texts.builder("No, keep method " + method + ".")
+			.onClick(TextActions.runCommand("/unregister -cancel " + method))
+			.color(TextColors.RED)
+			.build();
+		
+	}
+	
+	private Text getConfirmDeleteAccountAction() {
+		
+		return Texts.builder("Yes, delete my account.")
+			.onClick(TextActions.runCommand("/unregister -confirm"))
+			.color(TextColors.GREEN)
+			.build();
+		
+	}
+	
+	private Text getCancelDeleteAccountAction() {
+		
+		return Texts.builder("No, keep my account.")
+			.onClick(TextActions.runCommand("/unregister -cancel"))
+			.color(TextColors.RED)
+			.build();
 		
 	}
 	
