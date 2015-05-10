@@ -1,6 +1,6 @@
 package com.github.mmonkey.Relay.Email;
 
-public enum EmailComponentTypes {
+public enum EmailContentTypes {
 
 	HEADLINE ("h1", "line-height:100%;font-family:Helvetica,Arial,sans-serif;font-size:35px;font-weight:normal;margin-bottom:5px;text-align:center;"),
 	SECTION_HEADLINE ("h3", "line-height:125%;font-family:Helvetica,Arial,sans-serif;font-size:20px;font-weight:normal;margin-top:0;margin-bottom:3px;text-align:left;"),
@@ -19,7 +19,7 @@ public enum EmailComponentTypes {
 		return this.style;
 	}
 
-	EmailComponentTypes(String tag, String style) {
+	EmailContentTypes(String tag, String style) {
 		this.tag = tag;
 		this.style = style;
 	}
