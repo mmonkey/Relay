@@ -11,6 +11,7 @@ public class EmailMessage {
 	
 	private String emailBackground;
 	private String bodyBackground;
+	private String width = "500";
 	
 	public EmailHeaderSection getHeaderSection() {
 		return this.headerSection;
@@ -50,6 +51,14 @@ public class EmailMessage {
 	
 	public void setBodyBackground(String bodyBackground) {
 		this.bodyBackground = bodyBackground;
+	}
+	
+	public int getWidth() {
+		return Integer.parseInt(this.width);
+	}
+	
+	public void setWidth(int width) {
+		this.width = Integer.toString(width);
 	}
 	
 	public EmailMessage() {
