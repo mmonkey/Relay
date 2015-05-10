@@ -19,8 +19,13 @@ import org.spongepowered.api.util.command.spec.CommandExecutor;
 
 import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
-import com.github.mmonkey.Relay.EmailMessage;
 import com.github.mmonkey.Relay.Relay;
+import com.github.mmonkey.Relay.Email.EmailBodySection;
+import com.github.mmonkey.Relay.Email.EmailComponent;
+import com.github.mmonkey.Relay.Email.EmailComponentTypes;
+import com.github.mmonkey.Relay.Email.EmailFooterSection;
+import com.github.mmonkey.Relay.Email.EmailHeaderSection;
+import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Services.SendActivationMessageRelayService;
@@ -112,11 +117,24 @@ public class RegisterCommand implements CommandExecutor {
 			SendActivationMessageRelayService service = new SendActivationMessageRelayService(plugin);
 			HTMLTemplatingService templateService = new HTMLTemplatingService(); 
 			
+			EmailHeaderSection header = new EmailHeaderSection();
+			header.setInvisibleIntroduction("Please verify your contact information!");
+			
+			EmailBodySection body = new EmailBodySection();
+			body.addComponent(new EmailComponent(EmailComponentTypes.HEADLINE, "Verify your contact information!"));
+			body.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "Thank you for registering your "
+					+ "contact information on our Minecraft server! To verify your contact information, please "
+					+ "enter the following command on our server."));
+			body.addComponent(new EmailComponent(EmailComponentTypes.PARAGRAPH, "/register activate " + activationKey));
+			
+			EmailFooterSection footer = new EmailFooterSection();
+			footer.setCopyrightName("Relay");
+			footer.setCopyrightLink("https://github.com/mmonkey/Relay");
+			
 			EmailMessage email = new EmailMessage();
-			email.setHeadline("Verify your email!");
-			email.addParagraph("Thank you for registering your contact information on our minecraft server! "
-					+ "To verify your contact information, please enter the following command on our server.");
-			email.addParagraph("/register activate " + activationKey);
+			email.setHeaderSection(header);
+			email.setFooterSection(footer);
+			email.addBodySection(body);
 			
 			File templateDir = new File(plugin.getConfigDir(), "templates");
 			templateService.setTemplateDirectory(templateDir);

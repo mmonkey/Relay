@@ -61,11 +61,6 @@ public enum Carriers {
 	
 	private final String displayName;
 	private final String[] address;
-
-	Carriers(String displayName, String[] address) {
-		this.displayName = displayName;
-		this.address = address;
-	}
 	
 	public String getDisplayName() {
 		return displayName;
@@ -73,6 +68,11 @@ public enum Carriers {
 	
 	public String[] getAddresses() {
 		return address;
+	}
+	
+	Carriers(String displayName, String[] address) {
+		this.displayName = displayName;
+		this.address = address;
 	}
 	
 }
