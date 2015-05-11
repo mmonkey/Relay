@@ -9,6 +9,7 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
+import org.spongepowered.api.util.command.CommandMessageFormatting;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
@@ -39,6 +40,18 @@ public class RelayAccountSubcommand extends RelayCommand {
 		TextBuilder header = Texts.builder();
 		
 		List<String> list = plugin.getContactStorageService().getContactMethodList(player);
+		
+		if (list.isEmpty()) {
+			
+			player.sendMessage(
+				Texts.of(TextColors.WHITE, "You do not have any contact methods registered, to register your contact information use command:",
+					CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/register email <address>", CommandMessageFormatting.NEWLINE_TEXT,
+					TextColors.WHITE, "or ", TextColors.GOLD, "/register phone <number>").builder().build()
+			);
+			
+			return CommandResult.success();
+			
+		}
 		
 		for (String name: list) {
 			
