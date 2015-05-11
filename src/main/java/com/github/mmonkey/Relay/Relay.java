@@ -60,6 +60,10 @@ public class Relay {
 	@ConfigDir(sharedRoot = false)
 	private File configDir;
 	
+	private File templateDir;
+	
+	private String defaultTemplate;
+	
 	public Game getGame() {
 		return this.game;
 	}
@@ -88,6 +92,14 @@ public class Relay {
 		return this.configDir;
 	}
 	
+	public File getTemplateDir() {
+		return this.templateDir;
+	}
+	
+	public String getDefaultTemplate() {
+		return this.defaultTemplate;
+	}
+	
 	@Subscribe
 	public void onPreInit(PreInitializationEvent event) {
 		
@@ -101,13 +113,13 @@ public class Relay {
 			this.configDir.mkdirs();
 		}
 		
-		File templateDir = new File(this.configDir, "templates");
+		this.templateDir = new File(this.configDir, "templates");
 		
-		if (!templateDir.isDirectory()) {
-			templateDir.mkdirs();
+		if (!this.templateDir.isDirectory()) {
+			this.templateDir.mkdirs();
 		}
 		
-		FileUtils.copyResourcesRecursively(this.getClass().getResource("/templates"), templateDir);
+		FileUtils.copyResourcesRecursively(this.getClass().getResource("/templates"), this.templateDir);
 		
 		this.defaultConfigService = new DefaultConfigStorageService(this, this.configDir);
 		this.gatewayStorageService = new GatewayStorageService(this, this.configDir);
@@ -116,6 +128,8 @@ public class Relay {
 		this.defaultConfigService.load();
 		this.gatewayStorageService.load();
 		this.contactStorageService.load();
+		
+		this.loadDefaultTemplate();
 		
 		try {
 			
@@ -314,6 +328,13 @@ public class Relay {
 		}
 		
 		this.defaultConfigService.clearSensitiveData();
+		
+	}
+	
+	private void loadDefaultTemplate() {
+		
+		this.defaultTemplate = this.getDefaultConfigService().getConfig()
+			.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.EMAIL_TEMPLATE).getString();
 		
 	}
 

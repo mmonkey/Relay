@@ -17,9 +17,15 @@ public class EmailContent {
 	}
 	
 	public EmailContent(EmailContentTypes type, String content) {
+		
 		this.contentTag = type.getTag();
 		this.contentStyle = type.getStyle();
 		this.content = content;
+		
+		if (type.equals(EmailContentTypes.IMAGE)) {
+			this.isText = false;
+		}
+		
 	}
 
 }

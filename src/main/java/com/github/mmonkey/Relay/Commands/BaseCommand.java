@@ -1,6 +1,5 @@
 package com.github.mmonkey.Relay.Commands;
 
-import java.io.File;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
@@ -139,7 +138,8 @@ public class BaseCommand implements CommandExecutor {
 		String activationKey = method.getActivationKey();
 			
 		ActivationMessageRelayService service = new ActivationMessageRelayService(plugin);
-		HTMLTemplatingService templateService = new HTMLTemplatingService(); 
+		HTMLTemplatingService templateService = new HTMLTemplatingService();
+		templateService.setTemplateDirectory(plugin.getTemplateDir());
 		
 		EmailHeaderSection header = new EmailHeaderSection(plugin.getGame().getServer().getBoundAddress().get().getHostString());
 		header.setServerAddress(plugin.getGame().getServer().getBoundAddress().get().getAddress().getHostAddress()
@@ -169,11 +169,7 @@ public class BaseCommand implements CommandExecutor {
 		email.addBodySection(commandSection);
 		email.addBodySection(wrongAddress);
 		
-		File templateDir = new File(plugin.getConfigDir(), "templates");
-		templateService.setTemplateDirectory(templateDir);
-		
-		String emailMessage;
-		emailMessage = templateService.parse("default.mustache", email);
+		String emailMessage = templateService.parse(plugin.getDefaultTemplate(), email);
 
 		if (emailMessage == "") {
 			emailMessage = null;
