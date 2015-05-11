@@ -20,13 +20,14 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
-import com.github.mmonkey.Relay.Commands.RegisterAccountSubCommand;
-import com.github.mmonkey.Relay.Commands.RegisterActivateSubCommand;
-import com.github.mmonkey.Relay.Commands.RegisterCarriersSubCommand;
+import com.github.mmonkey.Relay.Commands.RelayAccountSubcommand;
+import com.github.mmonkey.Relay.Commands.RegisterActivateSubcommand;
+import com.github.mmonkey.Relay.Commands.RelayCarriersSubcommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
-import com.github.mmonkey.Relay.Commands.RegisterEditSubCommand;
-import com.github.mmonkey.Relay.Commands.RegisterEmailSubCommand;
-import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
+import com.github.mmonkey.Relay.Commands.RelayCommand;
+import com.github.mmonkey.Relay.Commands.RelayEditSubcommand;
+import com.github.mmonkey.Relay.Commands.RegisterEmailSubcommand;
+import com.github.mmonkey.Relay.Commands.RegisterPhoneSubcommand;
 import com.github.mmonkey.Relay.Commands.UnregisterCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
@@ -142,79 +143,42 @@ public class Relay {
 		
 		}
 		
-		HashMap<List<String>, CommandSpec> subcommands = new HashMap<List<String>, CommandSpec>();
+		HashMap<List<String>, CommandSpec> registerSubcommands = new HashMap<List<String>, CommandSpec>();
+		HashMap<List<String>, CommandSpec> relaySubcommands = new HashMap<List<String>, CommandSpec>();
 		
 		/**
 		 * /register email [[-a:accept] [-d:decline]] <emailAddress>
 		 */
-		subcommands.put(Arrays.asList("email"), CommandSpec.builder()
+		registerSubcommands.put(Arrays.asList("email"), CommandSpec.builder()
 			.setPermission("relay.register.email")
 			.setDescription(Texts.of("Register your email address."))
 			.setExtendedDescription(Texts.of("If registered, you can receive emails from this server."))
-			.setExecutor(new RegisterEmailSubCommand(this))
+			.setExecutor(new RegisterEmailSubcommand(this))
 			.setArguments(GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("emailAddress"))))
 			.build());
 		
 		/**
 		 * /register phone [[-a:accept] [-d:decline]] <phoneNumber> [carrier]
 		 */
-		subcommands.put(Arrays.asList("phone"), CommandSpec.builder()
+		registerSubcommands.put(Arrays.asList("phone"), CommandSpec.builder()
 			.setPermission("relay.register.phone")
 			.setDescription(Texts.of("Register your phone number."))
 			.setExtendedDescription(Texts.of("If registered, you can receive text messages from this server."))
-			.setExecutor(new RegisterPhoneSubCommand(this))
+			.setExecutor(new RegisterPhoneSubcommand(this))
 			.setArguments(GenericArguments.seq(
 					GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("phoneNumber"))),
 					GenericArguments.optional(GenericArguments.string(Texts.of("carrier")))))
 			.build());
 		
 		/**
-		 * /register carriers [[-s:select] [-u:update]] [name]
-		 */
-		subcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
-			.setPermission("relay.register.phone")
-			.setDescription(Texts.of("Supported Carriers"))
-			.setExtendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
-			.setExecutor(new RegisterCarriersSubCommand(this))
-			.setArguments(GenericArguments.seq(
-				GenericArguments.optional(GenericArguments.integer(Texts.of("page"))),
-				GenericArguments.flags().flag("s").flag("u").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("phone"))))
-			))
-			.build());
-		
-		/**
 		 * /register activate <code>
 		 */
-		subcommands.put(Arrays.asList("activate"), CommandSpec.builder()
+		registerSubcommands.put(Arrays.asList("activate"), CommandSpec.builder()
 			.setDescription(Texts.of("Activate your contact method."))
 			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
-			.setExecutor(new RegisterActivateSubCommand(this))
+			.setExecutor(new RegisterActivateSubcommand(this))
 			.setArguments(GenericArguments.string(Texts.of("code")))
 			.build());
-		
-		/**
-		 * /register account [page]
-		 */
-		subcommands.put(Arrays.asList("account"), CommandSpec.builder()
-			.setDescription(Texts.of("Manage your contact methods."))
-			.setExtendedDescription(Texts.of("View a list of your contact methods."))
-			.setExecutor(new RegisterAccountSubCommand(this))
-			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
-			.build());
-		
-		/**
-		 * /register edit [-e][-p] <contactMethodId> [-c] [carrier]
-		 */
-		subcommands.put(Arrays.asList("edit"), CommandSpec.builder()
-			.setDescription(Texts.of("Edit a contact method."))
-			.setExtendedDescription(Texts.of("Edit contact method of the given contact method."))
-			.setExecutor(new RegisterEditSubCommand(this))
-			.setArguments(GenericArguments.seq(
-				GenericArguments.flags().flag("e").flag("p").flag("r").buildWith(GenericArguments.string(Texts.of("contactMethod"))),
-				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("carrier"))))
-			))
-			.build());
-		
 		
 		/**
 		 * /register
@@ -223,7 +187,54 @@ public class Relay {
 			.setDescription(Texts.of("Register your email or phone number."))
 			.setExtendedDescription(Texts.of("If registered, you can recieve emails or text messages from this server."))
 			.setExecutor(new RegisterCommand(this))
-			.setChildren(subcommands)
+			.setChildren(registerSubcommands)
+			.build();
+		
+		/**
+		 * /relay carriers [[-s:select] [-u:update]] [name]
+		 */
+		relaySubcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
+			.setPermission("relay.register.phone")
+			.setDescription(Texts.of("Supported Carriers"))
+			.setExtendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
+			.setExecutor(new RelayCarriersSubcommand(this))
+			.setArguments(GenericArguments.seq(
+				GenericArguments.optional(GenericArguments.integer(Texts.of("page"))),
+				GenericArguments.flags().flag("s").flag("u").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("phone"))))
+			))
+			.build());
+		
+		/**
+		 * /relay account [page]
+		 */
+		relaySubcommands.put(Arrays.asList("account"), CommandSpec.builder()
+			.setDescription(Texts.of("Manage your contact methods."))
+			.setExtendedDescription(Texts.of("View a list of your contact methods."))
+			.setExecutor(new RelayAccountSubcommand(this))
+			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
+			.build());
+		
+		/**
+		 * /relay edit [-e][-p] <contactMethodId> [-c] [carrier]
+		 */
+		relaySubcommands.put(Arrays.asList("edit"), CommandSpec.builder()
+			.setDescription(Texts.of("Edit a contact method."))
+			.setExtendedDescription(Texts.of("Edit contact method of the given contact method."))
+			.setExecutor(new RelayEditSubcommand(this))
+			.setArguments(GenericArguments.seq(
+				GenericArguments.flags().flag("e").flag("p").flag("r").buildWith(GenericArguments.string(Texts.of("contactMethod"))),
+				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("carrier"))))
+			))
+			.build());
+		
+		/**
+		 * /relay
+		 */
+		CommandSpec relayCommand = CommandSpec.builder()
+			.setDescription(Texts.of("Relay edit, carriers, account, send"))
+			.setExtendedDescription(Texts.of("Manage your relay account or send an email or sms message."))
+			.setExecutor(new RelayCommand(this))
+			.setChildren(relaySubcommands)
 			.build();
 		
 		/**
@@ -241,6 +252,7 @@ public class Relay {
 		if (this.getDefaultConfigService().getConfig().getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.ENABLED).getBoolean()) {
 			
 			game.getCommandDispatcher().register(this, registerCommand, "register");
+			game.getCommandDispatcher().register(this, relayCommand, "relay");
 			game.getCommandDispatcher().register(this, unregisterCommand, "unregister");
 		
 		}

@@ -7,14 +7,14 @@ import org.spongepowered.api.util.command.args.CommandContext;
 
 import com.github.mmonkey.Relay.Relay;
 
-public class RegisterCommand extends BaseCommand {
+public class RelayCommand extends BaseCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		return CommandResult.success();
+		return CommandResult.empty();
 	}
 	
-	public RegisterCommand(Relay plugin) {
+	public RelayCommand(Relay plugin) {
 		super(plugin);
 	}
 

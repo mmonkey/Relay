@@ -24,7 +24,7 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
-public class RegisterEditSubCommand extends RegisterCommand {
+public class RelayEditSubcommand extends RelayCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -143,7 +143,7 @@ public class RegisterEditSubCommand extends RegisterCommand {
 	private Text getMethodStatus(ContactMethod method, String contactMethod) {
 		
 		Text resendActivation =  Texts.builder("Resend Activation")
-			.onClick(TextActions.runCommand("/register edit -r " + contactMethod))
+			.onClick(TextActions.runCommand("/relay edit -r " + contactMethod))
 			.color(TextColors.DARK_AQUA)
 			.build();
 		
@@ -177,13 +177,13 @@ public class RegisterEditSubCommand extends RegisterCommand {
 	private Text getChangeCarrierAction(String phone) {
 		
 		return Texts.builder("Change Carrier")
-			.onClick(TextActions.runCommand("/register carriers -u " + phone))
+			.onClick(TextActions.runCommand("/relay carriers -u " + phone))
 			.color(TextColors.RED)
 			.build();
 		
 	}
 	
-	public RegisterEditSubCommand(Relay plugin) {
+	public RelayEditSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

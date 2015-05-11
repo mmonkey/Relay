@@ -23,7 +23,7 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
-public class RegisterPhoneSubCommand extends RegisterCommand {
+public class RegisterPhoneSubcommand extends RegisterCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -90,7 +90,7 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 			
 			} catch (IllegalArgumentException e) {
 				
-				plugin.getGame().getCommandDispatcher().process(player, "register carriers -s " + phoneNumber);
+				plugin.getGame().getCommandDispatcher().process(player, "relay carriers -s " + phoneNumber);
 				return CommandResult.empty();
 				
 			} catch (UnsupportedEncodingException  e) {
@@ -107,7 +107,7 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 			
 		}
 		
-		plugin.getGame().getCommandDispatcher().process(player, "register carriers -s " + phoneNumber);
+		plugin.getGame().getCommandDispatcher().process(player, "relay carriers -s " + phoneNumber);
 		
 		return CommandResult.success();
 			
@@ -154,7 +154,7 @@ public class RegisterPhoneSubCommand extends RegisterCommand {
 		
 	}
 	
-	public RegisterPhoneSubCommand(Relay plugin) {
+	public RegisterPhoneSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

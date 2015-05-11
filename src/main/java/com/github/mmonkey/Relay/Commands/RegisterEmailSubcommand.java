@@ -22,7 +22,7 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
-public class RegisterEmailSubCommand extends RegisterCommand {
+public class RegisterEmailSubcommand extends RegisterCommand {
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -108,7 +108,7 @@ public class RegisterEmailSubCommand extends RegisterCommand {
 	
 	}
 	
-	public RegisterEmailSubCommand(Relay plugin) {
+	public RegisterEmailSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

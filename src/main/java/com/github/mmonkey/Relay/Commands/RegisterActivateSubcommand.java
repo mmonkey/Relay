@@ -14,7 +14,7 @@ import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 
-public class RegisterActivateSubCommand extends RegisterCommand {
+public class RegisterActivateSubcommand extends RegisterCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -66,7 +66,7 @@ public class RegisterActivateSubCommand extends RegisterCommand {
 	
 	}
 	
-	public RegisterActivateSubCommand(Relay plugin) {
+	public RegisterActivateSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

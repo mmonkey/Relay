@@ -20,7 +20,7 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
-public class RegisterAccountSubCommand extends RegisterCommand {
+public class RelayAccountSubcommand extends RelayCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -33,7 +33,7 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		
 		Player player = (Player) src;
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
-		PaginatedList pagination = new PaginatedList("/register account");
+		PaginatedList pagination = new PaginatedList("/relay account");
 		
 		TextBuilder message = Texts.builder();
 		TextBuilder header = Texts.builder();
@@ -85,14 +85,14 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 	private Text getEditAction(String displayName, String type, String name) {
 		
 		return Texts.builder("edit")
-				.onClick(TextActions.runCommand("/register edit -" + type + " " + name))
+				.onClick(TextActions.runCommand("/relay edit -" + type + " " + name))
 				.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Edit ", TextColors.GOLD, displayName)))
 				.color(TextColors.DARK_AQUA)
 				.build();
 		
 	}
 	
-	public RegisterAccountSubCommand(Relay plugin) {
+	public RelayAccountSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

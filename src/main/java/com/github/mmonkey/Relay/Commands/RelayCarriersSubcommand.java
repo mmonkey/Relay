@@ -17,7 +17,7 @@ import com.github.mmonkey.Relay.Carriers;
 import com.github.mmonkey.Relay.PaginatedList;
 import com.github.mmonkey.Relay.Relay;
 
-public class RegisterCarriersSubCommand extends RegisterCommand {
+public class RelayCarriersSubcommand extends RelayCommand {
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -33,7 +33,7 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 		
 		Player player = (Player) src;
 		
-		PaginatedList pagination = new PaginatedList("/register carriers");
+		PaginatedList pagination = new PaginatedList("/relay carriers");
 		
 		if (select && !phone.equals("")) {
 			pagination.setCommandSuffix("-s " + phone);
@@ -85,7 +85,7 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 		} else if (update && !phone.equals("")) {
 			
 			pagination.setFooter(Texts.of(TextColors.GRAY, "Click on carrier to update, or use message:",
-				CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/register edit -p " + phone + " -c CARRIER_NAME"));
+				CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/relay edit -p " + phone + " -c CARRIER_NAME"));
 			
 		}
 		
@@ -111,14 +111,14 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 	private Text getUpdateCarrierAction(String displayName, String phone, String carrier) {
 		
 		return Texts.builder(displayName)
-			.onClick(TextActions.runCommand("/register edit -p " + phone + " -c " + carrier))
+			.onClick(TextActions.runCommand("/relay edit -p " + phone + " -c " + carrier))
 			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
 			.color(TextColors.DARK_AQUA)
 			.build();
 		
 	}
 	
-	public RegisterCarriersSubCommand(Relay plugin) {
+	public RelayCarriersSubcommand(Relay plugin) {
 		super(plugin);
 	}
 
