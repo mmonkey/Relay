@@ -147,6 +147,7 @@ public class RelayEditSubcommand extends RelayCommand {
 		
 		Text resendActivation =  Texts.builder("Resend Activation")
 			.onClick(TextActions.runCommand("/relay edit -r " + contactMethod))
+			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Resent activation message.")))
 			.color(TextColors.DARK_AQUA)
 			.build();
 		
@@ -171,6 +172,7 @@ public class RelayEditSubcommand extends RelayCommand {
 		
 		return Texts.builder("Delete this Contact Method")
 			.onClick(TextActions.runCommand("/unregister -" + type + " " + contactMethod))
+			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Delete contact method ", TextColors.GOLD, contactMethod, TextColors.WHITE, ".")))
 			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
 			.build();
@@ -181,7 +183,8 @@ public class RelayEditSubcommand extends RelayCommand {
 		
 		return Texts.builder("Change Carrier")
 			.onClick(TextActions.runCommand("/relay carriers -u " + phone))
-			.color(TextColors.RED)
+			.color(TextColors.DARK_AQUA)
+			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select a new carrier.")))
 			.build();
 		
 	}

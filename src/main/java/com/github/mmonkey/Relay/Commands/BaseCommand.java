@@ -70,13 +70,13 @@ public class BaseCommand implements CommandExecutor {
 	
 	protected Text getTermsAndConditions(String subCommand, String address) {
 		
-		Text accept =  Texts.builder("Yes, I accept.")
+		Text accept =  Texts.builder("Yes, I accept")
 			.onClick(TextActions.runCommand("/register " + subCommand + " -a " + address))
 			.color(TextColors.GREEN)
 			.style(TextStyles.UNDERLINE)
 			.build();
 		
-		Text decline =  Texts.builder("No, I do not accept.")
+		Text decline =  Texts.builder("No, I do not accept")
 			.onClick(TextActions.runCommand("/register " + subCommand + " -d " + address))
 			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
@@ -93,7 +93,8 @@ public class BaseCommand implements CommandExecutor {
 		message.append(Texts.of(TextColors.GRAY, "Accept by clicking yes, or using command: /register " + subCommand + " -a " + address));
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(accept, Texts.of(" "), decline);
+		message.append(accept, Texts.of("   "), decline);
+		message.append(CommandMessageFormatting.NEWLINE_TEXT);
 		
 		return message.build();
 	

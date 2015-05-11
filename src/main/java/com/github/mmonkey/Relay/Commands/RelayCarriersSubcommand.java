@@ -71,9 +71,9 @@ public class RelayCarriersSubcommand extends RelayCommand {
 			
 		}
 		
-		header.append(Texts.of(TextColors.GREEN, "----------"));
+		header.append(Texts.of(TextColors.GREEN, "-----------"));
 		header.append(Texts.of(TextColors.GREEN, " Showing carriers page " + page + " of " + pagination.getTotalPages() + " "));
-		header.append(Texts.of(TextColors.GREEN, "----------"));
+		header.append(Texts.of(TextColors.GREEN, "-----------"));
 
 		pagination.setHeader(header.build());
 		
