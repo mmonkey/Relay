@@ -114,7 +114,10 @@ public class RelayEditSubcommand extends RelayCommand {
 			e.printStackTrace();
 		}
 		
+		String type = "e";
+		
 		if (phone) {
+			type = "p";
 			message.append(Texts.of(TextColors.WHITE, "Carrier: ", TextColors.GOLD, method.getCarrier().getDisplayName(), TextColors.WHITE, Texts.of(" - ")));
 			message.append(getChangeCarrierAction(contactMethod));
 			message.append(CommandMessageFormatting.NEWLINE_TEXT);
@@ -126,7 +129,7 @@ public class RelayEditSubcommand extends RelayCommand {
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
 		
 		message.append(Texts.of("                    "));
-		message.append(getDeleteMethodAction(contactMethod));
+		message.append(getDeleteMethodAction(contactMethod, type));
 		message.append(CommandMessageFormatting.NEWLINE_TEXT);
 		
 		message.append(Texts.of(TextColors.GRAY, "---------------------------------------------------"));
@@ -164,10 +167,10 @@ public class RelayEditSubcommand extends RelayCommand {
 	
 	}
 	
-	private Text getDeleteMethodAction(String contactMethod) {
+	private Text getDeleteMethodAction(String contactMethod, String type) {
 		
 		return Texts.builder("Delete this Contact Method")
-			.onClick(TextActions.runCommand("/unregister " + contactMethod))
+			.onClick(TextActions.runCommand("/unregister -" + type + " " + contactMethod))
 			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
 			.build();
