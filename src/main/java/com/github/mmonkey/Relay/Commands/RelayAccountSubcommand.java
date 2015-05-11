@@ -41,7 +41,7 @@ public class RelayAccountSubcommand extends RelayCommand {
 		
 		List<String> list = plugin.getContactStorageService().getContactMethodList(player);
 		
-		if (list.isEmpty()) {
+		if (list == null || list.isEmpty()) {
 			
 			player.sendMessage(
 				Texts.of(TextColors.WHITE, "You do not have any contact methods registered, to register your contact information use command:",
