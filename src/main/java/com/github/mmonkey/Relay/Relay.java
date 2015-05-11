@@ -334,7 +334,7 @@ public class Relay {
 	private void loadDefaultTemplate() {
 		
 		this.defaultTemplate = this.getDefaultConfigService().getConfig()
-			.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.EMAIL_TEMPLATE).getString();
+			.getNode(DefaultConfigStorageService.MESSAGES, DefaultConfigStorageService.EMAIL_TEMPLATE).getString();
 		
 	}
 
