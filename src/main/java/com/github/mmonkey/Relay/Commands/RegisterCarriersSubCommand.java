@@ -85,7 +85,7 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 		} else if (update && !phone.equals("")) {
 			
 			pagination.setFooter(Texts.of(TextColors.GRAY, "Click on carrier to update, or use message:",
-				CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/register edit -c CARRIER_NAME " + phone));
+				CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/register edit -p " + phone + " -c CARRIER_NAME"));
 			
 		}
 		
@@ -101,20 +101,20 @@ public class RegisterCarriersSubCommand extends RegisterCommand {
 	private Text getSelectCarrierAction(String displayName, String phone, String carrier) {
 		
 		return Texts.builder(displayName)
-				.onClick(TextActions.runCommand("/register phone -a " + phone + " " + carrier))
-				.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
-				.color(TextColors.DARK_AQUA)
-				.build();
+			.onClick(TextActions.runCommand("/register phone -a " + phone + " " + carrier))
+			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
+			.color(TextColors.DARK_AQUA)
+			.build();
 		
 	}
 	
 	private Text getUpdateCarrierAction(String displayName, String phone, String carrier) {
 		
 		return Texts.builder(displayName)
-				.onClick(TextActions.runCommand("/register edit -t phone -c " + carrier + " " + phone))
-				.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
-				.color(TextColors.DARK_AQUA)
-				.build();
+			.onClick(TextActions.runCommand("/register edit -p " + phone + " -c " + carrier))
+			.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Select ", TextColors.GOLD, displayName, TextColors.WHITE, " as my carrier.")))
+			.color(TextColors.DARK_AQUA)
+			.build();
 		
 	}
 	

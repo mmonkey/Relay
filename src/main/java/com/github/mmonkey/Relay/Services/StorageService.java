@@ -15,7 +15,7 @@ public class StorageService {
 	
 	public static final String LIST = "list";
 
-	private Relay plugin;
+	protected Relay plugin;
 	private File configDir;
 	private File configFile;
 	private ConfigurationLoader<CommentedConfigurationNode> configLoader;

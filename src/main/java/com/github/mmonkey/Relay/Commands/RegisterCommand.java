@@ -99,14 +99,13 @@ public class RegisterCommand implements CommandExecutor {
 	
 	}
 	
-	protected void saveContactActivated(Contact contact, Player player) {
+	protected void saveContact(Contact contact, Player player) {
 		plugin.getContactStorageService().saveContact(player, contact);
 	}
 	
 	protected void saveContactNotActivated(Contact contact, ContactMethod method, Player player) {
 		
 		boolean methodExists = false;
-		String activationKey = method.getActivationKey();
 		
 		for (ContactMethod m: contact.getMethods()) {
 			if (m.getAddress().equals(method.getAddress())) {
@@ -119,59 +118,7 @@ public class RegisterCommand implements CommandExecutor {
 			contact.getMethods().add(method);
 			contact.acceptTerms(true);
 			
-			ActivationMessageRelayService service = new ActivationMessageRelayService(plugin);
-			HTMLTemplatingService templateService = new HTMLTemplatingService(); 
-			
-			EmailHeaderSection header = new EmailHeaderSection(plugin.getGame().getServer().getBoundAddress().get().getHostString());
-			header.setServerAddress(plugin.getGame().getServer().getBoundAddress().get().getAddress().getHostAddress()
-					+ ":" + plugin.getGame().getServer().getBoundAddress().get().getPort());
-			header.setInvisibleIntroduction("Thank you for registering your contact information on our Minecraft server! To verify "
-					+ "your contact information, please enter the following command on our server");
-			
-			EmailBodySection infoSection = new EmailBodySection();
-			infoSection.addContent(new EmailContent(EmailContentTypes.SECTION_HEADLINE, "Please verify your contact information!"));
-			infoSection.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "<br />Thank you for registering your "
-					+ "contact information on our Minecraft server! To verify your contact information, please "
-					+ "enter the following command on our server:"));
-			
-			EmailBodySection commandSection = new EmailBodySection();
-			commandSection.setSectionBackgroundColor("#52894F");
-			EmailContent command = new EmailContent(EmailContentTypes.HEADLINE, "/register activate " + activationKey);
-			command.setTextColor("#FFFFFF");
-			commandSection.addContent(command);
-			
-			EmailBodySection wrongAddress = new EmailBodySection();
-			wrongAddress.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
-					+ "message by mistake, please disregard this message."));
-			
-			EmailMessage email = new EmailMessage();
-			email.setHeaderSection(header);
-			email.addBodySection(infoSection);
-			email.addBodySection(commandSection);
-			email.addBodySection(wrongAddress);
-			
-			File templateDir = new File(plugin.getConfigDir(), "templates");
-			templateService.setTemplateDirectory(templateDir);
-			
-			String emailMessage;
-			emailMessage = templateService.parse("default.mustache", email);
-
-			if (emailMessage == "") {
-				emailMessage = null;
-			}
-			
-			String smsMessage = "Please verify your contact information by entering the following command on our server:"
-					+ " /register activate " + activationKey;
-			
-			plugin.getContactStorageService().saveContact(player, contact);
-			
-			service.sendActivationMessage(method, smsMessage, emailMessage);
-		
-			player.sendMessage(
-				Texts.of(TextColors.GREEN, "Thank you for registering, you will receive an activation code shortly. Follow the"
-						+ " instructions in the message to verify your credentials.").builder()
-				.build()
-			);
+			this.sendActivationMessage(contact, method, player);
 		
 		} else {
 			
@@ -183,6 +130,66 @@ public class RegisterCommand implements CommandExecutor {
 			);
 			
 		}
+		
+	}
+	
+	protected void sendActivationMessage(Contact contact, ContactMethod method, Player player) {
+		
+		String activationKey = method.getActivationKey();
+			
+		ActivationMessageRelayService service = new ActivationMessageRelayService(plugin);
+		HTMLTemplatingService templateService = new HTMLTemplatingService(); 
+		
+		EmailHeaderSection header = new EmailHeaderSection(plugin.getGame().getServer().getBoundAddress().get().getHostString());
+		header.setServerAddress(plugin.getGame().getServer().getBoundAddress().get().getAddress().getHostAddress()
+				+ ":" + plugin.getGame().getServer().getBoundAddress().get().getPort());
+		header.setInvisibleIntroduction("Thank you for registering your contact information on our Minecraft server! To verify "
+				+ "your contact information, please enter the following command on our server");
+		
+		EmailBodySection infoSection = new EmailBodySection();
+		infoSection.addContent(new EmailContent(EmailContentTypes.SECTION_HEADLINE, "Please verify your contact information!"));
+		infoSection.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "<br />Thank you for registering your "
+				+ "contact information on our Minecraft server! To verify your contact information, please "
+				+ "enter the following command on our server:"));
+		
+		EmailBodySection commandSection = new EmailBodySection();
+		commandSection.setSectionBackgroundColor("#52894F");
+		EmailContent command = new EmailContent(EmailContentTypes.HEADLINE, "/register activate " + activationKey);
+		command.setTextColor("#FFFFFF");
+		commandSection.addContent(command);
+		
+		EmailBodySection wrongAddress = new EmailBodySection();
+		wrongAddress.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, "If you did not register on our Minecraft server, or received this "
+				+ "message by mistake, please disregard this message."));
+		
+		EmailMessage email = new EmailMessage();
+		email.setHeaderSection(header);
+		email.addBodySection(infoSection);
+		email.addBodySection(commandSection);
+		email.addBodySection(wrongAddress);
+		
+		File templateDir = new File(plugin.getConfigDir(), "templates");
+		templateService.setTemplateDirectory(templateDir);
+		
+		String emailMessage;
+		emailMessage = templateService.parse("default.mustache", email);
+
+		if (emailMessage == "") {
+			emailMessage = null;
+		}
+		
+		String smsMessage = "Please verify your contact information by entering the following command on our server:"
+				+ " /register activate " + activationKey;
+		
+		plugin.getContactStorageService().saveContact(player, contact);
+		
+		service.sendActivationMessage(method, smsMessage, emailMessage);
+	
+		player.sendMessage(
+			Texts.of(TextColors.GREEN, "You will receive an activation code shortly. Follow the instructions in the "
+					+ "message to verify your credentials.").builder()
+			.build()
+		);
 		
 	}
 	

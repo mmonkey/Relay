@@ -1,6 +1,8 @@
 package com.github.mmonkey.Relay.Services;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +16,7 @@ import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
+import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 
 public class ContactStorageService extends StorageService {
 	
@@ -119,11 +122,30 @@ public class ContactStorageService extends StorageService {
 		
 	}
 	
-	public ContactMethod getContactMethod(Player player, String name) {
+	public ContactMethod getContactMethod(Player player, String contactMethod) {
 		
 		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
 		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
-		CommentedConfigurationNode methodNode = methodConfig.getNode(name);
+		CommentedConfigurationNode methodNode = methodConfig.getNode(contactMethod);
+		
+		List<ContactMethod> methods = getMethods(methodConfig);
+		EncryptionUtil encryptionUtil = new EncryptionUtil(this.plugin.getDefaultConfigService().getConfig()
+			.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.SECRET_KEY).getString());
+
+			
+		for (ContactMethod method: methods) {
+			
+			try {
+				
+				if (encryptionUtil.decrypt(method.getAddress()).equals(contactMethod)) {
+					return method;
+				}
+				
+			} catch (UnsupportedEncodingException e) {
+			} catch (GeneralSecurityException e) {
+			}
+		
+		}
 		
 		if (methodNode == null) {
 			return null;
@@ -206,17 +228,35 @@ public class ContactStorageService extends StorageService {
 		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
 		
 		List<String> list = getList(methodConfig);
+		EncryptionUtil encryptionUtil = new EncryptionUtil(this.plugin.getDefaultConfigService().getConfig()
+				.getNode(DefaultConfigStorageService.SETTINGS, DefaultConfigStorageService.SECRET_KEY).getString());
+		String toDelete = "";
 		
-		if (list.contains(name)) {
+		for (String item: list) {
 			
-			list.remove(name);
+			try {
+				ContactMethod method = getContactMethod(player, item);
+				if (item.equals(name) || encryptionUtil.decrypt(method.getAddress()).equals(name)) {
+					toDelete = item;
+				}
 			
-			methodConfig.removeChild(name);
+			} catch (UnsupportedEncodingException e) {
+			} catch (GeneralSecurityException e) {
+			}
+		
+		}
+		
+		if (!toDelete.equals("")) {
+			
+			list.remove(toDelete);
+			
+			methodConfig.removeChild(toDelete);
 			methodConfig.removeChild(LIST);
 			methodConfig.getNode(LIST).setValue(list);
-			
+
 			saveConfig();
 			return true;
+
 		}
 		
 		return false;

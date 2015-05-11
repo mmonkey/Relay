@@ -46,7 +46,7 @@ public class RegisterActivateSubCommand extends RegisterCommand {
 				method.setActivationKey("");
 				
 				contact.setMethods(methods);
-				saveContactActivated(contact, player);
+				saveContact(contact, player);
 				
 				player.sendMessage(
 					Texts.of(TextColors.GREEN, "Your account has been activated!").builder()

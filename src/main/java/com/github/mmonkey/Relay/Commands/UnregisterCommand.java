@@ -1,7 +1,5 @@
 package com.github.mmonkey.Relay.Commands;
 
-import java.util.List;
-
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.TextBuilder;
@@ -16,6 +14,7 @@ import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
 import org.spongepowered.api.util.command.spec.CommandExecutor;
 
+import com.github.mmonkey.Relay.ContactMethod;
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
 
@@ -32,22 +31,22 @@ public class UnregisterCommand implements CommandExecutor {
 		
 		boolean delete = (args.hasAny("d")) ? (Boolean) args.getOne("d").get() : false;
 		boolean cancel = (args.hasAny("c")) ? (Boolean) args.getOne("c").get() : false;
-		String method = (args.hasAny("method")) ? ((String) args.getOne("method").get()) : "";
+		String contactMethod = (args.hasAny("contactMethod")) ? ((String) args.getOne("contactMethod").get()) : "";
 		
 		Player player = (Player) src;
 		
-		if (cancel && !method.equals("")) {
+		if (cancel && !contactMethod.equals("")) {
 			
 			player.sendMessage(
 				CommandMessageFormatting.NEWLINE_TEXT,
-				Texts.of(TextColors.GREEN, "Contact method ", TextColors.GOLD, method, TextColors.GREEN, " was not deleted.").builder().build()
+				Texts.of(TextColors.GREEN, "Contact method ", TextColors.GOLD, contactMethod, TextColors.GREEN, " was not deleted.").builder().build()
 			);
 			
 			return CommandResult.success();
 			
 		}
 		
-		if (cancel && method.equals("")) {
+		if (cancel && contactMethod.equals("")) {
 			
 			player.sendMessage(
 				CommandMessageFormatting.NEWLINE_TEXT,
@@ -58,32 +57,24 @@ public class UnregisterCommand implements CommandExecutor {
 			
 		}
 		
-		if (delete && !method.equals("")) {
+		if (delete && !contactMethod.equals("")) {
 			
-			boolean methodFound = false;
-			List<String> list = plugin.getContactStorageService().getContactMethodList(player);
+			ContactMethod method = plugin.getContactStorageService().getContactMethod(player, contactMethod);
 			
-			for (String item: list) {
+			if (method != null) {
 				
-				if (item.equalsIgnoreCase(method)) {
-					methodFound = true;
-					plugin.getContactStorageService().deleteContactMethod(player, method.toUpperCase());
-				}
-				
-			}
-			
-			if (methodFound) {
+				plugin.getContactStorageService().deleteContactMethod(player, method.getAddress());
 				
 				player.sendMessage(
 					FormatUtil.empty(),
-					Texts.of(TextColors.GREEN, "Contact method ", TextColors.GOLD, method, TextColors.GREEN, " has been deleted.").builder().build()
+					Texts.of(TextColors.GREEN, "Contact method ", TextColors.GOLD, contactMethod, TextColors.GREEN, " has been deleted.").builder().build()
 				);
 				
 			} else {
 				
 				player.sendMessage(
 					FormatUtil.empty(),
-					Texts.of(TextColors.GOLD, "Contact method ", TextColors.RED, method, TextColors.GOLD, " was not found.").builder().build()
+					Texts.of(TextColors.GOLD, "Contact method ", TextColors.RED, contactMethod, TextColors.GOLD, " was not found.").builder().build()
 				);
 				
 			}
@@ -92,7 +83,7 @@ public class UnregisterCommand implements CommandExecutor {
 			
 		}
 		
-		if (delete && method.equals("")) {
+		if (delete && contactMethod.equals("")) {
 			
 			plugin.getContactStorageService().deleteContact(player);
 			
@@ -105,14 +96,14 @@ public class UnregisterCommand implements CommandExecutor {
 			
 		}
 		
-		if (!delete && !cancel && !method.equals("")) {
+		if (!delete && !cancel && !contactMethod.equals("")) {
 			
 			TextBuilder message = Texts.builder();
 			
 			message.append(CommandMessageFormatting.NEWLINE_TEXT);
-			message.append(Texts.of(TextColors.WHITE, "Would you like to delte method ", TextColors.GOLD, method, TextColors.WHITE, "?"));
+			message.append(Texts.of(TextColors.WHITE, "Would you like to delte method ", TextColors.GOLD, contactMethod, TextColors.WHITE, "?"));
 			message.append(CommandMessageFormatting.NEWLINE_TEXT);
-			message.append(getConfirmDeleteContactMethodAction(method), Texts.of(" "), getCancelDeleteContactMethodAction(method));
+			message.append(getConfirmDeleteContactMethodAction(contactMethod), Texts.of(" "), getCancelDeleteContactMethodAction(contactMethod));
 			message.append(CommandMessageFormatting.NEWLINE_TEXT);
 			
 			player.sendMessage(message.build());
@@ -121,7 +112,7 @@ public class UnregisterCommand implements CommandExecutor {
 			
 		}
 		
-		if (!delete && !cancel && method.equals("")) {
+		if (!delete && !cancel && contactMethod.equals("")) {
 			
 			TextBuilder message = Texts.builder();
 			
@@ -141,20 +132,20 @@ public class UnregisterCommand implements CommandExecutor {
 		
 	}
 	
-	private Text getConfirmDeleteContactMethodAction(String method) {
+	private Text getConfirmDeleteContactMethodAction(String contactMethod) {
 		
-		return Texts.builder("Yes, delete method " + method + ".")
-			.onClick(TextActions.runCommand("/unregister -d " + method))
+		return Texts.builder("Yes, delete method " + contactMethod + ".")
+			.onClick(TextActions.runCommand("/unregister -d " + contactMethod))
 			.color(TextColors.GREEN)
 			.style(TextStyles.UNDERLINE)
 			.build();
 		
 	}
 	
-	private Text getCancelDeleteContactMethodAction(String method) {
+	private Text getCancelDeleteContactMethodAction(String contactMethod) {
 		
-		return Texts.builder("No, keep method " + method + ".")
-			.onClick(TextActions.runCommand("/unregister -c " + method))
+		return Texts.builder("No, keep method " + contactMethod + ".")
+			.onClick(TextActions.runCommand("/unregister -c " + contactMethod))
 			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
 			.build();

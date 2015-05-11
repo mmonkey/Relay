@@ -24,6 +24,7 @@ import com.github.mmonkey.Relay.Commands.RegisterAccountSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterActivateSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCarriersSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterCommand;
+import com.github.mmonkey.Relay.Commands.RegisterEditSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterEmailSubCommand;
 import com.github.mmonkey.Relay.Commands.RegisterPhoneSubCommand;
 import com.github.mmonkey.Relay.Commands.UnregisterCommand;
@@ -200,6 +201,20 @@ public class Relay {
 			.setExecutor(new RegisterAccountSubCommand(this))
 			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
 			.build());
+		
+		/**
+		 * /register edit [-e][-p] <contactMethodId> [-c] [carrier]
+		 */
+		subcommands.put(Arrays.asList("edit"), CommandSpec.builder()
+			.setDescription(Texts.of("Edit a contact method."))
+			.setExtendedDescription(Texts.of("Edit contact method of the given contact method."))
+			.setExecutor(new RegisterEditSubCommand(this))
+			.setArguments(GenericArguments.seq(
+				GenericArguments.flags().flag("e").flag("p").flag("r").buildWith(GenericArguments.string(Texts.of("contactMethod"))),
+				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("carrier"))))
+			))
+			.build());
+		
 		
 		/**
 		 * /register

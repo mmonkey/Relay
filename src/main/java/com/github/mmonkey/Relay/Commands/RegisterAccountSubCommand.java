@@ -34,7 +34,6 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 		Player player = (Player) src;
 		EncryptionUtil encryptionUtil = getEncryptionUtil();
 		PaginatedList pagination = new PaginatedList("/register account");
-		pagination.displayLineNumbers(false);
 		
 		TextBuilder message = Texts.builder();
 		TextBuilder header = Texts.builder();
@@ -49,11 +48,11 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 				
 				try {
 				
-					String type = (method.getType().equals(ContactMethodTypes.EMAIL)) ? "email": "phone";
+					String type = (method.getType().equals(ContactMethodTypes.EMAIL)) ? "e": "p";
 					String address = encryptionUtil.decrypt(method.getAddress());
 					
 					TextBuilder row = Texts.builder();
-					row.append(Texts.of(TextColors.WHITE, name + ": " + address + " - "));
+					row.append(Texts.of(TextColors.WHITE, address + " - "));
 					row.append(getEditAction(address, type, name));
 					
 					pagination.add(row.build());
@@ -72,6 +71,8 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 
 		pagination.setHeader(header.build());
 		
+		//TODO create footer with command info
+		
 		message.append(FormatUtil.empty());
 		message.append(pagination.getPage(page));
 		
@@ -84,7 +85,7 @@ public class RegisterAccountSubCommand extends RegisterCommand {
 	private Text getEditAction(String displayName, String type, String name) {
 		
 		return Texts.builder("edit")
-				.onClick(TextActions.runCommand("/register edit -t " + type + " " + name))
+				.onClick(TextActions.runCommand("/register edit -" + type + " " + name))
 				.onHover(TextActions.showText(Texts.of(TextColors.WHITE, "Edit ", TextColors.GOLD, displayName)))
 				.color(TextColors.DARK_AQUA)
 				.build();
