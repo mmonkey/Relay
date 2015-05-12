@@ -43,7 +43,7 @@ public class RegisterEmailSubcommand extends RegisterCommand {
 		List<String> contacts = plugin.getContactStorageService().getContactList();
 		
 		if (contacts.contains(player.getUniqueId().toString())) {
-			contact = plugin.getContactStorageService().getContact(player);
+			contact = getContact(player);
 			accept = contact.acceptTerms();
 		}
 		

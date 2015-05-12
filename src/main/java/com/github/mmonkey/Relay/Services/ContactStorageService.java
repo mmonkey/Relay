@@ -20,6 +20,7 @@ import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 
 public class ContactStorageService extends StorageService {
 	
+	public static final String CONTACT_USERNAME = "username";
 	public static final String CONTACT_ACCEPT_TERMS = "acceptTerms";
 	public static final String CONTACT_METHODS = "methods";
 	public static final String CONTACT_BLACKLIST = "blacklist";
@@ -73,6 +74,7 @@ public class ContactStorageService extends StorageService {
 		}
 		
 		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		config.getNode(CONTACT_USERNAME).setValue(player.getName());
 		config.getNode(CONTACT_ACCEPT_TERMS).setValue(contact.acceptTerms());
 		
 		CommentedConfigurationNode methods = config.getNode(CONTACT_METHODS);
@@ -180,25 +182,58 @@ public class ContactStorageService extends StorageService {
 		
 	}
 	
-	public Contact getContact(Player player) {
+	private UUID getUniqueId(String playerName) {
 		
-		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		List<String> contactIds = getContactList();
+		
+		for (String id: contactIds) {
+			
+			CommentedConfigurationNode config = getConfig().getNode(id);
+			String username = config.getNode(ContactStorageService.CONTACT_USERNAME).getString();
+			
+			if (username.equals(playerName)) {
+				return UUID.fromString(id);
+			}
+			
+		}
+		
+		return null;
+		
+	}
+	
+	public Contact getContact(String playerName) {
+		UUID uniqueId = getUniqueId(playerName);
+		return (uniqueId == null) ? new Contact() : getContact(uniqueId);
+	}
+	
+	public Contact getContact(Player player) {
+		return getContact(player.getUniqueId());
+	}
+	
+	public Contact getContact(UUID uniqueId) {
+		
+		CommentedConfigurationNode config = getConfig().getNode(uniqueId.toString());
 		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
 		CommentedConfigurationNode blacklistConfig = config.getNode(CONTACT_BLACKLIST);
 		
+		String username;
 		boolean terms;
 		
 		try {
 		
+			username = config.getNode(CONTACT_USERNAME).getString();
 			terms = config.getNode(CONTACT_ACCEPT_TERMS).getBoolean();
 		
 		} catch (Exception e) {
 			
+			e.printStackTrace();
+			username = "";
 			terms = false;
 			
 		}
 		
 		Contact contact = new Contact();
+		contact.setUsername(username);
 		contact.acceptTerms(terms);
 		contact.setMethods(getMethods(methodConfig));
 		contact.setBlacklist(getBlacklist(blacklistConfig));

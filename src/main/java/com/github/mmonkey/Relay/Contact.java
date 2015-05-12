@@ -8,9 +8,18 @@ import org.spongepowered.api.entity.player.Player;
 
 public class Contact {
 	
+	private String username = "";
 	private boolean acceptTerms = false;
 	List<ContactMethod> methods = new ArrayList<ContactMethod>();	
 	private List<UUID> blacklist = new ArrayList<UUID>();
+	
+	public String getUsername() {
+		return this.username;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	
 	public boolean acceptTerms() {
 		return this.acceptTerms;

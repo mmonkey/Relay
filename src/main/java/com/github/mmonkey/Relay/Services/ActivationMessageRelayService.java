@@ -25,7 +25,9 @@ import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
-public class ActivationMessageRelayService extends MessageRelayService {
+public class ActivationMessageRelayService {
+	
+	private Relay plugin;
 	
 	/**
 	 * Send activation message to player.
@@ -229,8 +231,28 @@ public class ActivationMessageRelayService extends MessageRelayService {
 		
 	}
 	
+	private Gateway getGateway() {
+		
+		List<String> gateways = plugin.getGatewayStorageService().getGatewayList();
+		
+		for (String name: gateways) {
+			if (name.equals("Mandrill")) {
+				return plugin.getGatewayStorageService().getGateway(name);
+			}
+		}
+		
+		if (gateways.size() > 0) {
+		
+			return plugin.getGatewayStorageService().getGateway(gateways.get(0));
+		
+		}
+		
+		return null;
+		
+	}
+	
 	public ActivationMessageRelayService(Relay plugin) {
-		super(plugin);
+		this.plugin = plugin;
 	}
 	
 }

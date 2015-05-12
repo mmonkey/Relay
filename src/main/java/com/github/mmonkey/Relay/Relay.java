@@ -30,6 +30,7 @@ import com.github.mmonkey.Relay.Commands.RegisterEmailSubcommand;
 import com.github.mmonkey.Relay.Commands.RegisterPhoneSubcommand;
 import com.github.mmonkey.Relay.Commands.RelaySendSubcommand;
 import com.github.mmonkey.Relay.Commands.UnregisterCommand;
+import com.github.mmonkey.Relay.Events.PlayerChangeNameListener;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.GatewayStorageService;
@@ -145,11 +146,11 @@ public class Relay {
 	}
 	
 	@Subscribe
-	public void init(InitializationEvent event) {
+	public <T> void init(InitializationEvent event) {
 		
 		try {
 			
-			this.game.getServiceManager().setProvider(this, RelayService.class, new MessageRelayService(this));
+			this.game.getServiceManager().setProvider(this, RelayService.class, new MessageRelayService<T>(this));
 			this.game.getServiceManager().setProvider(this, TemplatingService.class, new HTMLTemplatingService());
 		
 		} catch (ProviderExistsException e) {
@@ -286,6 +287,8 @@ public class Relay {
 			game.getCommandDispatcher().register(this, unregisterCommand, "unregister");
 		
 		}
+		
+		game.getEventManager().register(this, new PlayerChangeNameListener(this));
 		
 	}
 	

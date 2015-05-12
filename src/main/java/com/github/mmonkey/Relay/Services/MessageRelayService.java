@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -28,8 +29,9 @@ import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
+import com.google.common.base.Optional;
 
-public class MessageRelayService implements RelayService {
+public class MessageRelayService<T> implements RelayService<T> {
 
 	protected Relay plugin;
 	
@@ -41,9 +43,9 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player recipient, String message) {
+	public MessageRelayResult sendMessage(T recipient, String message) {
 		
-		List<Player> recipients = new ArrayList<Player>();
+		List<T> recipients = new ArrayList<T>();
 		recipients.add(recipient);
 		
 		return send(null, recipients, message, null);
@@ -58,7 +60,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Collection<Player> recipients, String message) {
+	public MessageRelayResult sendMessage(Collection<T> recipients, String message) {
 		
 		return send(null, recipients, message, null);
 		
@@ -73,9 +75,9 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, Player recipient, String message) {
+	public MessageRelayResult sendMessage(T sender, T recipient, String message) {
 		
-		List<Player> recipients = new ArrayList<Player>();
+		List<T> recipients = new ArrayList<T>();
 		recipients.add(recipient);
 		
 		return send(sender, recipients, message, null);
@@ -91,7 +93,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String message) {
+	public MessageRelayResult sendMessage(T sender, Collection<T> recipients, String message) {
 		
 		return send(sender, recipients, message, null);
 		
@@ -106,9 +108,9 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player recipient, String text, String html) {
+	public MessageRelayResult sendMessage(T recipient, String text, String html) {
 		
-		List<Player> recipients = new ArrayList<Player>();
+		List<T> recipients = new ArrayList<T>();
 		recipients.add(recipient);
 		
 		return send(null, recipients, text, html);
@@ -124,7 +126,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Collection<Player> recipients, String text, String html) {
+	public MessageRelayResult sendMessage(Collection<T> recipients, String text, String html) {
 		
 		return send(null, recipients, text, html);
 		
@@ -140,9 +142,9 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, Player recipient, String text, String html) {
+	public MessageRelayResult sendMessage(T sender, T recipient, String text, String html) {
 		
-		List<Player> recipients = new ArrayList<Player>();
+		List<T> recipients = new ArrayList<T>();
 		recipients.add(recipient);
 		
 		return send(sender, recipients, text, html);
@@ -159,13 +161,13 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String text, String html) {
+	public MessageRelayResult sendMessage(T sender, Collection<T> recipients, String text, String html) {
 		
 		return send(sender, recipients, text, html);
 		
 	}
 	
-	private MessageRelayResult send(Player sender, Collection<Player> recipients, String text, String html) {
+	private MessageRelayResult send(T sender, Collection<T> recipients, String text, String html) {
 		
 		Gateway gateway = getGateway();
 		
@@ -248,11 +250,15 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, Collection<Player> recipients, Session session, Gateway gateway, String text, String html) {
+	private List<Message> getMessages(T sender, Collection<T> recipients, Session session, Gateway gateway, String text, String html) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		
-		for (Player player: recipients) {
+		for (T player: recipients) {
+			
+			if (!(player instanceof Player) && !(player instanceof UUID) && !(player instanceof String)) {
+				return null;
+			}
 			
 			try {
 				
@@ -269,7 +275,22 @@ public class MessageRelayService implements RelayService {
 					.getNode(DefaultConfigStorageService.MESSAGES, DefaultConfigStorageService.EMAIL_DISPLAY_NAME).getString();
 				
 				EncryptionUtil encryptionUtil = new EncryptionUtil(secretKey);
-				Contact contact = plugin.getContactStorageService().getContact(player);
+				
+				Contact contact = new Contact();
+				
+				if (player instanceof Player) {
+					contact = plugin.getContactStorageService().getContact((Player) player);
+				}
+				
+				if (player instanceof String) {
+					contact = plugin.getContactStorageService().getContact((String) player);
+				}
+				
+				if (player instanceof UUID) {	
+					contact = plugin.getContactStorageService().getContact((UUID) player);
+				}
+				
+				
 				List<ContactMethod> methods = contact.getMethods();
 				
 				for (ContactMethod method: methods) {
@@ -281,10 +302,33 @@ public class MessageRelayService implements RelayService {
 					String fromEmailUsername = encryptionUtil.decrypt(gateway.getUsername());
 					String fromAddress = (!fromEmailAddress.equals("")) ? fromEmailAddress : fromEmailUsername;
 					
-					if (sender == null) {
-						message.setFrom(new InternetAddress(fromAddress, displayName));
+						
+					if (sender instanceof String) {
+						
+						message.setFrom(new InternetAddress(fromAddress, (String) sender));
+					
+					} else if (sender instanceof Player) {
+						
+						message.setFrom(new InternetAddress(fromAddress, ((Player) sender).getName()));
+						
+					} else if (sender instanceof UUID) {
+						
+						Optional<Player> s = plugin.getGame().getServer().getPlayer((UUID) sender);
+						
+						if (s.isPresent()) {
+						
+							message.setFrom(new InternetAddress(fromAddress, ((Player) s.get()).getName()));
+						
+						} else {
+							
+							message.setFrom(new InternetAddress(fromAddress, displayName));
+							
+						}
+						
 					} else {
-						message.setFrom(new InternetAddress(fromAddress, sender.getName()));
+							
+						message.setFrom(new InternetAddress(fromAddress, displayName));
+						
 					}
 					
 					for (int i = 0; i < method.getCarrier().getAddresses().length; i++) {	

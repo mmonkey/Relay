@@ -27,6 +27,8 @@ public class RegisterActivateSubcommand extends RegisterCommand {
 		Player player = (Player) src;
 		Contact contact = getContact(player);
 		
+		Relay.getLogger().info("contact: " + contact.getUsername());
+		
 		if (code.equals("")) {
 			
 			player.sendMessage(
@@ -34,12 +36,17 @@ public class RegisterActivateSubcommand extends RegisterCommand {
 				.build()
 			);
 			
+			Relay.getLogger().info("code is blank");
+			
 			return CommandResult.success();
 		}
 			
 		List<ContactMethod> methods = contact.getMethods();
 		
 		for (ContactMethod method: methods) {
+			
+			Relay.getLogger().info("Method: " + method.getActivationKey());
+			
 			if (method.getActivationKey().equals(code)) {
 				
 				method.isActivated(true);

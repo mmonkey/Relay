@@ -2,90 +2,88 @@ package com.github.mmonkey.Relay.Services;
 
 import java.util.Collection;
 
-import org.spongepowered.api.entity.player.Player;
-
 import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
-public interface RelayService {
+public interface RelayService<T> {
 
 	/**
 	 * Send message from server to player.
 	 * 
-	 * @param recipient Player
+	 * @param recipient <T> (Player or String)
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player recipient, String message);
+	public MessageRelayResult sendMessage(T recipient, String message);
 	
 	/**
 	 * Send message from server to multiple players.
 	 * 
-	 * @param recipients List<Player>
+	 * @param recipients Collection<T> (Player or String)
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Collection<Player> recipients, String message);
+	public MessageRelayResult sendMessage(Collection<T> recipients, String message);
 	
 	/**
 	 * Send message from player to player.
 	 * 
-	 * @param sender Player
-	 * @param recipient Player
+	 * @param sender <T> (Player or String)
+	 * @param recipient <T> (Player or String)
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, Player recipient, String message);
+	public MessageRelayResult sendMessage(T sender, T recipient, String message);
 	
 	/**
 	 * Send message from player to multiple players.
 	 * 
-	 * @param sender Player
-	 * @param recipients List<Player>
+	 * @param sender <T> (Player or String)
+	 * @param recipients Collection<T> (Player or String)
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String message);
+	public MessageRelayResult sendMessage(T sender, Collection<T> recipients, String message);
 	
 	/**
 	 * Send message from server to player with separate text and email message templates.
 	 * 
-	 * @param recipient Player
+	 * @param recipient <T> (Player or String)
 	 * @param text String
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player recipient, String text, String html);
+	public MessageRelayResult sendMessage(T recipient, String text, String html);
 	
 	/**
 	 * Send message from server to multiple players with separate text and email message templates.
 	 * 
-	 * @param recipients List<Player>
+	 * @param recipients Collection<T> (Player or String)
 	 * @param message String
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Collection<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(Collection<T> recipients, String text, String html);
 	
 	/**
 	 * Send message from player to player with separate text and email message templates.
 	 * 
-	 * @param sender Player
-	 * @param recipient Player
+	 * @param sender <T> (Player or String)
+	 * @param recipient <T> (Player or String)
 	 * @param text String
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, Player recipient, String text, String html);
+	public MessageRelayResult sendMessage(T sender, T recipient, String text, String html);
 	
 	/**
 	 * Send message from player to multiple players with separate text and email message templates.
 	 * 
-	 * @param sender Player
-	 * @param recipients List<Player>
+	 * @param sender <T> (Player or String)
+	 * @param recipients List<T> (Player or String)
 	 * @param text String
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(T sender, Collection<T> recipients, String text, String html);
 	
 }

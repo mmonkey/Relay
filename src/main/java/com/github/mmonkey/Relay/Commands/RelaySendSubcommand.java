@@ -3,27 +3,24 @@ package com.github.mmonkey.Relay.Commands;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.UUID;
 
 import org.spongepowered.api.entity.player.Player;
+import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
 import org.spongepowered.api.util.command.args.CommandContext;
 
 import com.github.mmonkey.Relay.Relay;
+import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
+import com.github.mmonkey.Relay.Utilities.MessageRelayResult;
 
 public class RelaySendSubcommand extends RelayCommand {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		
-		if (!(src instanceof Player)) {
-			return CommandResult.empty();
-		}
-		
-		Player player = (Player) src;
 		
 		boolean all = (args.hasAny("a")) ? (Boolean) args.getOne("a").get() : false;
 		String message = (args.hasAny("message")) ? ((String) args.getOne("message").get()) : "";
@@ -32,26 +29,47 @@ public class RelaySendSubcommand extends RelayCommand {
 		Collection<String> players = (Collection<String>) ((args.hasAny("player")) ? args.getAll("player") : new ArrayList<String>());
 		@SuppressWarnings("unchecked")
 		Collection<String> templates = (Collection<String>) ((args.hasAny("template")) ? args.getAll("template") : new ArrayList<String>());
-	
-		Collection<Player> recipients = (all) ? getAllContactPlayers() : new ArrayList<Player>();
 		
-		if (!players.isEmpty() && !all) {
-		
-			// TODO get uuid from contact storage
-			for(String name: players) {
-				recipients.add((Player) this.plugin.getGame().getServer().getPlayer(name));
-			}
-		
-		}
+		Collection<UUID> allContacts = getAllContacts();
 		
 		String template = getTemplate(templates);
+		EmailMessage email = new EmailMessage();
 		
-		MessageRelayService service = new MessageRelayService(plugin);
+		MessageRelayResult result;
 		
-		//TODO add email message with template
-		service.sendMessage(player, recipients, message);
+		//TODO add email template stuff
 		
+		if (!all) {
 		
+			MessageRelayService<String> service = new MessageRelayService<String>(plugin);
+			
+			if (src instanceof Player) {
+				
+				result = service.sendMessage(src.getName(), players, message);
+			
+			} else {
+				
+				result = service.sendMessage(players, message);
+				
+			}
+		
+		} else {
+			
+			MessageRelayService<UUID> service = new MessageRelayService<UUID>(plugin);
+			
+			if (src instanceof Player) {
+				
+				result = service.sendMessage(((Player) src).getUniqueId(), allContacts, message);
+			
+			} else {
+				
+				result = service.sendMessage(allContacts, message);
+				
+			}
+			
+		}
+		
+		src.sendMessage(Texts.of(result.getResult()).builder().build());
 		return CommandResult.success();
 		
 	}
@@ -79,18 +97,16 @@ public class RelaySendSubcommand extends RelayCommand {
 		
 	}
 	
-	private List<Player> getAllContactPlayers() {
+	private Collection<UUID> getAllContacts() {
 		
-		List<Player> players = new ArrayList<Player>();
-		List<String> contacts = plugin.getContactStorageService().getContactList();
+		Collection<String> contactIds = plugin.getContactStorageService().getContactList();
+		Collection<UUID> contacts = new ArrayList<UUID>();
 		
-		for (String contact: contacts) {
-			
-			players.add((Player) plugin.getGame().getServer().getPlayer(contact));
-			
+		for (String id: contactIds) {
+			contacts.add(UUID.fromString(id));
 		}
 		
-		return players;
+		return contacts;
 		
 	}
 	
