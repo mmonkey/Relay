@@ -3,6 +3,7 @@ package com.github.mmonkey.Relay.Services;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -57,7 +58,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(List<Player> recipients, String message) {
+	public MessageRelayResult sendMessage(Collection<Player> recipients, String message) {
 		
 		return send(null, recipients, message, null);
 		
@@ -90,7 +91,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message) {
+	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String message) {
 		
 		return send(sender, recipients, message, null);
 		
@@ -123,7 +124,7 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html) {
+	public MessageRelayResult sendMessage(Collection<Player> recipients, String text, String html) {
 		
 		return send(null, recipients, text, html);
 		
@@ -158,13 +159,13 @@ public class MessageRelayService implements RelayService {
 	 * @return MessageRelayResult
 	 */
 	@Override
-	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html) {
+	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String text, String html) {
 		
 		return send(sender, recipients, text, html);
 		
 	}
 	
-	private MessageRelayResult send(Player sender, List<Player> recipients, String text, String html) {
+	private MessageRelayResult send(Player sender, Collection<Player> recipients, String text, String html) {
 		
 		Gateway gateway = getGateway();
 		
@@ -247,7 +248,7 @@ public class MessageRelayService implements RelayService {
 		
 	}
 	
-	private List<Message> getMessages(Player sender, List<Player> recipients, Session session, Gateway gateway, String text, String html) {
+	private List<Message> getMessages(Player sender, Collection<Player> recipients, Session session, Gateway gateway, String text, String html) {
 		
 		List<Message> messages = new ArrayList<Message>();
 		

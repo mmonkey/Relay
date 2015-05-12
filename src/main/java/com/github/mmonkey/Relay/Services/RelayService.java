@@ -1,6 +1,6 @@
 package com.github.mmonkey.Relay.Services;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.spongepowered.api.entity.player.Player;
 
@@ -24,7 +24,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(List<Player> recipients, String message);
+	public MessageRelayResult sendMessage(Collection<Player> recipients, String message);
 	
 	/**
 	 * Send message from player to player.
@@ -44,7 +44,7 @@ public interface RelayService {
 	 * @param message String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String message);
+	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String message);
 	
 	/**
 	 * Send message from server to player with separate text and email message templates.
@@ -64,7 +64,7 @@ public interface RelayService {
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(List<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(Collection<Player> recipients, String text, String html);
 	
 	/**
 	 * Send message from player to player with separate text and email message templates.
@@ -86,6 +86,6 @@ public interface RelayService {
 	 * @param html String
 	 * @return MessageRelayResult
 	 */
-	public MessageRelayResult sendMessage(Player sender, List<Player> recipients, String text, String html);
+	public MessageRelayResult sendMessage(Player sender, Collection<Player> recipients, String text, String html);
 	
 }
