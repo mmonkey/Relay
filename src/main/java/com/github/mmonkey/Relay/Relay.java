@@ -28,6 +28,7 @@ import com.github.mmonkey.Relay.Commands.RelayCommand;
 import com.github.mmonkey.Relay.Commands.RelayEditSubcommand;
 import com.github.mmonkey.Relay.Commands.RegisterEmailSubcommand;
 import com.github.mmonkey.Relay.Commands.RegisterPhoneSubcommand;
+import com.github.mmonkey.Relay.Commands.RelaySendSubcommand;
 import com.github.mmonkey.Relay.Commands.UnregisterCommand;
 import com.github.mmonkey.Relay.Services.ContactStorageService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
@@ -239,6 +240,21 @@ public class Relay {
 				GenericArguments.flags().flag("e").flag("p").flag("r").buildWith(GenericArguments.string(Texts.of("contactMethod"))),
 				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("carrier"))))
 			))
+			.build());
+		
+		/**
+		 * /relay send [[-p] [player]] [[-t] [template]] [-a] <message>
+		 */
+		relaySubcommands.put(Arrays.asList("send"), CommandSpec.builder()
+			.setDescription(Texts.of("Send an email or sms message."))
+			.setExtendedDescription(Texts.of("If the player has a relay account setup, send them an email or sms message."))
+			.setExecutor(new RelaySendSubcommand(this))
+			.setArguments(
+				GenericArguments.flags().flag("a")
+					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
+					.valueFlag(GenericArguments.string(Texts.of("player")), "p")
+					.buildWith(GenericArguments.remainingJoinedStrings(Texts.of("message")))
+			)
 			.build());
 		
 		/**
