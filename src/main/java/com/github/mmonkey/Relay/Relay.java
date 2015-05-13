@@ -20,35 +20,15 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
-import com.github.mmonkey.Relay.Commands.RelayAccountSubcommand;
-import com.github.mmonkey.Relay.Commands.RegisterActivateSubcommand;
-import com.github.mmonkey.Relay.Commands.RelayCarriersSubcommand;
-import com.github.mmonkey.Relay.Commands.RegisterCommand;
-import com.github.mmonkey.Relay.Commands.RelayCommand;
-import com.github.mmonkey.Relay.Commands.RelayEditSubcommand;
-import com.github.mmonkey.Relay.Commands.RegisterEmailSubcommand;
-import com.github.mmonkey.Relay.Commands.RegisterPhoneSubcommand;
-import com.github.mmonkey.Relay.Commands.RelaySendSubcommand;
-import com.github.mmonkey.Relay.Commands.UnregisterCommand;
-import com.github.mmonkey.Relay.Events.PlayerChangeNameListener;
-import com.github.mmonkey.Relay.Services.ContactStorageService;
-import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
-import com.github.mmonkey.Relay.Services.GatewayStorageService;
-import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
-import com.github.mmonkey.Relay.Services.MessageRelayService;
-import com.github.mmonkey.Relay.Services.RelayService;
-import com.github.mmonkey.Relay.Services.TemplatingService;
-import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
-import com.github.mmonkey.Relay.Utilities.FileUtils;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
 @Plugin(id = Relay.ID, name = Relay.NAME, version = Relay.VERSION)
 public class Relay {
 	
-	public static final String ID = "Relay";
-	public static final String NAME = "Relay";
-	public static final String VERSION = "0.0.1";
+	protected static final String ID = "Relay";
+	protected static final String NAME = "Relay";
+	protected static final String VERSION = "0.0.1";
 	
 	private Game game;
 	private Optional<PluginContainer> pluginContainer;
@@ -66,39 +46,39 @@ public class Relay {
 	
 	private String defaultTemplate;
 	
-	public Game getGame() {
+	protected Game getGame() {
 		return this.game;
 	}
 	
-	public Optional<PluginContainer> getPluginContainer() {
+	protected Optional<PluginContainer> getPluginContainer() {
 		return this.pluginContainer;
 	}
 	
-	public static Logger getLogger() {
+	protected static Logger getLogger() {
 		return logger;
 	}
 	
-	public DefaultConfigStorageService getDefaultConfigService() {
+	protected DefaultConfigStorageService getDefaultConfigService() {
 		return this.defaultConfigService;
 	}
 	
-	public GatewayStorageService getGatewayStorageService() {
+	protected GatewayStorageService getGatewayStorageService() {
 		return this.gatewayStorageService;
 	}
 	
-	public ContactStorageService getContactStorageService() {
+	protected ContactStorageService getContactStorageService() {
 		return this.contactStorageService;
 	}
 	
-	public File getConfigDir() {
+	protected File getConfigDir() {
 		return this.configDir;
 	}
 	
-	public File getTemplateDir() {
+	protected File getTemplateDir() {
 		return this.templateDir;
 	}
 	
-	public String getDefaultTemplate() {
+	protected String getDefaultTemplate() {
 		return this.defaultTemplate;
 	}
 	

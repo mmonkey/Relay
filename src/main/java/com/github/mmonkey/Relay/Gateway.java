@@ -10,63 +10,63 @@ public class Gateway {
 	private int port;
 	private boolean ssl;
 	
-	public String getName() {
+	protected String getName() {
 		return this.name;
 	}
 	
-	public void setName(String name) {
+	protected void setName(String name) {
 		this.name = name;
 	}
 	
-	public String getEmailAddress() {
+	protected String getEmailAddress() {
 		return this.emailAddress;
 	}
 	
-	public void setEmailAddress(String emailAddress) {
+	protected void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 	
-	public String getUsername() {
+	protected String getUsername() {
 		return this.username;
 	}
 	
-	public void setUsername(String username) {
+	protected void setUsername(String username) {
 		this.username = username;
 	}
 	
-	public String getPassword() {
+	protected String getPassword() {
 		return this.password;
 	}
 	
-	public void setPassword(String password) {
+	protected void setPassword(String password) {
 		this.password = password;
 	}
 	
-	public String getHost() {
+	protected String getHost() {
 		return this.host;
 	}
 	
-	public void setHost(String host) {
+	protected void setHost(String host) {
 		this.host = host;
 	}
 	
-	public int getPort() {
+	protected int getPort() {
 		return this.port;
 	}
 	
-	public void setPort(int port) {
+	protected void setPort(int port) {
 		this.port = port;
 	}
 	
-	public boolean sslEnabled() {
+	protected boolean sslEnabled() {
 		return this.ssl;
 	}
 	
-	public void sslEnabled(boolean enabled) {
+	protected void sslEnabled(boolean enabled) {
 		this.ssl = enabled;
 	}
 	
-	public boolean isValid() {
+	protected boolean isValid() {
 		
 		if (this.name == null || this.username == null || this.password == null || this.host == null || this.port == 0) {
 			return false;
@@ -76,7 +76,7 @@ public class Gateway {
 	
 	}
 	
-	public Gateway() {
+	protected Gateway() {
 	}
 	
 }

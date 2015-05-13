@@ -11,8 +11,6 @@ import org.spongepowered.api.text.format.TextColor;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandMessageFormatting;
 
-import com.github.mmonkey.Relay.Utilities.PaginatedListUtil;
-
 public class PaginatedList {
 	
 	private List<Text> items = new ArrayList<Text>();

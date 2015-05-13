@@ -13,51 +13,51 @@ public class Contact {
 	List<ContactMethod> methods = new ArrayList<ContactMethod>();	
 	private List<UUID> blacklist = new ArrayList<UUID>();
 	
-	public String getUsername() {
+	protected String getUsername() {
 		return this.username;
 	}
 	
-	public void setUsername(String username) {
+	protected void setUsername(String username) {
 		this.username = username;
 	}
 	
-	public boolean acceptTerms() {
+	protected boolean acceptTerms() {
 		return this.acceptTerms;
 	}
 	
-	public void acceptTerms(boolean acceptTerms) {
+	protected void acceptTerms(boolean acceptTerms) {
 		this.acceptTerms = acceptTerms;
 	}
 	
-	public List<ContactMethod> getMethods() {
+	protected List<ContactMethod> getMethods() {
 		return this.methods;
 	}
 	
-	public void setMethods(List<ContactMethod> methods) {
+	protected void setMethods(List<ContactMethod> methods) {
 		this.methods = methods;
 	}
 	
-	public List<UUID> getBlacklist() {
+	protected List<UUID> getBlacklist() {
 		return this.blacklist;
 	}
 	
-	public void setBlacklist(List<UUID> blacklist) {
+	protected void setBlacklist(List<UUID> blacklist) {
 		this.blacklist = blacklist;
 	}
 	
-	public void addPlayerToBlacklist(Player player) {
+	protected void addPlayerToBlacklist(Player player) {
 		if (!this.blacklist.contains(player.getUniqueId())) {
 			this.blacklist.add(player.getUniqueId());
 		}
 	}
 	
-	public void removePlayerFromBlacklist(Player player) {
+	protected void removePlayerFromBlacklist(Player player) {
 		if (this.blacklist.contains(player.getUniqueId())) {
 			this.blacklist.remove(player.getUniqueId());
 		}
 	}
 	
-	public Contact() {
+	protected Contact() {
 	}
 	
 }

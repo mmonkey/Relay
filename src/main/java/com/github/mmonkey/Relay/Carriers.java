@@ -62,11 +62,11 @@ public enum Carriers {
 	private final String displayName;
 	private final String[] address;
 	
-	public String getDisplayName() {
+	protected String getDisplayName() {
 		return displayName;
 	}
 	
-	public String[] getAddresses() {
+	protected String[] getAddresses() {
 		return address;
 	}
 	

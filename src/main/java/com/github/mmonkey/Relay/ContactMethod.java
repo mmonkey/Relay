@@ -1,6 +1,5 @@
 package com.github.mmonkey.Relay;
 
-import com.github.mmonkey.Relay.Utilities.ContactMethodTypes;
 
 public class ContactMethod {
 
@@ -8,49 +7,49 @@ public class ContactMethod {
 	private String address;
 	private Carriers carrier = Carriers.EMAIL;
 	private String activationKey;
-	boolean isActivated = false;
+	private boolean isActivated = false;
 	
-	public ContactMethodTypes getType() {
+	protected ContactMethodTypes getType() {
 		return this.type;
 	}
 	
-	public void setType(ContactMethodTypes type) {
+	protected void setType(ContactMethodTypes type) {
 		this.type = type;
 	}
 	
-	public String getAddress() {
+	protected String getAddress() {
 		return this.address;
 	}
 	
-	public void setAddress(String address) {
+	protected void setAddress(String address) {
 		this.address = address;
 	}
 	
-	public Carriers getCarrier() {
+	protected Carriers getCarrier() {
 		return this.carrier;
 	}
 	
-	public void setCarrier(Carriers carrier) {
+	protected void setCarrier(Carriers carrier) {
 		this.carrier = carrier;
 	}
 	
-	public String getActivationKey() {
+	protected String getActivationKey() {
 		return this.activationKey;
 	}
 	
-	public void setActivationKey(String activationKey) {
+	protected void setActivationKey(String activationKey) {
 		this.activationKey = activationKey;
 	}
 	
-	public boolean isActivated() {
+	protected boolean isActivated() {
 		return this.isActivated;
 	}
 	
-	public void isActivated(boolean isActivated) {
+	protected void isActivated(boolean isActivated) {
 		this.isActivated = isActivated;
 	}
 	
-	public ContactMethod(ContactMethodTypes type, String address, Carriers carrier, String activationKey) {
+	protected ContactMethod(ContactMethodTypes type, String address, Carriers carrier, String activationKey) {
 		this.type = type;
 		this.address = address;
 		this.carrier = carrier;
