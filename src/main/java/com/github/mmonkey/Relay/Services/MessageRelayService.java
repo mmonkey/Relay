@@ -5,6 +5,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -224,7 +225,9 @@ public class MessageRelayService<T> implements RelayService<T> {
 			
 		}
 		
-		List<Message> messages = getMessages(sender, recipients, session, gateway, text, html);
+		Collection<T> filteredRecipients = removeDuplicates(recipients);
+		
+		List<Message> messages = getMessages(sender, filteredRecipients, session, gateway, text, html);
 		
 		if (messages == null) {
 			return MessageRelayResult.NO_MESSAGES_TO_SEND;
@@ -395,6 +398,10 @@ public class MessageRelayService<T> implements RelayService<T> {
 		
 		return messages;
 		
+	}
+	
+	protected Collection<T> removeDuplicates(Collection<T> list) {
+		return new ArrayList<T>(new LinkedHashSet<T>(list));
 	}
 	
 	protected Gateway getGateway() {

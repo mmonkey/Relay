@@ -91,6 +91,15 @@ public class ContactStorageService extends StorageService {
 		return getList(getConfig());
 	}
 	
+	public List<String> getContactMethodList(Player player) {
+		
+		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
+		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
+		
+		return getList(methodConfig);
+		
+	}
+	
 	private List<ContactMethod> getMethods(CommentedConfigurationNode config) {
 		
 		List<String> list = getList(config);
@@ -112,15 +121,6 @@ public class ContactStorageService extends StorageService {
 		}
 		
 		return methods;
-		
-	}
-	
-	public List<String> getContactMethodList(Player player) {
-		
-		CommentedConfigurationNode config = getConfig().getNode(player.getUniqueId().toString());
-		CommentedConfigurationNode methodConfig = config.getNode(CONTACT_METHODS);
-		
-		return getList(methodConfig);
 		
 	}
 	
@@ -182,32 +182,15 @@ public class ContactStorageService extends StorageService {
 		
 	}
 	
-	private UUID getUniqueId(String playerName) {
-		
-		List<String> contactIds = getContactList();
-		
-		for (String id: contactIds) {
-			
-			CommentedConfigurationNode config = getConfig().getNode(id);
-			String username = config.getNode(ContactStorageService.CONTACT_USERNAME).getString();
-			
-			if (username.equals(playerName)) {
-				return UUID.fromString(id);
-			}
-			
-		}
-		
-		return null;
-		
+	public Contact getContact(Player player) {
+		return getContact(player.getUniqueId());
 	}
 	
 	public Contact getContact(String playerName) {
+		
 		UUID uniqueId = getUniqueId(playerName);
 		return (uniqueId == null) ? new Contact() : getContact(uniqueId);
-	}
 	
-	public Contact getContact(Player player) {
-		return getContact(player.getUniqueId());
 	}
 	
 	public Contact getContact(UUID uniqueId) {
@@ -239,21 +222,6 @@ public class ContactStorageService extends StorageService {
 		contact.setBlacklist(getBlacklist(blacklistConfig));
 	
 		return contact;
-		
-	}
-	
-	private String getMethodName(List<String> list, ContactMethod method) {
-		
-		String type = method.getType().name();
-		int count = 1;
-		
-		for (String item: list) {
-			if (item.contains(type)) {
-				count++;
-			}
-		}
-		
-		return type + count;
 		
 	}
 	
@@ -315,6 +283,40 @@ public class ContactStorageService extends StorageService {
 		}
 		
 		return false;
+		
+	}
+	
+	private String getMethodName(List<String> list, ContactMethod method) {
+		
+		String type = method.getType().name();
+		int count = 1;
+		
+		for (String item: list) {
+			if (item.contains(type)) {
+				count++;
+			}
+		}
+		
+		return type + count;
+		
+	}
+	
+	private UUID getUniqueId(String playerName) {
+		
+		List<String> contactIds = getContactList();
+		
+		for (String id: contactIds) {
+			
+			CommentedConfigurationNode config = getConfig().getNode(id);
+			String username = config.getNode(ContactStorageService.CONTACT_USERNAME).getString();
+			
+			if (username.equalsIgnoreCase(playerName)) {
+				return UUID.fromString(id);
+			}
+			
+		}
+		
+		return null;
 		
 	}
 	

@@ -82,7 +82,6 @@ public class RelayEditSubcommand extends RelayCommand {
 		if (resend) {
 			
 			this.sendActivationMessage(contact, method, player);
-			
 			return CommandResult.success();
 			
 		}

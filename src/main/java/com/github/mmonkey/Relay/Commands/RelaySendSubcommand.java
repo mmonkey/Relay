@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Texts;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.command.CommandException;
 import org.spongepowered.api.util.command.CommandResult;
 import org.spongepowered.api.util.command.CommandSource;
@@ -69,7 +70,20 @@ public class RelaySendSubcommand extends RelayCommand {
 			
 		}
 		
-		src.sendMessage(Texts.of(result.getResult()).builder().build());
+		if (result.isSent()) {
+			
+			src.sendMessage(Texts.of(TextColors.GREEN, "Message(s) succesfully sent!").builder().build());
+			
+		} else {
+			
+			if (src instanceof Player) {
+				Relay.getLogger().info("Error sending message: Player " + src.getName() + " Error: " + result.getResult());
+			}
+			
+			src.sendMessage(Texts.of(TextColors.GOLD + "Error sending message. Details: ", TextColors.RED, result.getResult()).builder().build());
+			
+			
+		}
 		return CommandResult.success();
 		
 	}

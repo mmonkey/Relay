@@ -58,6 +58,10 @@ public class ActivationMessageRelayService {
 	
 	private MessageRelayResult sendActivation(ContactMethod method, String text, String html) {
 		
+		if (method.getActivationKey().equals("")) {
+			return MessageRelayResult.METHOD_ALREADY_ACTIVATED;
+		}
+		
 		Gateway gateway = getGateway();
 		
 		if (gateway == null) {

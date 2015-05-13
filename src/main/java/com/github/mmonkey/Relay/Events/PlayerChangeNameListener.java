@@ -32,20 +32,15 @@ public class PlayerChangeNameListener {
 	
 	private void updateUsername(Player player) {
 		
-		String playerId = player.getUniqueId().toString();
 		List<String> contactIds = plugin.getContactStorageService().getContactList();
 		
-		for (String id: contactIds) {
+		if (contactIds.contains(player.getUniqueId().toString())) {
 			
-			if (id.equals(playerId)) {
-				
-				Contact contact = plugin.getContactStorageService().getContact((Player) player);
-				
-				if (!contact.getUsername().equals(player.getName())) {
-					contact.setUsername(player.getName());
-					saveContact(contact, player);
-				}
-				
+			Contact contact = plugin.getContactStorageService().getContact(player);
+			
+			if (!contact.getUsername().equals(player.getName()) && !contact.getUsername().equals("")) {
+				contact.setUsername(player.getName());
+				saveContact(contact, player);
 			}
 			
 		}
