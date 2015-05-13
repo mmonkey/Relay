@@ -20,6 +20,26 @@ import org.spongepowered.api.text.Texts;
 import org.spongepowered.api.util.command.args.GenericArguments;
 import org.spongepowered.api.util.command.spec.CommandSpec;
 
+import com.github.mmonkey.Relay.Commands.RegisterActivateSubcommand;
+import com.github.mmonkey.Relay.Commands.RegisterCommand;
+import com.github.mmonkey.Relay.Commands.RegisterEmailSubcommand;
+import com.github.mmonkey.Relay.Commands.RegisterPhoneSubcommand;
+import com.github.mmonkey.Relay.Commands.RelayAccountSubcommand;
+import com.github.mmonkey.Relay.Commands.RelayCarriersSubcommand;
+import com.github.mmonkey.Relay.Commands.RelayCommand;
+import com.github.mmonkey.Relay.Commands.RelayEditSubcommand;
+import com.github.mmonkey.Relay.Commands.RelaySendSubcommand;
+import com.github.mmonkey.Relay.Commands.UnregisterCommand;
+import com.github.mmonkey.Relay.Events.PlayerChangeNameListener;
+import com.github.mmonkey.Relay.Services.ContactStorageService;
+import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
+import com.github.mmonkey.Relay.Services.GatewayStorageService;
+import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
+import com.github.mmonkey.Relay.Services.MessageRelayService;
+import com.github.mmonkey.Relay.Services.RelayService;
+import com.github.mmonkey.Relay.Services.TemplatingService;
+import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
+import com.github.mmonkey.Relay.Utilities.FileUtils;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 
@@ -46,39 +66,39 @@ public class Relay {
 	
 	private String defaultTemplate;
 	
-	protected Game getGame() {
+	public Game getGame() {
 		return this.game;
 	}
 	
-	protected Optional<PluginContainer> getPluginContainer() {
+	public Optional<PluginContainer> getPluginContainer() {
 		return this.pluginContainer;
 	}
 	
-	protected static Logger getLogger() {
+	public static Logger getLogger() {
 		return logger;
 	}
 	
-	protected DefaultConfigStorageService getDefaultConfigService() {
+	public DefaultConfigStorageService getDefaultConfigService() {
 		return this.defaultConfigService;
 	}
 	
-	protected GatewayStorageService getGatewayStorageService() {
+	public GatewayStorageService getGatewayStorageService() {
 		return this.gatewayStorageService;
 	}
 	
-	protected ContactStorageService getContactStorageService() {
+	public ContactStorageService getContactStorageService() {
 		return this.contactStorageService;
 	}
 	
-	protected File getConfigDir() {
+	public File getConfigDir() {
 		return this.configDir;
 	}
 	
-	protected File getTemplateDir() {
+	public File getTemplateDir() {
 		return this.templateDir;
 	}
 	
-	protected String getDefaultTemplate() {
+	public String getDefaultTemplate() {
 		return this.defaultTemplate;
 	}
 	
