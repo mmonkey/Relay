@@ -166,7 +166,7 @@ public class Relay {
 		 * /register email [[-a:accept] [-d:decline]] <emailAddress>
 		 */
 		registerSubcommands.put(Arrays.asList("email"), CommandSpec.builder()
-			.setPermission("relay.register.email")
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Register your email address."))
 			.setExtendedDescription(Texts.of("If registered, you can receive emails from this server."))
 			.setExecutor(new RegisterEmailSubcommand(this))
@@ -177,7 +177,7 @@ public class Relay {
 		 * /register phone [[-a:accept] [-d:decline]] <phoneNumber> [carrier]
 		 */
 		registerSubcommands.put(Arrays.asList("phone"), CommandSpec.builder()
-			.setPermission("relay.register.phone")
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Register your phone number."))
 			.setExtendedDescription(Texts.of("If registered, you can receive text messages from this server."))
 			.setExecutor(new RegisterPhoneSubcommand(this))
@@ -190,6 +190,7 @@ public class Relay {
 		 * /register activate <code>
 		 */
 		registerSubcommands.put(Arrays.asList("activate"), CommandSpec.builder()
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Activate your contact method."))
 			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
 			.setExecutor(new RegisterActivateSubcommand(this))
@@ -210,7 +211,7 @@ public class Relay {
 		 * /relay carriers [[-s:select] [-u:update]] [name]
 		 */
 		relaySubcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
-			.setPermission("relay.register.phone")
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Supported Carriers"))
 			.setExtendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
 			.setExecutor(new RelayCarriersSubcommand(this))
@@ -224,6 +225,7 @@ public class Relay {
 		 * /relay account [page]
 		 */
 		relaySubcommands.put(Arrays.asList("account"), CommandSpec.builder()
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Manage your contact methods."))
 			.setExtendedDescription(Texts.of("View a list of your contact methods."))
 			.setExecutor(new RelayAccountSubcommand(this))
@@ -234,6 +236,7 @@ public class Relay {
 		 * /relay edit [-e][-p] <contactMethodId> [-c] [carrier]
 		 */
 		relaySubcommands.put(Arrays.asList("edit"), CommandSpec.builder()
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Edit a contact method."))
 			.setExtendedDescription(Texts.of("Edit contact method of the given contact method."))
 			.setExecutor(new RelayEditSubcommand(this))
@@ -247,6 +250,7 @@ public class Relay {
 		 * /relay send [[-p] [player]] [[-t] [template]] <message>
 		 */
 		relaySubcommands.put(Arrays.asList("send"), CommandSpec.builder()
+			.setPermission("relay.send")
 			.setDescription(Texts.of("Send an email or sms message."))
 			.setExtendedDescription(Texts.of("If the player(s) have a relay account, send them an email or sms message."))
 			.setExecutor(new RelaySendSubcommand(this))
@@ -262,6 +266,7 @@ public class Relay {
 		 * /relay send [[-p] [player]] [[-t] [template]] <message>
 		 */
 		relaySubcommands.put(Arrays.asList("sendall", "all"), CommandSpec.builder()
+			.setPermission("relay.sendall")
 			.setDescription(Texts.of("Send an email or sms message to all."))
 			.setExtendedDescription(Texts.of("Send all contacts an email or sms message."))
 			.setExecutor(new RelaySendSubcommand(this))
@@ -286,6 +291,7 @@ public class Relay {
 		 * /unregister
 		 */
 		CommandSpec unregisterCommand = CommandSpec.builder()
+			.setPermission("relay.register")
 			.setDescription(Texts.of("Unregister your contact methods."))
 			.setExtendedDescription(Texts.of("Remove all contact information from this server."))
 			.setExecutor(new UnregisterCommand(this))
