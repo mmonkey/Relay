@@ -10,7 +10,8 @@ Once a user has registered a contact method, they will receive a verification em
 Relay stores informaiton per-server, so users will have to setup their contact information on any server that they would like to receive messages from. 
 
 ### Setup
-For server owners, setup is a breeze:
+For server owners, setup is a breeze:  
+
 1. Download the [latest version](/releases/latest) of Relay.
 2. Drop `Relay.jar` into your servers mod folder.
 3. Run the server - this will generate the configuration files.
