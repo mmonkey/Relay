@@ -13,6 +13,7 @@ import org.spongepowered.api.util.command.args.CommandContext;
 
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Email.EmailMessage;
+import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Services.MessageRelayResult;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
 
@@ -28,21 +29,22 @@ public class RelaySendSubcommand extends RelayCommand {
 		@SuppressWarnings("unchecked")
 		Collection<String> templates = (Collection<String>) ((args.hasAny("template")) ? args.getAll("template") : new ArrayList<String>());
 		
-		MessageRelayResult result;
-		String template = getTemplate(templates);
-		EmailMessage email = new EmailMessage();
+		HTMLTemplatingService templateService = new HTMLTemplatingService();
+		templateService.setTemplateDirectory(plugin.getTemplateDir());
 		
-		//TODO add email template stuff
+		EmailMessage email = getSendEmail(src, message);
+		String emailMessage = templateService.parse(getTemplate(templates), email);
 		
 		MessageRelayService<String> service = new MessageRelayService<String>(plugin);
+		MessageRelayResult result;
 		
 		if (src instanceof Player) {
 			
-			result = service.sendMessage(src.getName(), players, message);
+			result = service.sendMessage(src.getName(), players, message, emailMessage);
 		
 		} else {
 			
-			result = service.sendMessage(players, message);
+			result = service.sendMessage(players, message, emailMessage);
 			
 		}
 		

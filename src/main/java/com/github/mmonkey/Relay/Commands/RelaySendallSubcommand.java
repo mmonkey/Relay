@@ -14,6 +14,7 @@ import org.spongepowered.api.util.command.args.CommandContext;
 
 import com.github.mmonkey.Relay.Relay;
 import com.github.mmonkey.Relay.Email.EmailMessage;
+import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Services.MessageRelayResult;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
 
@@ -29,19 +30,22 @@ public class RelaySendallSubcommand extends RelayCommand {
 		
 		Collection<UUID> allContacts = getAllContacts();
 		
-		MessageRelayResult result;
-		String template = getTemplate(templates);
-		EmailMessage email = new EmailMessage();
+		HTMLTemplatingService templateService = new HTMLTemplatingService();
+		templateService.setTemplateDirectory(plugin.getTemplateDir());
+		
+		EmailMessage email = getSendEmail(src, message);
+		String emailMessage = templateService.parse(getTemplate(templates), email);
 		
 		MessageRelayService<UUID> service = new MessageRelayService<UUID>(plugin);
+		MessageRelayResult result;
 		
 		if (src instanceof Player) {
 			
-			result = service.sendMessage(((Player) src).getUniqueId(), allContacts, message);
+			result = service.sendMessage(((Player) src).getUniqueId(), allContacts, message, emailMessage);
 		
 		} else {
 			
-			result = service.sendMessage(allContacts, message);
+			result = service.sendMessage(allContacts, message, emailMessage);
 			
 		}
 		

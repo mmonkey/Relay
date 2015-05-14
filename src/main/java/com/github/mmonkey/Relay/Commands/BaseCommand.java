@@ -215,6 +215,34 @@ public class BaseCommand implements CommandExecutor {
 		
 	}
 	
+	protected EmailMessage getSendEmail(CommandSource src, String message) {
+		
+		EmailMessage email = new EmailMessage();
+		
+		EmailHeaderSection header = new EmailHeaderSection(plugin.getGame().getServer().getBoundAddress().get().getHostString());
+		header.setServerAddress(plugin.getGame().getServer().getBoundAddress().get().getAddress().getHostAddress()
+				+ ":" + plugin.getGame().getServer().getBoundAddress().get().getPort());
+		
+		if (src instanceof Player) {
+			
+			header.setInvisibleIntroduction("New message from: " + src.getName());
+		
+		} else {
+		
+			header.setInvisibleIntroduction("New message from: " + plugin.getGame().getServer().getBoundAddress().get().getHostString());
+		
+		}
+		
+		EmailBodySection messageSection = new EmailBodySection();
+		messageSection.addContent(new EmailContent(EmailContentTypes.PARAGRAPH, message));
+		
+		email.setHeaderSection(header);
+		email.addBodySection(messageSection);
+		
+		return email;
+		
+	}
+	
 	public BaseCommand(Relay plugin) {
 		this.plugin = plugin;
 	}
