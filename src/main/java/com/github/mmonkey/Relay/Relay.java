@@ -48,7 +48,7 @@ public class Relay {
 	
 	protected static final String ID = "Relay";
 	protected static final String NAME = "Relay";
-	protected static final String VERSION = "0.0.1";
+	protected static final String VERSION = "1.0.0";
 	
 	private Game game;
 	private Optional<PluginContainer> pluginContainer;
