@@ -3,7 +3,7 @@ An email and sms messaging plugin and API for Minecraft servers running [Sponge]
 
 ## Relay Plugin
 ### Overview
-Relay works by using javax.mail to send emails. Most cellphone companies provide an email address that can receive messages on, these show as sms messages. Relay saves all contacts internally and keeps all users contact information encrypted. **NOTE:** although Relay keeps your contact information encrypted, since this project is open source, it would not take much to break the encryption, so be careful.  
+Relay works by using javax.mail to send emails. Most cellphone companies provide an email address that can receive messages on, these show as sms messages. Relay saves all contacts internally and keeps all users contact information encrypted. **Note:** although Relay keeps your contact information encrypted, since this project is open source, it would not take much to break the encryption, so be careful.  
   
 Once a user has registered a contact method, they will receive a verification email containing a 4 digit code. This code must be entered on the server in order to activate that users contact information. Once verified they can receive messages on that account.  
   
