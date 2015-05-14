@@ -244,16 +244,30 @@ public class Relay {
 			.build());
 		
 		/**
-		 * /relay send [[-p] [player]] [[-t] [template]] [-a] <message>
+		 * /relay send [[-p] [player]] [[-t] [template]] <message>
 		 */
 		relaySubcommands.put(Arrays.asList("send"), CommandSpec.builder()
 			.setDescription(Texts.of("Send an email or sms message."))
-			.setExtendedDescription(Texts.of("If the player has a relay account setup, send them an email or sms message."))
+			.setExtendedDescription(Texts.of("If the player(s) have a relay account, send them an email or sms message."))
 			.setExecutor(new RelaySendSubcommand(this))
 			.setArguments(
-				GenericArguments.flags().flag("a")
-					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
+				GenericArguments.flags()
 					.valueFlag(GenericArguments.string(Texts.of("player")), "p")
+					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
+					.buildWith(GenericArguments.remainingJoinedStrings(Texts.of("message")))
+			)
+			.build());
+		
+		/**
+		 * /relay send [[-p] [player]] [[-t] [template]] <message>
+		 */
+		relaySubcommands.put(Arrays.asList("sendall", "all"), CommandSpec.builder()
+			.setDescription(Texts.of("Send an email or sms message to all."))
+			.setExtendedDescription(Texts.of("Send all contacts an email or sms message."))
+			.setExecutor(new RelaySendSubcommand(this))
+			.setArguments(
+				GenericArguments.flags()
+					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
 					.buildWith(GenericArguments.remainingJoinedStrings(Texts.of("message")))
 			)
 			.build());

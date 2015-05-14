@@ -2,6 +2,7 @@ package com.github.mmonkey.Relay.Commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.spongepowered.api.entity.player.Player;
 import org.spongepowered.api.text.Texts;
@@ -16,33 +17,31 @@ import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.MessageRelayResult;
 import com.github.mmonkey.Relay.Services.MessageRelayService;
 
-public class RelaySendSubcommand extends RelayCommand {
-
+public class RelaySendallSubcommand extends RelayCommand {
+	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		
 		String message = (args.hasAny("message")) ? ((String) args.getOne("message").get()) : "";
 		
 		@SuppressWarnings("unchecked")
-		Collection<String> players = (Collection<String>) ((args.hasAny("player")) ? args.getAll("player") : new ArrayList<String>());
-		@SuppressWarnings("unchecked")
 		Collection<String> templates = (Collection<String>) ((args.hasAny("template")) ? args.getAll("template") : new ArrayList<String>());
+		
+		Collection<UUID> allContacts = getAllContacts();
 		
 		MessageRelayResult result;
 		String template = getTemplate(templates);
 		EmailMessage email = new EmailMessage();
 		
-		//TODO add email template stuff
-		
-		MessageRelayService<String> service = new MessageRelayService<String>(plugin);
+		MessageRelayService<UUID> service = new MessageRelayService<UUID>(plugin);
 		
 		if (src instanceof Player) {
 			
-			result = service.sendMessage(src.getName(), players, message);
+			result = service.sendMessage(((Player) src).getUniqueId(), allContacts, message);
 		
 		} else {
 			
-			result = service.sendMessage(players, message);
+			result = service.sendMessage(allContacts, message);
 			
 		}
 		
@@ -58,14 +57,26 @@ public class RelaySendSubcommand extends RelayCommand {
 			
 			src.sendMessage(Texts.of(TextColors.GOLD + "Error sending message. Details: ", TextColors.RED, result.getResult()).builder().build());
 			
-			
 		}
 		
 		return CommandResult.success();
 		
 	}
 	
-	public RelaySendSubcommand(Relay plugin) {
+	private Collection<UUID> getAllContacts() {
+		
+		Collection<String> contactIds = plugin.getContactStorageService().getContactList();
+		Collection<UUID> contacts = new ArrayList<UUID>();
+		
+		for (String id: contactIds) {
+			contacts.add(UUID.fromString(id));
+		}
+		
+		return contacts;
+		
+	}
+	
+	public RelaySendallSubcommand(Relay plugin) {
 		super(plugin);
 	}
 

@@ -1,5 +1,7 @@
 package com.github.mmonkey.Relay.Commands;
 
+import java.io.File;
+import java.util.Collection;
 import java.util.List;
 
 import org.spongepowered.api.entity.player.Player;
@@ -130,6 +132,29 @@ public class BaseCommand implements CommandExecutor {
 			);
 			
 		}
+		
+	}
+	
+	protected String getTemplate(Collection<String> templates) {
+		
+		if (!templates.isEmpty()) {
+		
+			for (String template: templates) {
+			
+				String filename = template.split("\\.")[0];
+				String templateName = filename + ".mustache";
+				
+				File file = new File(plugin.getTemplateDir(), templateName);
+				
+				if (file.isFile()) {
+					return templateName;
+				}
+				
+			}
+		
+		}
+			
+		return plugin.getDefaultTemplate();
 		
 	}
 	
