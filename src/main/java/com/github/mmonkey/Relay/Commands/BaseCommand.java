@@ -35,11 +35,11 @@ import com.github.mmonkey.Relay.Utilities.FormatUtil;
 public class BaseCommand implements CommandExecutor {
 	
 	protected static final Text TERMS_AND_CONDITIONS = Texts.of(TextColors.WHITE, "Standard data fees and text messaging rates "
-		+ "may apply based on your plan with your mobile phone carrier. The developer of this plugin, or any other plugin "
-		+ "that uses Relay may not be held accountable for:", CommandMessageFormatting.NEWLINE_TEXT, "Charges which may "
-		+ "occur when recieving text messages.", CommandMessageFormatting.NEWLINE_TEXT, "Phone numbers or email addresses "
-		+ "becoming public.", CommandMessageFormatting.NEWLINE_TEXT, "You may opt out of message delivery from this service "
-		+ "by using the command:", CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/unregister");
+		+ "may apply based on your plan with your mobile phone carrier. The developer of this plugin may not be held accountable for:",
+		CommandMessageFormatting.NEWLINE_TEXT, "Charges which may occur when receiving text messages.",
+		CommandMessageFormatting.NEWLINE_TEXT, "Phone numbers or email addresses becoming public.",
+		CommandMessageFormatting.NEWLINE_TEXT, "You may opt out of message delivery from this service by using the command:",
+		CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/unregister");
 	
 	protected Relay plugin;
 

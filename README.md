@@ -1,13 +1,13 @@
 # Relay
-An email and sms messaging plugin and API for Minecraft servers running [Sponge](https://github.com/SpongePowered/Sponge).
+An email and SMS messaging plugin and API for Minecraft servers running [Sponge](https://github.com/SpongePowered/Sponge).
 
 ## Relay Plugin
 ### Overview
-Relay works by using javax.mail to send emails. Most cellphone companies provide an email address that can receive messages on, these show as sms messages. Relay saves all contacts internally and keeps all users contact information encrypted. **Note:** although Relay keeps your contact information encrypted, since this project is open source, it would not take much to break the encryption, so be careful.  
+Relay works by using javax.mail to send emails. Most cell phone carriers provide an email address that can receive messages on, these show as sms messages. Relay saves all contacts internally and keeps all users contact information encrypted. **Note:** although Relay keeps your contact information encrypted, since this project is open source, it would not take much to break the encryption, so be careful.  
   
 Once a user has registered a contact method, they will receive a verification email containing a 4 digit code. This code must be entered on the server in order to activate that users contact information. Once verified they can receive messages on that account.  
   
-Relay stores informaiton per-server, so users will have to setup their contact information on any server that they would like to receive messages from. 
+Relay stores information per-server, so users will have to setup their contact information on any server that they would like to receive messages from. 
 
 ### Setup
 For server owners, setup is a breeze:  
@@ -40,33 +40,18 @@ For server owners, setup is a breeze:
 
 * `/unregister [contactMethod]` - unreigster your account or a contact method on your account.
   
-**Note:** Groups are currently not implemented
-.
-### Carriers
-As of the current release, these are the available carriers. You may create an [issue](/issues) to request a new carrier get added.
+**Note:** Groups are currently not implemented.
 
-* Alltel
-* AT&T
-* Cingular
-* Claro
-* Metro PCS
-* Nextel
-* O2
-* Oi
-* Orange
-* Powertel
-* Sprint
-* SunCom
-* T-Mobile
-* Tim
-* US Cellular
-* Verizon
-* Virgin Mobile
-* Vivo
+### Carriers
+Relay already handles just about any [carrier](https://github.com/mmonkey/Relay/blob/master/src/main/java/com/github/mmonkey/Relay/Carriers.java). However Relay does not guarantee that every carrier will work.  
+  
+If receive duplicate SMS messages, or have any other problems with a carrier, please [submit an issue](/issues).  
+  
+**Note:** Some carriers require you to manually activate the receiving of SMS sent via email gateways.
 
 ## Relay API
 ### Overview
-Relay provides services and classes to create and send email and sms messages. For email messages, relay provides an EmailMessage class and TemplatingService that uses [Mustache](https://github.com/spullara/mustache.java) to create modual HTML email messages. The RelayService provides serveral methods for sending messages to one or many players. The RelayService allows players to passed in by name, UUID or the Player object. Relay tries to keep the most up-to-date player name by hooking into PlayerJoinEvent and PlayerUpdateEvent and checking wether the player's name has changed.
+Relay provides services and classes to create and send email and sms messages. For email messages, relay provides an EmailMessage class and TemplatingService that uses [Mustache](https://github.com/spullara/mustache.java) to create modular HTML email messages. The RelayService provides several methods for sending messages to one or many players. The RelayService allows players to passed in by name, UUID or the Player object. Relay tries to keep the most up-to-date player name by hooking into PlayerJoinEvent and PlayerUpdateEvent and checking whether the player's name has changed.
 
 ### Services
 Relay provides two services that any plugin can hook into.
@@ -79,3 +64,11 @@ Relay provides two services that any plugin can hook into.
 **Creating an HTML email message**
 
 **Creating a template**
+
+## Player Terms and Conditions
+Standard data fees and text messaging rates may apply based on your plan with your mobile phone carrier. The developer of this plugin may not be held accountable for:
+
+* Charges which may occur when receiving text messages.
+* Phone numbers or email addresses becoming public.
+  
+You may opt out of message delivery from this service by using the command: `/unregister`
