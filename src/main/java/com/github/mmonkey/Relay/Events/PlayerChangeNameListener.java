@@ -17,7 +17,7 @@ public class PlayerChangeNameListener {
 	@Subscribe
 	public void onJoin(PlayerJoinEvent event) {
 		
-		Player player = event.getPlayer();
+		Player player = event.getUser();
 		updateUsername(player);
 		
 	}
@@ -25,7 +25,7 @@ public class PlayerChangeNameListener {
 	@Subscribe
 	public void onPlayerUpdate(PlayerUpdateEvent event) {
 		
-		Player player = event.getPlayer();
+		Player player = event.getUser();
 		updateUsername(player);
 	
 	}

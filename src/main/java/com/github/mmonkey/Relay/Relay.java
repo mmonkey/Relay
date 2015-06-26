@@ -48,7 +48,7 @@ public class Relay {
 	
 	protected static final String ID = "Relay";
 	protected static final String NAME = "Relay";
-	protected static final String VERSION = "1.0.1";
+	protected static final String VERSION = "1.0.2-2.1";
 	
 	private Game game;
 	private Optional<PluginContainer> pluginContainer;
@@ -166,22 +166,22 @@ public class Relay {
 		 * /register email [[-a:accept] [-d:decline]] <emailAddress>
 		 */
 		registerSubcommands.put(Arrays.asList("email"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Register your email address."))
-			.setExtendedDescription(Texts.of("If registered, you can receive emails from this server."))
-			.setExecutor(new RegisterEmailSubcommand(this))
-			.setArguments(GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("emailAddress"))))
+			.permission("relay.register")
+			.description(Texts.of("Register your email address."))
+			.extendedDescription(Texts.of("If registered, you can receive emails from this server."))
+			.executor(new RegisterEmailSubcommand(this))
+			.arguments(GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("emailAddress"))))
 			.build());
 		
 		/**
 		 * /register phone [[-a:accept] [-d:decline]] <phoneNumber> [carrier]
 		 */
 		registerSubcommands.put(Arrays.asList("phone"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Register your phone number."))
-			.setExtendedDescription(Texts.of("If registered, you can receive text messages from this server."))
-			.setExecutor(new RegisterPhoneSubcommand(this))
-			.setArguments(GenericArguments.seq(
+			.permission("relay.register")
+			.description(Texts.of("Register your phone number."))
+			.extendedDescription(Texts.of("If registered, you can receive text messages from this server."))
+			.executor(new RegisterPhoneSubcommand(this))
+			.arguments(GenericArguments.seq(
 					GenericArguments.flags().flag("a").flag("d").buildWith(GenericArguments.string(Texts.of("phoneNumber"))),
 					GenericArguments.optional(GenericArguments.string(Texts.of("carrier")))))
 			.build());
@@ -190,32 +190,32 @@ public class Relay {
 		 * /register activate <code>
 		 */
 		registerSubcommands.put(Arrays.asList("activate"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Activate your contact method."))
-			.setExtendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
-			.setExecutor(new RegisterActivateSubcommand(this))
-			.setArguments(GenericArguments.string(Texts.of("code")))
+			.permission("relay.register")
+			.description(Texts.of("Activate your contact method."))
+			.extendedDescription(Texts.of("Enter the code from your verification message to activate that contact method."))
+			.executor(new RegisterActivateSubcommand(this))
+			.arguments(GenericArguments.string(Texts.of("code")))
 			.build());
 		
 		/**
 		 * /register
 		 */
 		CommandSpec registerCommand = CommandSpec.builder()
-			.setDescription(Texts.of("Register your email or phone number."))
-			.setExtendedDescription(Texts.of("If registered, you can recieve emails or text messages from this server."))
-			.setExecutor(new RegisterCommand(this))
-			.setChildren(registerSubcommands)
+			.description(Texts.of("Register your email or phone number."))
+			.extendedDescription(Texts.of("If registered, you can recieve emails or text messages from this server."))
+			.executor(new RegisterCommand(this))
+			.children(registerSubcommands)
 			.build();
 		
 		/**
 		 * /relay carriers [[-s:select] [-u:update]] [name]
 		 */
 		relaySubcommands.put(Arrays.asList("carriers"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Supported Carriers"))
-			.setExtendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
-			.setExecutor(new RelayCarriersSubcommand(this))
-			.setArguments(GenericArguments.seq(
+			.permission("relay.register")
+			.description(Texts.of("Supported Carriers"))
+			.extendedDescription(Texts.of("View a list of supported phone carriers for receiving SMS messages."))
+			.executor(new RelayCarriersSubcommand(this))
+			.arguments(GenericArguments.seq(
 				GenericArguments.optional(GenericArguments.integer(Texts.of("page"))),
 				GenericArguments.flags().flag("s").flag("u").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("phone"))))
 			))
@@ -225,22 +225,22 @@ public class Relay {
 		 * /relay account [page]
 		 */
 		relaySubcommands.put(Arrays.asList("account"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Manage your contact methods."))
-			.setExtendedDescription(Texts.of("View a list of your contact methods."))
-			.setExecutor(new RelayAccountSubcommand(this))
-			.setArguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
+			.permission("relay.register")
+			.description(Texts.of("Manage your contact methods."))
+			.extendedDescription(Texts.of("View a list of your contact methods."))
+			.executor(new RelayAccountSubcommand(this))
+			.arguments(GenericArguments.optional(GenericArguments.integer(Texts.of("page"))))
 			.build());
 		
 		/**
 		 * /relay edit [-e][-p] <contactMethodId> [-c] [carrier]
 		 */
 		relaySubcommands.put(Arrays.asList("edit"), CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Edit a contact method."))
-			.setExtendedDescription(Texts.of("Edit contact method of the given contact method."))
-			.setExecutor(new RelayEditSubcommand(this))
-			.setArguments(GenericArguments.seq(
+			.permission("relay.register")
+			.description(Texts.of("Edit a contact method."))
+			.extendedDescription(Texts.of("Edit contact method of the given contact method."))
+			.executor(new RelayEditSubcommand(this))
+			.arguments(GenericArguments.seq(
 				GenericArguments.flags().flag("e").flag("p").flag("r").buildWith(GenericArguments.string(Texts.of("contactMethod"))),
 				GenericArguments.flags().flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("carrier"))))
 			))
@@ -250,11 +250,11 @@ public class Relay {
 		 * /relay send [[-p] [player]] [[-t] [template]] <message>
 		 */
 		relaySubcommands.put(Arrays.asList("send"), CommandSpec.builder()
-			.setPermission("relay.send")
-			.setDescription(Texts.of("Send an email or sms message."))
-			.setExtendedDescription(Texts.of("If the player(s) have a relay account, send them an email or sms message."))
-			.setExecutor(new RelaySendSubcommand(this))
-			.setArguments(
+			.permission("relay.send")
+			.description(Texts.of("Send an email or sms message."))
+			.extendedDescription(Texts.of("If the player(s) have a relay account, send them an email or sms message."))
+			.executor(new RelaySendSubcommand(this))
+			.arguments(
 				GenericArguments.flags()
 					.valueFlag(GenericArguments.string(Texts.of("player")), "p")
 					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
@@ -266,11 +266,11 @@ public class Relay {
 		 * /relay send [[-p] [player]] [[-t] [template]] <message>
 		 */
 		relaySubcommands.put(Arrays.asList("sendall", "all"), CommandSpec.builder()
-			.setPermission("relay.sendall")
-			.setDescription(Texts.of("Send an email or sms message to all."))
-			.setExtendedDescription(Texts.of("Send all contacts an email or sms message."))
-			.setExecutor(new RelaySendSubcommand(this))
-			.setArguments(
+			.permission("relay.sendall")
+			.description(Texts.of("Send an email or sms message to all."))
+			.extendedDescription(Texts.of("Send all contacts an email or sms message."))
+			.executor(new RelaySendSubcommand(this))
+			.arguments(
 				GenericArguments.flags()
 					.valueFlag(GenericArguments.string(Texts.of("template")), "t")
 					.buildWith(GenericArguments.remainingJoinedStrings(Texts.of("message")))
@@ -281,21 +281,21 @@ public class Relay {
 		 * /relay
 		 */
 		CommandSpec relayCommand = CommandSpec.builder()
-			.setDescription(Texts.of("Relay edit, carriers, account, send"))
-			.setExtendedDescription(Texts.of("Manage your relay account or send an email or sms message."))
-			.setExecutor(new RelayCommand(this))
-			.setChildren(relaySubcommands)
+			.description(Texts.of("Relay edit, carriers, account, send"))
+			.extendedDescription(Texts.of("Manage your relay account or send an email or sms message."))
+			.executor(new RelayCommand(this))
+			.children(relaySubcommands)
 			.build();
 		
 		/**
 		 * /unregister
 		 */
 		CommandSpec unregisterCommand = CommandSpec.builder()
-			.setPermission("relay.register")
-			.setDescription(Texts.of("Unregister your contact methods."))
-			.setExtendedDescription(Texts.of("Remove all contact information from this server."))
-			.setExecutor(new UnregisterCommand(this))
-			.setArguments(
+			.permission("relay.register")
+			.description(Texts.of("Unregister your contact methods."))
+			.extendedDescription(Texts.of("Remove all contact information from this server."))
+			.executor(new UnregisterCommand(this))
+			.arguments(
 				GenericArguments.flags().flag("d").flag("c").buildWith(GenericArguments.optional(GenericArguments.string(Texts.of("method"))))
 			)
 			.build();
