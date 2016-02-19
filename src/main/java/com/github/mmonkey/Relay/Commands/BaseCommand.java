@@ -1,45 +1,37 @@
 package com.github.mmonkey.Relay.Commands;
 
-import java.io.File;
-import java.util.Collection;
-import java.util.List;
-
-import org.spongepowered.api.entity.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.TextBuilder;
-import org.spongepowered.api.text.Texts;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColors;
-import org.spongepowered.api.text.format.TextStyles;
-import org.spongepowered.api.util.command.CommandException;
-import org.spongepowered.api.util.command.CommandMessageFormatting;
-import org.spongepowered.api.util.command.CommandResult;
-import org.spongepowered.api.util.command.CommandSource;
-import org.spongepowered.api.util.command.args.CommandContext;
-import org.spongepowered.api.util.command.spec.CommandExecutor;
-
 import com.github.mmonkey.Relay.Contact;
 import com.github.mmonkey.Relay.ContactMethod;
+import com.github.mmonkey.Relay.Email.*;
 import com.github.mmonkey.Relay.Relay;
-import com.github.mmonkey.Relay.Email.EmailBodySection;
-import com.github.mmonkey.Relay.Email.EmailContent;
-import com.github.mmonkey.Relay.Email.EmailContentTypes;
-import com.github.mmonkey.Relay.Email.EmailHeaderSection;
-import com.github.mmonkey.Relay.Email.EmailMessage;
 import com.github.mmonkey.Relay.Services.ActivationMessageRelayService;
 import com.github.mmonkey.Relay.Services.DefaultConfigStorageService;
 import com.github.mmonkey.Relay.Services.HTMLTemplatingService;
 import com.github.mmonkey.Relay.Utilities.EncryptionUtil;
 import com.github.mmonkey.Relay.Utilities.FormatUtil;
+import org.spongepowered.api.command.CommandException;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
 public class BaseCommand implements CommandExecutor {
 	
-	protected static final Text TERMS_AND_CONDITIONS = Texts.of(TextColors.WHITE, "Standard data fees and text messaging rates "
+	protected static final Text TERMS_AND_CONDITIONS = Text.of(TextColors.WHITE, "Standard data fees and text messaging rates "
 		+ "may apply based on your plan with your mobile phone carrier. The developer of this plugin may not be held accountable for:",
-		CommandMessageFormatting.NEWLINE_TEXT, "Charges which may occur when receiving text messages.",
-		CommandMessageFormatting.NEWLINE_TEXT, "Phone numbers or email addresses becoming public.",
-		CommandMessageFormatting.NEWLINE_TEXT, "You may opt out of message delivery from this service by using the command:",
-		CommandMessageFormatting.NEWLINE_TEXT, TextColors.GOLD, "/unregister");
+		Text.NEW_LINE, "Charges which may occur when receiving text messages.",
+		Text.NEW_LINE, "Phone numbers or email addresses becoming public.",
+		Text.NEW_LINE, "You may opt out of message delivery from this service by using the command:",
+		Text.NEW_LINE, TextColors.GOLD, "/unregister");
 	
 	protected Relay plugin;
 
@@ -71,31 +63,31 @@ public class BaseCommand implements CommandExecutor {
 	
 	protected Text getTermsAndConditions(String subCommand, String address) {
 		
-		Text accept =  Texts.builder("Yes, I accept")
+		Text accept =  Text.builder("Yes, I accept")
 			.onClick(TextActions.runCommand("/register " + subCommand + " -a " + address))
 			.color(TextColors.GREEN)
 			.style(TextStyles.UNDERLINE)
 			.build();
 		
-		Text decline =  Texts.builder("No, I do not accept")
+		Text decline =  Text.builder("No, I do not accept")
 			.onClick(TextActions.runCommand("/register " + subCommand + " -d " + address))
 			.color(TextColors.RED)
 			.style(TextStyles.UNDERLINE)
 			.build();
 		
-		TextBuilder message = Texts.builder();
+		Text.Builder message = Text.builder();
 		
 		message.append(FormatUtil.empty());
-		message.append(Texts.of(TextColors.GOLD, "Registration terms and conditions:"));
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
+		message.append(Text.of(TextColors.GOLD, "Registration terms and conditions:"));
+		message.append(Text.NEW_LINE);
 		message.append(TERMS_AND_CONDITIONS);
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(Texts.of(TextColors.GRAY, "Accept by clicking yes, or using command: /register " + subCommand + " -a " + address));
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
-		message.append(accept, Texts.of("   "), decline);
-		message.append(CommandMessageFormatting.NEWLINE_TEXT);
+		message.append(Text.NEW_LINE);
+		message.append(Text.NEW_LINE);
+		message.append(Text.of(TextColors.GRAY, "Accept by clicking yes, or using command: /register " + subCommand + " -a " + address));
+		message.append(Text.NEW_LINE);
+		message.append(Text.NEW_LINE);
+		message.append(accept, Text.of("   "), decline);
+		message.append(Text.NEW_LINE);
 		
 		return message.build();
 	
@@ -125,10 +117,9 @@ public class BaseCommand implements CommandExecutor {
 		} else {
 			
 			player.sendMessage(
-				Texts.of(TextColors.GOLD, "This account has already been registered, to manage your accounts, use command: ",
-						CommandMessageFormatting.NEWLINE_TEXT,
-						Texts.of(TextColors.GOLD, "/register account")).builder()
-				.build()
+				Text.of(TextColors.GOLD, "This account has already been registered, to manage your accounts, use command: ",
+					Text.NEW_LINE,
+					Text.of(TextColors.GOLD, "/register account"))
 			);
 			
 		}
@@ -208,9 +199,8 @@ public class BaseCommand implements CommandExecutor {
 		service.sendActivationMessage(method, smsMessage, emailMessage);
 	
 		player.sendMessage(
-			Texts.of(TextColors.GREEN, "You will receive an activation code shortly. Follow the instructions in the "
-					+ "message to verify your credentials.").builder()
-			.build()
+			Text.of(TextColors.GREEN, "You will receive an activation code shortly. Follow the instructions in the "
+					+ "message to verify your credentials.")
 		);
 		
 	}

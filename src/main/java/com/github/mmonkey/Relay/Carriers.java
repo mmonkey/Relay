@@ -1,420 +1,420 @@
 package com.github.mmonkey.Relay;
 
 public enum Carriers {
-	
-	EMAIL ("Email",
-			new String[] {""}),
 
-	AIRCEL ("Aircel",
-		new String[] {"@aircel.co.in", "@airsms.com"}),
+    EMAIL("Email",
+            new String[]{""}),
 
-	AIRFIRE_MOBILE ("Airfire Mobile",
-		new String[] {"@sms.airfiremobile.com"}),
+    AIRCEL("Aircel",
+            new String[]{"@aircel.co.in", "@airsms.com"}),
 
-	AIRTEL ("Airtel",
-		new String[] {"@airtelmail.com", "@airtelap.com", "@airtelchennai.com", "@airtelkk.com", "@airtelkerala.com", "@airtelkol.com", "@airtelmobile.com"}),
+    AIRFIRE_MOBILE("Airfire Mobile",
+            new String[]{"@sms.airfiremobile.com"}),
 
-	ALASKA_COMMUNICATIONS ("Alaska Communications",
-		new String[] {"@msg.acsalaska.com"}),
+    AIRTEL("Airtel",
+            new String[]{"@airtelmail.com", "@airtelap.com", "@airtelchennai.com", "@airtelkk.com", "@airtelkerala.com", "@airtelkol.com", "@airtelmobile.com"}),
 
-	ALIANT ("Aliant",
-		new String[] {"@chat.wirefree.ca"}),
+    ALASKA_COMMUNICATIONS("Alaska Communications",
+            new String[]{"@msg.acsalaska.com"}),
 
-	ALLTEL ("Alltel",
-		new String[] {"@message.alltel.com", "@sms.alltelwireless.com"}),
+    ALIANT("Aliant",
+            new String[]{"@chat.wirefree.ca"}),
 
-	AMERITECH ("Ameritech",
-		new String[] {"@paging.acswireless.com"}),
+    ALLTEL("Alltel",
+            new String[]{"@message.alltel.com", "@sms.alltelwireless.com"}),
 
-	AQL ("aql",
-		new String[] {"@text.aql.com"}),
+    AMERITECH("Ameritech",
+            new String[]{"@paging.acswireless.com"}),
 
-	ASSURANCE_WIRELESS ("Assurance Wireless",
-		new String[] {"@vmobl.com"}),
+    AQL("aql",
+            new String[]{"@text.aql.com"}),
 
-	ATT ("AT&T Wireless",
-		new String[] {"@txt.att.net", "@sms.smartmessagingsuite.com", "@txt.att.net", "@cingularme.com", "@mobile.mycingular.com", "@page.att.net"}),
+    ASSURANCE_WIRELESS("Assurance Wireless",
+            new String[]{"@vmobl.com"}),
 
-	AU ("AU by KDDI",
-		new String[] {"@ezweb.ne.jp"}),
+    ATT("AT&T Wireless",
+            new String[]{"@txt.att.net", "@sms.smartmessagingsuite.com", "@txt.att.net", "@cingularme.com", "@mobile.mycingular.com", "@page.att.net"}),
 
-	BEELINE ("Beeline",
-		new String[] {"@sms.beeline.ua", "@sms.beemail.ru"}),
+    AU("AU by KDDI",
+            new String[]{"@ezweb.ne.jp"}),
 
-	BELLMOBILITY ("Bell Mobility & Solo Mobile",
-		new String[] {"@txt.bell.ca", "@txt.bellmobility.ca"}),
+    BEELINE("Beeline",
+            new String[]{"@sms.beeline.ua", "@sms.beemail.ru"}),
 
-	BELLSOUTH ("BellSouth",
-		new String[] {"@bellsouth.cl"}),
+    BELLMOBILITY("Bell Mobility & Solo Mobile",
+            new String[]{"@txt.bell.ca", "@txt.bellmobility.ca"}),
 
-	BLUEGRASS ("Bluegrass Cellular",
-		new String[] {"@sms.bluecell.com"}),
+    BELLSOUTH("BellSouth",
+            new String[]{"@bellsouth.cl"}),
 
-	BLUESKY ("Bluesky Communications",
-		new String[] {"@psms.bluesky.as"}),
+    BLUEGRASS("Bluegrass Cellular",
+            new String[]{"@sms.bluecell.com"}),
 
-	BLUESKYFROG ("BlueSkyFrog",
-		new String[] {"@blueskyfrog.com"}),
+    BLUESKY("Bluesky Communications",
+            new String[]{"@psms.bluesky.as"}),
 
-	BOOSTMOBILE ("Boost Mobile",
-		new String[] {"@sms.myboostmobile.com", "@myboostmobile.com"}),
+    BLUESKYFROG("BlueSkyFrog",
+            new String[]{"@blueskyfrog.com"}),
 
-	BOUYGUES ("Bouygues Telecom",
-		new String[] {"@mms.bouyguestelecom.fr"}),
+    BOOSTMOBILE("Boost Mobile",
+            new String[]{"@sms.myboostmobile.com", "@myboostmobile.com"}),
 
-	CELFORCE ("Celforce",
-		new String[] {"@celforce.com"}),
+    BOUYGUES("Bouygues Telecom",
+            new String[]{"@mms.bouyguestelecom.fr"}),
 
-	CELLCOM ("Cellcom",
-		new String[] {"@cellcom.quiktxt.com"}),
+    CELFORCE("Celforce",
+            new String[]{"@celforce.com"}),
 
-	CELLULARSOUTH ("Cellular South",
-		new String[] {"@csouth1.com"}),
+    CELLCOM("Cellcom",
+            new String[]{"@cellcom.quiktxt.com"}),
 
-	CENTENNIAL_WIRELESS ("Centennial Wireless",
-		new String[] {"@cwemail.com"}),
+    CELLULARSOUTH("Cellular South",
+            new String[]{"@csouth1.com"}),
 
-	CHARITON_VALLEY ("Chariton Valley Wireless",
-		new String[] {"@sms.cvalley.net"}),
+    CENTENNIAL_WIRELESS("Centennial Wireless",
+            new String[]{"@cwemail.com"}),
 
-	CHAT_MOBILITY ("Chat Mobility",
-		new String[] {"@mail.msgsender.com"}),
+    CHARITON_VALLEY("Chariton Valley Wireless",
+            new String[]{"@sms.cvalley.net"}),
 
-	CHINA_MOBILE ("China Mobile",
-		new String[] {"@139.com"}),
+    CHAT_MOBILITY("Chat Mobility",
+            new String[]{"@mail.msgsender.com"}),
 
-	CINCINNATI_BELL ("Cincinnati Bell",
-		new String[] {"@gocbw.com"}),
+    CHINA_MOBILE("China Mobile",
+            new String[]{"@139.com"}),
 
-	CINGULAR ("Cingular",
-		new String[] {"@cingular.com", "@mobile.mycingular.com", "@cingularme.com"}),
+    CINCINNATI_BELL("Cincinnati Bell",
+            new String[]{"@gocbw.com"}),
 
-	CLARO ("Claro",
-		new String[] {"@clarotorpedo.com.br", "@vtexto.com", "@sms.ctimovil.com.ar"}),
+    CINGULAR("Cingular",
+            new String[]{"@cingular.com", "@mobile.mycingular.com", "@cingularme.com"}),
 
-	CLEARTALK ("Cleartalk Wireless",
-		new String[] {"@sms.cleartalk.us"}),
+    CLARO("Claro",
+            new String[]{"@clarotorpedo.com.br", "@vtexto.com", "@sms.ctimovil.com.ar"}),
 
-	COMCAST_PCS ("Comcast PCS",
-		new String[] {"@comcastpcs.textmsg.com"}),
+    CLEARTALK("Cleartalk Wireless",
+            new String[]{"@sms.cleartalk.us"}),
 
-	COMCEL ("Comcel",
-		new String[] {"@comcel.com.co"}),
+    COMCAST_PCS("Comcast PCS",
+            new String[]{"@comcastpcs.textmsg.com"}),
 
-	CRICKET ("Cricket",
-		new String[] {"@sms.mycricket.com"}),
+    COMCEL("Comcel",
+            new String[]{"@comcel.com.co"}),
 
-	CSL ("CSL",
-		new String[] {"@mgw.mmsc1.hkcsl.com"}),
+    CRICKET("Cricket",
+            new String[]{"@sms.mycricket.com"}),
 
-	CSPIRE ("C Spire Wireless",
-		new String[] {"@cspire1.com"}),
+    CSL("CSL",
+            new String[]{"@mgw.mmsc1.hkcsl.com"}),
 
-	DIGICEL ("Digicel",
-		new String[] {"@digitextdm.com"}),
+    CSPIRE("C Spire Wireless",
+            new String[]{"@cspire1.com"}),
 
-	DTC_WIRELESS ("DTC Wireless",
-		new String[] {"@sms.advantagecell.net"}),
+    DIGICEL("Digicel",
+            new String[]{"@digitextdm.com"}),
 
-	ELEMENT ("Element Mobile",
-		new String[] {"@sms.elementmobile.net"}),
+    DTC_WIRELESS("DTC Wireless",
+            new String[]{"@sms.advantagecell.net"}),
 
-	EMTEL ("Emtel",
-		new String[] {"@emtelworld.net"}),
+    ELEMENT("Element Mobile",
+            new String[]{"@sms.elementmobile.net"}),
 
-	EPLUS ("E-Plus",
-		new String[] {"@smsmail.eplus.de"}),
+    EMTEL("Emtel",
+            new String[]{"@emtelworld.net"}),
 
-	ESCOTEL ("Escotel Mobile",
-		new String[] {"@escotelmobile.com"}),
+    EPLUS("E-Plus",
+            new String[]{"@smsmail.eplus.de"}),
 
-	ESENDEX ("Esendex",
-		new String[] {"@echoemail.net", "@esendex.net"}),
+    ESCOTEL("Escotel Mobile",
+            new String[]{"@escotelmobile.com"}),
 
-	FIDO ("Fido",
-		new String[] {"@sms.fido.ca"}),
+    ESENDEX("Esendex",
+            new String[]{"@echoemail.net", "@esendex.net"}),
 
-	FOROYA_TELE ("Foroya tele",
-		new String[] {"@gsm.fo"}),
+    FIDO("Fido",
+            new String[]{"@sms.fido.ca"}),
 
-	GENERAL_COMM ("General Communications Inc.",
-		new String[] {"@mobile.gci.net"}),
+    FOROYA_TELE("Foroya tele",
+            new String[]{"@gsm.fo"}),
 
-	GLOBALSTAR ("Globalstar satellite",
-		new String[] {"@msg.globalstarusa.com"}),
+    GENERAL_COMM("General Communications Inc.",
+            new String[]{"@mobile.gci.net"}),
 
-	GLOBUL ("Globul",
-		new String[] {"@sms.globul.bg"}),
+    GLOBALSTAR("Globalstar satellite",
+            new String[]{"@msg.globalstarusa.com"}),
 
-	GOLDEN_STATE ("Golden State Cellular",
-		new String[] {"@gscsms.com"}),
+    GLOBUL("Globul",
+            new String[]{"@sms.globul.bg"}),
 
-	GOOGLE_VOICE ("Google Voice",
-		new String[] {"@txt.voice.google.com"}),
+    GOLDEN_STATE("Golden State Cellular",
+            new String[]{"@gscsms.com"}),
 
-	GREATCALL ("GreatCall",
-		new String[] {"@vtext.com"}),
+    GOOGLE_VOICE("Google Voice",
+            new String[]{"@txt.voice.google.com"}),
 
-	GUYANA_TELEPHONE ("Guyana Telephone & Telegraph",
-		new String[] {"@sms.cellinkgy.com"}),
+    GREATCALL("GreatCall",
+            new String[]{"@vtext.com"}),
 
-	HAY_SYSTEMS ("HSL Mobile (Hay Systems Ltd)",
-		new String[] {"@sms.haysystems.com"}),
+    GUYANA_TELEPHONE("Guyana Telephone & Telegraph",
+            new String[]{"@sms.cellinkgy.com"}),
 
-	HELIO ("Helio",
-		new String[] {"@myhelio.com"}),
+    HAY_SYSTEMS("HSL Mobile (Hay Systems Ltd)",
+            new String[]{"@sms.haysystems.com"}),
 
-	IDEA_CELLULAR ("Idea Cellular",
-		new String[] {"@ideacellular.net"}),
+    HELIO("Helio",
+            new String[]{"@myhelio.com"}),
 
-	IRIDIUM ("Iridium satellite",
-		new String[] {"@msg.iridium.com"}),
+    IDEA_CELLULAR("Idea Cellular",
+            new String[]{"@ideacellular.net"}),
 
-	I_WIRELESS ("i wireless",
-		new String[] {"@iwirelesshometext.com", ".iws@iwspcs.net"}),
+    IRIDIUM("Iridium satellite",
+            new String[]{"@msg.iridium.com"}),
 
-	KAJEET ("Kajeet",
-		new String[] {"@mobile.kajeet.net"}),
+    I_WIRELESS("i wireless",
+            new String[]{"@iwirelesshometext.com", ".iws@iwspcs.net"}),
 
-	KOODO ("Koodo Mobile",
-		new String[] {"@msg.telus.com"}),
+    KAJEET("Kajeet",
+            new String[]{"@mobile.kajeet.net"}),
 
-	LONGLINES ("LongLines",
-		new String[] {"@text.longlines.com"}),
+    KOODO("Koodo Mobile",
+            new String[]{"@msg.telus.com"}),
 
-	LOOP ("Loop (BPL Mobile)",
-		new String[] {"@loopmobile.co.in"}),
+    LONGLINES("LongLines",
+            new String[]{"@text.longlines.com"}),
 
-	LYNX_MOBILITY ("Lynx Mobility",
-		new String[] {"@sms.lynxmobility.com"}),
+    LOOP("Loop (BPL Mobile)",
+            new String[]{"@loopmobile.co.in"}),
 
-	M1 ("M1",
-		new String[] {"@m1.com.sg"}),
+    LYNX_MOBILITY("Lynx Mobility",
+            new String[]{"@sms.lynxmobility.com"}),
 
-	MANITOBA_TELECOM ("Manitoba Telecom/MTS Mobility",
-		new String[] {"@text.mtsmobility.com"}),
+    M1("M1",
+            new String[]{"@m1.com.sg"}),
 
-	MAS_MOVIL ("Mas Movil",
-		new String[] {"@cwmovil.com"}),
+    MANITOBA_TELECOM("Manitoba Telecom/MTS Mobility",
+            new String[]{"@text.mtsmobility.com"}),
 
-	METEOR ("Meteor",
-		new String[] {"@sms.mymeteor.ie"}),
+    MAS_MOVIL("Mas Movil",
+            new String[]{"@cwmovil.com"}),
 
-	METRO_PCS ("Metro PCS",
-		new String[] {"@mymetropcs.com"}),
+    METEOR("Meteor",
+            new String[]{"@sms.mymeteor.ie"}),
 
-	MOBILTEL ("Mobiltel",
-		new String[] {"@sms.mtel.net"}),
+    METRO_PCS("Metro PCS",
+            new String[]{"@mymetropcs.com"}),
 
-	MOBINIL ("Mobinil",
-		new String[] {"@mobinil.net"}),
+    MOBILTEL("Mobiltel",
+            new String[]{"@sms.mtel.net"}),
 
-	MOBISTAR ("Mobistar",
-		new String[] {"@mobistar.be"}),
+    MOBINIL("Mobinil",
+            new String[]{"@mobinil.net"}),
 
-	MOBITEL ("Mobitel",
-		new String[] {"@sms.mobitel.lk"}),
+    MOBISTAR("Mobistar",
+            new String[]{"@mobistar.be"}),
 
-	MOVISTAR ("Movistar/Telefonica",
-		new String[] {"@movistar.net", "@correo.movistar.net", "@movimensaje.com.ar", "@sms.movistar.net.ar", "@sms.movistar.com.uy", "@movistar.com.co"}),
+    MOBITEL("Mobitel",
+            new String[]{"@sms.mobitel.lk"}),
 
-	MTN ("MTN",
-		new String[] {"@sms.co.za"}),
+    MOVISTAR("Movistar/Telefonica",
+            new String[]{"@movistar.net", "@correo.movistar.net", "@movimensaje.com.ar", "@sms.movistar.net.ar", "@sms.movistar.com.uy", "@movistar.com.co"}),
 
-	NCELL ("Ncell",
-		new String[] {"@sms.ncell.com.np"}),
+    MTN("MTN",
+            new String[]{"@sms.co.za"}),
 
-	NEXTECH ("Nextech",
-		new String[] {"@sms.nextechwireless.com"}),
+    NCELL("Ncell",
+            new String[]{"@sms.ncell.com.np"}),
 
-	NEXTEL ("Nextel",
-		new String[] {"@messaging.nextel.com", "@page.nextel.com", "@msgnextel.com.mx", "TwoWay.@nextel.net.ar"}),
+    NEXTECH("Nextech",
+            new String[]{"@sms.nextechwireless.com"}),
 
-	NORTHERNTEL ("NorthernTel",
-		new String[] {"@txt.northerntelmobility.com"}),
+    NEXTEL("Nextel",
+            new String[]{"@messaging.nextel.com", "@page.nextel.com", "@msgnextel.com.mx", "TwoWay.@nextel.net.ar"}),
 
-	NTT ("NTT DoCoMo",
-		new String[] {"@docomo.ne.jp"}),
+    NORTHERNTEL("NorthernTel",
+            new String[]{"@txt.northerntelmobility.com"}),
 
-	O2 ("O2",
-		new String[] {"@mmail.co.uk", "@o2online.de", "@o2imail.co.uk"}),
+    NTT("NTT DoCoMo",
+            new String[]{"@docomo.ne.jp"}),
 
-	OGVODAFONE ("OgVodafone",
-		new String[] {"@sms.is"}),
-		
-	OI ("Oi",
-		new String[] {"@mms.oi.com.br"}),
+    O2("O2",
+            new String[]{"@mmail.co.uk", "@o2online.de", "@o2imail.co.uk"}),
 
-	ORANGE ("Orange",
-		new String[] {"@orange.net", "@orangemail.co.in", "@sms.orange.nl", "@sms.orange.pl"}),
+    OGVODAFONE("OgVodafone",
+            new String[]{"@sms.is"}),
 
-	PAGEPLUS ("Page Plus Cellular",
-		new String[] {"@vtext.com"}),
+    OI("Oi",
+            new String[]{"@mms.oi.com.br"}),
 
-	PC_TELECOM ("PC Telecom",
-		new String[] {"@mobiletxt.ca"}),
+    ORANGE("Orange",
+            new String[]{"@orange.net", "@orangemail.co.in", "@sms.orange.nl", "@sms.orange.pl"}),
 
-	PIONEER ("Pioneer Cellular",
-		new String[] {"@zsend.com"}),
+    PAGEPLUS("Page Plus Cellular",
+            new String[]{"@vtext.com"}),
 
-	PLUS ("Plus",
-		new String[] {"+@text.plusgsm.pl"}),
+    PC_TELECOM("PC Telecom",
+            new String[]{"@mobiletxt.ca"}),
 
-	POLKOMTEL ("Polkomtel",
-		new String[] {"+@text.plusgsm.pl"}),
-		
-	POWERTEL ("Powertel",
-		new String[] {"@ptel.net"}),
+    PIONEER("Pioneer Cellular",
+            new String[]{"@zsend.com"}),
 
-	PSC_WIRELESS ("PSC Wireless",
-		new String[] {"@sms.pscel.com"}),
+    PLUS("Plus",
+            new String[]{"+@text.plusgsm.pl"}),
 
-	QWEST ("Qwest",
-		new String[] {"@qwestmp.com"}),
+    POLKOMTEL("Polkomtel",
+            new String[]{"+@text.plusgsm.pl"}),
 
-	ROGERS_WIRELESS ("Rogers Wireless",
-		new String[] {"@sms.rogers.com"}),
+    POWERTEL("Powertel",
+            new String[]{"@ptel.net"}),
 
-	SASKTEL ("SaskTel",
-		new String[] {"@sms.sasktel.com", "@pcs.sasktelmobility.com"}),
+    PSC_WIRELESS("PSC Wireless",
+            new String[]{"@sms.pscel.com"}),
 
-	SETAR ("Setar Mobile",
-		new String[] {"@mas.aw"}),
+    QWEST("Qwest",
+            new String[]{"@qwestmp.com"}),
 
-	SFR ("SFR",
-		new String[] {"@sfr.fr"}),
+    ROGERS_WIRELESS("Rogers Wireless",
+            new String[]{"@sms.rogers.com"}),
 
-	SIMINN ("Siminn",
-		new String[] {"@box.is"}),
+    SASKTEL("SaskTel",
+            new String[]{"@sms.sasktel.com", "@pcs.sasktelmobility.com"}),
 
-	SIMPLE_MOBILE ("Simple Mobile",
-		new String[] {"@smtext.com"}),
+    SETAR("Setar Mobile",
+            new String[]{"@mas.aw"}),
 
-	SOLAVEI ("Solavei",
-		new String[] {"@tmomail.net"}),
+    SFR("SFR",
+            new String[]{"@sfr.fr"}),
 
-	SOUTH_CENTRAL ("South Central Communications",
-		new String[] {"@rinasms.com"}),
+    SIMINN("Siminn",
+            new String[]{"@box.is"}),
 
-	SOUTHERN_LINK ("Southern Link",
-		new String[] {"@page.southernlinc.com"}),
+    SIMPLE_MOBILE("Simple Mobile",
+            new String[]{"@smtext.com"}),
 
-	SPIKKO ("Spikko",
-		new String[] {"@spikkosms.com"}),
+    SOLAVEI("Solavei",
+            new String[]{"@tmomail.net"}),
 
-	SPRINT ("Sprint PCS",
-		new String[] {"@messaging.sprintpcs.com"}),
+    SOUTH_CENTRAL("South Central Communications",
+            new String[]{"@rinasms.com"}),
 
-	STRAIGHT_TALK ("Straight Talk",
-		new String[] {"@vtext.com"}),
-		
-	SUNCOM ("SunCom",
-		new String[] {"@tms.suncom.com"}),
+    SOUTHERN_LINK("Southern Link",
+            new String[]{"@page.southernlinc.com"}),
 
-	SUNRISE ("Sunrise Communications",
-		new String[] {"@gsm.sunrise.ch"}),
+    SPIKKO("Spikko",
+            new String[]{"@spikkosms.com"}),
 
-	SYRINGA ("Syringa Wireless",
-		new String[] {"@rinasms.com"}),
+    SPRINT("Sprint PCS",
+            new String[]{"@messaging.sprintpcs.com"}),
 
-	T_MOBILE ("T-Mobile",
-		new String[] {"@optusmobile.com.au", "@gin.nl", "@t-mobile.uk.net", "@tmomail.net"}),
+    STRAIGHT_TALK("Straight Talk",
+            new String[]{"@vtext.com"}),
 
-	TELE2 ("Tele2",
-		new String[] {"@sms.tele2.se"}),
+    SUNCOM("SunCom",
+            new String[]{"@tms.suncom.com"}),
 
-	TELEBEC ("Telebec",
-		new String[] {"@txt.telebecmobilite.com"}),
+    SUNRISE("Sunrise Communications",
+            new String[]{"@gsm.sunrise.ch"}),
 
-	TELECOM ("Telecom",
-		new String[] {"@etxt.co.nz", "@alertas.personal.com.ar"}),
+    SYRINGA("Syringa Wireless",
+            new String[]{"@rinasms.com"}),
 
-	TELEFLIP ("Teleflip",
-		new String[] {"@teleflip.com"}),
+    T_MOBILE("T-Mobile",
+            new String[]{"@optusmobile.com.au", "@gin.nl", "@t-mobile.uk.net", "@tmomail.net"}),
 
-	TELEFONICA ("Telefonica",
-		new String[] {"@movistar.net", "@correo.movistar.net", "@movimensaje.com.ar", "@sms.movistar.net.ar", "@sms.movistar.com.uy", "@movistar.com.co"}),
+    TELE2("Tele2",
+            new String[]{"@sms.tele2.se"}),
 
-	TELLUSTALK ("TellusTalk",
-		new String[] {"@esms.nu"}),
+    TELEBEC("Telebec",
+            new String[]{"@txt.telebecmobilite.com"}),
 
-	TELUS ("Telus Mobility",
-		new String[] {"@msg.telus.com"}),
-		
-	TIM ("Tim",
-		new String[] {"@timnet.com"}),
+    TELECOM("Telecom",
+            new String[]{"@etxt.co.nz", "@alertas.personal.com.ar"}),
 
-	TING ("Ting",
-		new String[] {"@message.ting.com"}),
+    TELEFLIP("Teleflip",
+            new String[]{"@teleflip.com"}),
 
-	TRACFONE ("Tracfone",
-		new String[] {"@mmst5.tracfone.com"}),
+    TELEFONICA("Telefonica",
+            new String[]{"@movistar.net", "@correo.movistar.net", "@movimensaje.com.ar", "@sms.movistar.net.ar", "@sms.movistar.com.uy", "@movistar.com.co"}),
 
-	TXTLOCAL ("Txtlocal",
-		new String[] {"@txtlocal.co.uk"}),
+    TELLUSTALK("TellusTalk",
+            new String[]{"@esms.nu"}),
 
-	UNICEL ("Unicel",
-		new String[] {"@utext.com"}),
+    TELUS("Telus Mobility",
+            new String[]{"@msg.telus.com"}),
 
-	UNIMOVIL ("UniMovil Corporation",
-		new String[] {"@viawebsms.com"}),
+    TIM("Tim",
+            new String[]{"@timnet.com"}),
 
-	US_CELLULAR ("US Cellular",
-		new String[] {"@email.uscc.net"}),
+    TING("Ting",
+            new String[]{"@message.ting.com"}),
 
-	USA_MOBILITY ("USA Mobility",
-		new String[] {"@usamobility.net"}),
+    TRACFONE("Tracfone",
+            new String[]{"@mmst5.tracfone.com"}),
 
-	VERIZON ("Verizon Wireless",
-		new String[] {"@vtext.com"}),
+    TXTLOCAL("Txtlocal",
+            new String[]{"@txtlocal.co.uk"}),
 
-	VIAERO ("Viaero",
-		new String[] {"@viaerosms.com"}),
+    UNICEL("Unicel",
+            new String[]{"@utext.com"}),
 
-	VIRGIN_MOBILE ("Virgin Mobile",
-		new String[] {"@vmobl.com", "@vmobile.ca"}),
+    UNIMOVIL("UniMovil Corporation",
+            new String[]{"@viawebsms.com"}),
 
-	VIVO ("Vivo",
-		new String[] {"@torpedoemail.com.br"}),
+    US_CELLULAR("US Cellular",
+            new String[]{"@email.uscc.net"}),
 
-	VODACOM ("Vodacom",
-		new String[] {"@voda.co.za"}),
+    USA_MOBILITY("USA Mobility",
+            new String[]{"@usamobility.net"}),
 
-	VODAFONE ("Vodafone",
-		new String[] {"@mtxt.co.nz"}),
+    VERIZON("Verizon Wireless",
+            new String[]{"@vtext.com"}),
 
-	VODAPHONE ("Vodaphone",
-		new String[] {"@sms.vodafone.it", "@vodafone-sms.de", "@vodafone.com.eg", "@vodafone.es", "@vodafonemail.cz", "@n.vodafone.ne.jp", "@d.vodafone.ne.jp", "@r.vodafone.ne.jp", "@k.vodafone.ne.jp", "@k.vodafone.ne.jp", "@k.vodafone.ne.jp", "@q.vodafone.ne.jp", "@h.vodafone.ne.jp", "@q.vodafone.ne.jp", "@k.vodafone.ne.jp", "@s.vodafone.ne.jp", "@k.vodafone.ne.jp", "@h.vodafone.ne.jp", "@h.vodafone.ne.jp"}),
+    VIAERO("Viaero",
+            new String[]{"@viaerosms.com"}),
 
-	VOYAGER_MOBILE ("Voyager Mobile",
-		new String[] {"@text.voyagermobile.com"}),
+    VIRGIN_MOBILE("Virgin Mobile",
+            new String[]{"@vmobl.com", "@vmobile.ca"}),
 
-	WEST_CENTRAL ("West Central Wireless",
-		new String[] {"@sms.wcc.net"}),
+    VIVO("Vivo",
+            new String[]{"@torpedoemail.com.br"}),
 
-	WILLCOM ("Willcom",
-		new String[] {"@pdx.ne.jp"}),
+    VODACOM("Vodacom",
+            new String[]{"@voda.co.za"}),
 
-	WIND_MOBILE ("Wind Mobile",
-		new String[] {"@txt.windmobile.ca"}),
+    VODAFONE("Vodafone",
+            new String[]{"@mtxt.co.nz"}),
 
-	XIT_COMM ("XIT Communications",
-		new String[] {"@sms.xit.net"});
-	
-	private final String displayName;
-	private final String[] address;
-	
-	public String getDisplayName() {
-		return displayName;
-	}
-	
-	public String[] getAddresses() {
-		return address;
-	}
-	
-	Carriers(String displayName, String[] address) {
-		this.displayName = displayName;
-		this.address = address;
-	}
-	
+    VODAPHONE("Vodaphone",
+            new String[]{"@sms.vodafone.it", "@vodafone-sms.de", "@vodafone.com.eg", "@vodafone.es", "@vodafonemail.cz", "@n.vodafone.ne.jp", "@d.vodafone.ne.jp", "@r.vodafone.ne.jp", "@k.vodafone.ne.jp", "@k.vodafone.ne.jp", "@k.vodafone.ne.jp", "@q.vodafone.ne.jp", "@h.vodafone.ne.jp", "@q.vodafone.ne.jp", "@k.vodafone.ne.jp", "@s.vodafone.ne.jp", "@k.vodafone.ne.jp", "@h.vodafone.ne.jp", "@h.vodafone.ne.jp"}),
+
+    VOYAGER_MOBILE("Voyager Mobile",
+            new String[]{"@text.voyagermobile.com"}),
+
+    WEST_CENTRAL("West Central Wireless",
+            new String[]{"@sms.wcc.net"}),
+
+    WILLCOM("Willcom",
+            new String[]{"@pdx.ne.jp"}),
+
+    WIND_MOBILE("Wind Mobile",
+            new String[]{"@txt.windmobile.ca"}),
+
+    XIT_COMM("XIT Communications",
+            new String[]{"@sms.xit.net"});
+
+    private final String displayName;
+    private final String[] address;
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public String[] getAddresses() {
+        return address;
+    }
+
+    Carriers(String displayName, String[] address) {
+        this.displayName = displayName;
+        this.address = address;
+    }
+
 }
